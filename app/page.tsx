@@ -13,6 +13,7 @@ import { vehicles } from "@/lib/vehicles";
 import { useBooking } from "@/context/BookingContext";
 import "./home-sections.css";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import CockpitCounter from "@/components/home/CockpitCounter";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
 
@@ -180,6 +181,9 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* Supercar Cockpit HUD Telemetry Counter */}
+      <CockpitCounter />
 
       <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 

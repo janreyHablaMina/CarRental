@@ -1,0 +1,130 @@
+/* ==========================================================================
+   DriveX Full-Width Telemetry Counter Strip
+   Style: Minimalist Full-Width Luxury Bar with Clean Vertical Separator Lines
+   ========================================================================== */
+
+.fw-counter-section {
+  position: relative;
+  width: 100%;
+  background: #07080b;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 60px 0;
+  box-sizing: border-box;
+}
+
+.fw-counter-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 max(4vw, 24px);
+  box-sizing: border-box;
+}
+
+.fw-counter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  align-items: stretch;
+}
+
+.fw-counter-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 36px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Vertical Separator Line Between Items */
+.fw-counter-item:not(:last-child) {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.fw-counter-index {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--accent, #4da3ff);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.fw-counter-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fw-counter-number {
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(38px, 3.8vw, 56px);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.fw-counter-suffix {
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 600;
+  color: var(--accent, #4da3ff);
+  margin-left: 2px;
+}
+
+.fw-counter-label {
+  font-size: 15px;
+  font-weight: 650;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px 0;
+}
+
+.fw-counter-desc {
+  font-size: 13px;
+  color: #8b929c;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 280px;
+}
+
+/* Responsive Adaptations */
+@media (max-width: 1024px) {
+  .fw-counter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .fw-counter-item {
+    padding: 24px 20px;
+  }
+  .fw-counter-item:nth-child(2) {
+    border-right: none;
+  }
+  .fw-counter-item:nth-child(1),
+  .fw-counter-item:nth-child(2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .fw-counter-section {
+    padding: 40px 0;
+  }
+  .fw-counter-grid {
+    grid-template-columns: 1fr;
+  }
+  .fw-counter-item {
+    padding: 24px 0;
+    border-right: none !important;
+  }
+  .fw-counter-item:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .fw-counter-number {
+    font-size: 40px;
+  }
+}
