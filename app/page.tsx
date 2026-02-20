@@ -14,6 +14,7 @@ import { useBooking } from "@/context/BookingContext";
 import "./home-sections.css";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CockpitCounter from "@/components/home/CockpitCounter";
+import HomeContactSection from "@/components/home/HomeContactSection";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
 
@@ -193,7 +194,10 @@ export default function Home() {
       <TestimonialsSection />
 
       <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
-
+ 
+      {/* Map Background VIP Concierge & Contact Section */}
+      <HomeContactSection />
+ 
       <footer id="footer"><div className="footer-main"><div><div className="wordmark">DRIVE<span>X</span></div><p>Drive more. Experience more.</p></div><div><h4>Explore</h4><a href="#vehicles">Vehicles</a><a href="#how">How It Works</a><a href="#why">About</a><a href="mailto:hello@drivex.ph">Contact</a></div><div><h4>Support</h4><a href="#footer">Help Center</a><a href="#footer">Rental Policies</a><a href="#footer">Terms</a><a href="#footer">Privacy</a></div><div><h4>Follow</h4><a href="#footer">Instagram</a><a href="#footer">Facebook</a><a href="#footer">LinkedIn</a></div></div><div className="footer-bottom"><span>© 2026 DriveX. All rights reserved.</span><span>Manila, Philippines</span></div></footer>
     </main>
   );
