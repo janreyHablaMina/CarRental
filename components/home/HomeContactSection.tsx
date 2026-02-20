@@ -1,166 +1,162 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock, MessageSquare, ArrowRight, Compass } from "lucide-react";
+import { MapPin, Phone, Clock, ArrowRight, ExternalLink } from "lucide-react";
+import { type HubLocation } from "@/components/LeafletMap";
 import "./home-contact.css";
 
+const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="home-leaflet-loading">
+      <span>Initializing DriveX Telemetry Map...</span>
+    </div>
+  ),
+});
+
+const HUBS: HubLocation[] = [
+  {
+    id: "bgc",
+    name: "BGC Flagship Lounge",
+    category: "Supercar Delivery & Showroom",
+    address: "5th Ave cor. 28th St, Bonifacio High Street Central, Taguig City, Metro Manila",
+    phone: "+63 (2) 8888-3748",
+    email: "bgc.concierge@drivex.ph",
+    hours: "Open 24/7 (VIP Turnaround)",
+    coords: "14.5507° N, 121.0509° E",
+    lat: 14.5507,
+    lng: 121.0509,
+    googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
+    features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"],
+  },
+  {
+    id: "makati",
+    name: "Makati Executive Hub",
+    category: "Chauffeur & Corporate Fleet",
+    address: "Ayala Triangle Gardens Tower Two, Paseo de Roxas, Makati CBD",
+    phone: "+63 (2) 8888-3749",
+    email: "makati.fleet@drivex.ph",
+    hours: "06:00 AM – 11:00 PM Daily",
+    coords: "14.5574° N, 121.0232° E",
+    lat: 14.5574,
+    lng: 121.0232,
+    googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
+    features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk"],
+  },
+  {
+    id: "naia",
+    name: "NAIA Terminal 3 VIP Concierge",
+    category: "24/7 Flight Arrival Hub",
+    address: "Terminal 3 Arrival VIP Lounge, Andrews Ave, Pasay City, Metro Manila",
+    phone: "+63 (2) 8888-3750",
+    email: "airport.vip@drivex.ph",
+    hours: "Open 24/7 (Flight Tracked)",
+    coords: "14.5204° N, 121.0159° E",
+    lat: 14.5204,
+    lng: 121.0159,
+    googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
+    features: ["Tarmac Fast-Track", "Luggage Valet", "Keyless Mobile Unlock"],
+  },
+  {
+    id: "clark",
+    name: "Clark Freeport Hub",
+    category: "Grand Touring & Track Fleet",
+    address: "Clark Global City, Manuel A. Roxas Hwy, Clark Freeport Zone, Pampanga",
+    phone: "+63 (45) 499-3748",
+    email: "clark.fleet@drivex.ph",
+    hours: "07:00 AM – 10:00 PM Daily",
+    coords: "15.1764° N, 120.5312° E",
+    lat: 15.1764,
+    lng: 120.5312,
+    googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
+    features: ["Track Preparation", "North Luzon Dispatch", "Helipad Access"],
+  },
+  {
+    id: "cebu",
+    name: "Cebu IT Park Hub",
+    category: "Visayas Coastal Fleet",
+    address: "Skyrise 4B, Garden Bloc, Cebu IT Park, Lahug, Cebu City",
+    phone: "+63 (32) 412-3748",
+    email: "cebu.vip@drivex.ph",
+    hours: "08:00 AM – 09:00 PM Daily",
+    coords: "10.3297° N, 123.9056° E",
+    lat: 10.3297,
+    lng: 123.9056,
+    googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
+    features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"],
+  },
+];
+
 export default function HomeContactSection() {
+  const [selectedHub, setSelectedHub] = useState<HubLocation>(HUBS[0]);
+
   return (
     <section className="home-contact-section" id="contact" data-reveal>
-      {/* ---------------- Dark Matter Map Visual Background ---------------- */}
-      <div className="home-contact-map-bg" aria-hidden="true">
-        {/* Cybernetic Grid Pattern */}
-        <div className="home-contact-map-mesh" />
-
-        {/* Stylized Vector Cartography Road Networks */}
-        <svg
-          className="home-contact-map-svg"
-          viewBox="0 0 1200 800"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Highway Arcs & Arterial Roads */}
-          <path
-            d="M-50 450 C 300 480, 500 300, 750 350 S 1100 550, 1300 500"
-            stroke="#4da3ff"
-            strokeWidth="3.5"
-            strokeDasharray="12 6"
-            opacity="0.65"
-          />
-          <path
-            d="M100 -50 C 150 250, 400 450, 600 520 S 950 650, 1250 850"
-            stroke="#38bdf8"
-            strokeWidth="2.5"
-            opacity="0.45"
-          />
-          <path
-            d="M350 850 C 420 600, 650 400, 850 300 S 1150 150, 1300 100"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="2"
-          />
-          <path
-            d="M-20 200 C 250 220, 520 180, 800 240 S 1100 200, 1250 260"
-            stroke="rgba(77,163,255,0.3)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M500 50 L 500 750 M 200 150 L 1050 650 M 150 700 L 950 100"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="1"
-          />
-
-          {/* Coordinate Concentric Rings */}
-          <circle cx="280" cy="320" r="140" stroke="rgba(77,163,255,0.18)" strokeWidth="1" strokeDasharray="6 6" />
-          <circle cx="280" cy="320" r="220" stroke="rgba(77,163,255,0.1)" strokeWidth="1" />
-          <circle cx="950" cy="380" r="180" stroke="rgba(77,163,255,0.15)" strokeWidth="1" strokeDasharray="8 8" />
-        </svg>
-
-        {/* Ambient Radial Vignette */}
-        <div className="home-contact-vignette" />
-
-        {/* Active Radar Beacon Pins on Map */}
-        <div className="home-map-pin bgc">
-          <span className="home-map-pin-pulse" />
-          <span className="home-map-pin-label">BGC FLAGSHIP LOUNGE // 14.5507° N</span>
+      <div className="home-contact-container">
+        {/* Section Header */}
+        <div className="home-contact-header">
+          <div>
+            <p className="eyebrow">05 // Nationwide Operations</p>
+            <h2>Nationwide Hubs &amp; Lounges</h2>
+          </div>
+          <p className="home-contact-header-desc">
+            Direct delivery at NAIA, private turnarounds in BGC, and executive lounges across Metro Manila &amp; the Philippines.
+          </p>
         </div>
 
-        <div className="home-map-pin makati">
-          <span className="home-map-pin-pulse" />
-          <span className="home-map-pin-label">MAKATI CBD EXECUTIVE // 14.5574° N</span>
+        {/* Hub Selector Pills */}
+        <div className="home-hub-tabs">
+          {HUBS.map((hub) => (
+            <button
+              type="button"
+              key={hub.id}
+              className={`home-hub-tab ${selectedHub.id === hub.id ? "active" : ""}`}
+              onClick={() => setSelectedHub(hub)}
+            >
+              <span className="home-hub-tab-dot" />
+              <span>{hub.name.split(" ")[0]}</span>
+            </button>
+          ))}
         </div>
 
-        <div className="home-map-pin naia">
-          <span className="home-map-pin-pulse" />
-          <span className="home-map-pin-label">NAIA TERMINAL 3 AIRPORT // 14.5204° N</span>
+        {/* Exact Leaflet Map from Contact Page */}
+        <div className="home-map-frame">
+          <LeafletMap
+            hubs={HUBS}
+            selectedHub={selectedHub}
+            onSelectHub={setSelectedHub}
+          />
         </div>
 
-        <div className="home-map-pin clark">
-          <span className="home-map-pin-pulse" />
-          <span className="home-map-pin-label">CLARK FREEPORT HUB // 15.1764° N</span>
-        </div>
-      </div>
-
-      {/* ---------------- Centered Floating Luxury Card ---------------- */}
-      <div className="home-contact-card">
-        <div className="home-contact-badge">
-          <span className="home-contact-pulse-dot" />
-          <span>24/7 VIP Concierge // Metro Manila & Lounges</span>
-        </div>
-
-        <h2 className="home-contact-title">
-          Visit or Connect With <span>DriveX.</span>
-        </h2>
-
-        <p className="home-contact-subtitle">
-          Experience private curbside delivery directly to your hotel or airport terminal, or visit our flagship showroom in Bonifacio Global City.
-        </p>
-
-        {/* 2x2 Contact Grid */}
-        <div className="home-contact-grid">
-          <a
-            href="https://maps.google.com/?q=Bonifacio+High+Street+Taguig"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="home-contact-item"
-          >
-            <div className="home-contact-icon">
-              <MapPin size={18} />
+        {/* Selected Hub Details Bar */}
+        <div className="home-selected-hub-bar">
+          <div className="home-selected-hub-main">
+            <div className="home-selected-hub-tags">
+              <span className="home-selected-hub-name">{selectedHub.name}</span>
+              <span className="home-selected-hub-category">{selectedHub.category}</span>
             </div>
-            <div className="home-contact-info">
-              <span className="home-contact-label">Flagship Lounge</span>
-              <span className="home-contact-value">5th Ave, BGC, Taguig City</span>
-            </div>
-          </a>
-
-          <a href="tel:+63288883748" className="home-contact-item">
-            <div className="home-contact-icon">
-              <Phone size={18} />
-            </div>
-            <div className="home-contact-info">
-              <span className="home-contact-label">VIP Direct Line</span>
-              <span className="home-contact-value">+63 (2) 8888-DRIVEX</span>
-            </div>
-          </a>
-
-          <a href="mailto:concierge@drivex.ph" className="home-contact-item">
-            <div className="home-contact-icon">
-              <Mail size={18} />
-            </div>
-            <div className="home-contact-info">
-              <span className="home-contact-label">Concierge Email</span>
-              <span className="home-contact-value">concierge@drivex.ph</span>
-            </div>
-          </a>
-
-          <div className="home-contact-item">
-            <div className="home-contact-icon">
-              <Clock size={18} />
-            </div>
-            <div className="home-contact-info">
-              <span className="home-contact-label">Dispatch Hours</span>
-              <span className="home-contact-value">Open 24/7 (Flight Tracked)</span>
+            <div className="home-selected-hub-meta">
+              <span><MapPin size={14} /> {selectedHub.address}</span>
+              <span><Clock size={14} /> {selectedHub.hours}</span>
+              <span><Phone size={14} /> {selectedHub.phone}</span>
             </div>
           </div>
-        </div>
 
-        {/* Action Buttons Row */}
-        <div className="home-contact-actions">
-          <a
-            href="https://wa.me/639178883748?text=Hello%20DriveX%20Concierge,%20I%20would%20like%20to%20inquire%20about%20a%20luxury%20vehicle%20reservation."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="home-contact-btn primary"
-          >
-            <MessageSquare size={16} />
-            <span>Message on WhatsApp</span>
-          </a>
-
-          <Link href="/contact" className="home-contact-btn secondary">
-            <Compass size={15} />
-            <span>Explore Nationwide Hubs</span>
-            <ArrowRight size={14} />
-          </Link>
+          <div className="home-selected-hub-actions">
+            <a
+              href={selectedHub.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="home-hub-action-btn secondary"
+            >
+              Directions <ExternalLink size={13} />
+            </a>
+            <Link href="/contact" className="home-hub-action-btn primary">
+              Concierge Hub <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
