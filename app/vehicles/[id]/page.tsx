@@ -5,13 +5,14 @@ import "./vehicle-detail.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, use } from "react";
 import { ArrowLeft, ArrowRight, Gauge, Users, Zap } from "lucide-react";
 import { vehicles, PH_LOCATIONS, type Vehicle } from "@/lib/vehicles";
 
-export default function VehicleDetailPage({ params }: { params: { id: string } }) {
+export default function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const router = useRouter();
-  const vehicle: Vehicle | undefined = vehicles.find((v) => v.id === params.id);
+  const vehicle: Vehicle | undefined = vehicles.find((v) => v.id === resolvedParams.id);
 
   const [activeImage, setActiveImage] = useState(vehicle?.image ?? "");
   const [destSearch, setDestSearch] = useState("");
@@ -22,7 +23,7 @@ export default function VehicleDetailPage({ params }: { params: { id: string } }
     return (
       <main className="vd-not-found">
         <p>Vehicle not found.</p>
-        <Link href="/#vehicles">← Back to fleet</Link>
+        <Link href="/vehicles">← Back to fleet collection</Link>
       </main>
     );
   }
@@ -35,9 +36,9 @@ export default function VehicleDetailPage({ params }: { params: { id: string } }
     <div className="vd-page">
       {/* Top bar */}
       <header className="vd-topbar">
-        <button className="vd-back-btn" onClick={() => router.push("/#vehicles")}>
+        <button className="vd-back-btn" onClick={() => router.push("/vehicles")}>
           <ArrowLeft size={18} />
-          <span>Back to Fleet</span>
+          <span>Back to Collection</span>
         </button>
         <div className="vd-wordmark">DRIVE<span>X</span></div>
         <div />

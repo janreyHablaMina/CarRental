@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowRight, CalendarDays, ChevronDown, Gauge, MapPin, Menu, Users, X, Zap } from "lucide-react";
@@ -50,7 +51,8 @@ export default function Home() {
       <header className={`topbar ${progress > 0.015 ? "topbar-scrolled" : ""}`}>
         <button className="wordmark" onClick={() => scrollTo("#hero")} aria-label="DriveX home">DRIVE<span>X</span></button>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          <button onClick={() => scrollTo("#vehicles")}>Vehicles</button>
+          <button onClick={() => scrollTo("#vehicles")}>Fleet</button>
+          <Link href="/vehicles" style={{ color: "inherit", textDecoration: "none" }}>All Cars</Link>
           <button onClick={() => scrollTo("#how")}>How It Works</button>
           <button onClick={() => scrollTo("#why")}>About</button>
           <button onClick={() => scrollTo("#footer")}>Contact</button>
@@ -103,7 +105,7 @@ export default function Home() {
           <p>Choose the vehicle that fits your journey and take off when you&apos;re ready.</p>
           <div className="hero-actions">
             <button className="primary-button" onClick={() => scrollTo("#booking")}>Book this car <ArrowRight size={18} /></button>
-            <button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore collection</button>
+            <button className="text-button" onClick={() => router.push("/vehicles")}>Explore full collection</button>
           </div>
         </div>
         <button className="scroll-cue" onClick={() => scrollTo("#vehicles")}>Scroll to explore <ArrowDown size={15} /></button>
@@ -115,7 +117,16 @@ export default function Home() {
             <p className="eyebrow">The collection</p>
             <h2>Choose Your Drive</h2>
           </div>
-          <p>From city streets to open roads, explore our hand-picked fleet of real high-performance and luxury automobiles.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "flex-start" }}>
+            <p>From city streets to open roads, explore our hand-picked fleet of real high-performance and luxury automobiles.</p>
+            <Link
+              href="/vehicles"
+              className="text-button"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, textDecoration: "none", color: "var(--accent)" }}
+            >
+              Browse complete directory with filters & search <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
         <div className="category-tabs" data-reveal>
           {["All", "Sports", "Luxury", "Sedan", "SUV", "Economy"].map((tab) => (
@@ -130,7 +141,7 @@ export default function Home() {
         </div>
         <div className="vehicle-grid">
           {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).map((vehicle, index) => (
-            <article className="vehicle-item" key={vehicle.id} data-reveal>
+            <Link href={`/vehicles/${vehicle.id}`} className="vehicle-item" key={vehicle.id} data-reveal style={{ textDecoration: "none", color: "inherit", display: "block" }}>
               <div className="vehicle-visual">
                 <Image
                   src={vehicle.image}
@@ -162,12 +173,12 @@ export default function Home() {
                 <button
                   className="round-button"
                   aria-label={`View details for ${vehicle.brand} ${vehicle.name}`}
-                  onClick={() => router.push(`/vehicles/${vehicle.id}`)}
+                  style={{ pointerEvents: "none" }}
                 >
                   <ArrowRight size={18} />
                 </button>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
