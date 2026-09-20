@@ -10,6 +10,7 @@ import {
   Car,
   Check,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   Clock,
   DollarSign,
@@ -168,6 +169,237 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     status: "maintenance",
     trips: 89,
   },
+  {
+    id: "v-10",
+    name: "911 GT3 RS",
+    brand: "Porsche",
+    category: "Sports",
+    plate: "DX-9110",
+    image: "/images/fleet-porsche.jpg",
+    rate: 32000,
+    status: "available",
+    trips: 31,
+  },
+  {
+    id: "v-11",
+    name: "Ghost Extended",
+    brand: "Rolls-Royce",
+    category: "Luxury",
+    plate: "DX-7788",
+    image: "/images/fleet-rolls.jpg",
+    rate: 38000,
+    status: "available",
+    trips: 19,
+  },
+  {
+    id: "v-12",
+    name: "Defender 110 V8",
+    brand: "Range Rover",
+    category: "SUV",
+    plate: "DX-5580",
+    image: "/images/fleet-suv-velar.jpg",
+    rate: 11000,
+    status: "rented",
+    trips: 65,
+  },
+  {
+    id: "v-13",
+    name: "M5 Competition",
+    brand: "BMW",
+    category: "Sedan",
+    plate: "DX-3550",
+    image: "/images/fleet-bmw.jpg",
+    rate: 14500,
+    status: "available",
+    trips: 47,
+  },
+  {
+    id: "v-14",
+    name: "Corolla Cross HEV",
+    brand: "Toyota",
+    category: "Economy",
+    plate: "DX-1920",
+    image: "/images/fleet-toyota.jpg",
+    rate: 2500,
+    status: "available",
+    trips: 110,
+  },
+  {
+    id: "v-15",
+    name: "Huracán STO",
+    brand: "Lamborghini",
+    category: "Sports",
+    plate: "DX-8822",
+    image: "/images/fleet-sports-huracan.jpg",
+    rate: 42000,
+    status: "maintenance",
+    trips: 18,
+  },
+  {
+    id: "v-16",
+    name: "Cullinan Black Badge",
+    brand: "Rolls-Royce",
+    category: "Luxury",
+    plate: "DX-7744",
+    image: "/images/fleet-rolls.jpg",
+    rate: 45000,
+    status: "rented",
+    trips: 29,
+  },
+  {
+    id: "v-17",
+    name: "Range Rover Sport",
+    brand: "Range Rover",
+    category: "SUV",
+    plate: "DX-5599",
+    image: "/images/fleet-suv-velar.jpg",
+    rate: 13500,
+    status: "available",
+    trips: 58,
+  },
+  {
+    id: "v-18",
+    name: "S-Class 580 Maybach",
+    brand: "Mercedes-Benz",
+    category: "Sedan",
+    plate: "DX-2255",
+    image: "/images/fleet-mercedes.jpg",
+    rate: 22000,
+    status: "rented",
+    trips: 38,
+  },
+  {
+    id: "v-19",
+    name: "Sentra SR Turbo",
+    brand: "Nissan",
+    category: "Economy",
+    plate: "DX-4888",
+    image: "/images/fleet-nissan.jpg",
+    rate: 2400,
+    status: "available",
+    trips: 95,
+  },
+  {
+    id: "v-20",
+    name: "718 Cayman GTS",
+    brand: "Porsche",
+    category: "Sports",
+    plate: "DX-9718",
+    image: "/images/fleet-porsche.jpg",
+    rate: 16000,
+    status: "available",
+    trips: 72,
+  },
+  {
+    id: "v-21",
+    name: "Model X Plaid",
+    brand: "Tesla",
+    category: "Luxury",
+    plate: "DX-1088",
+    image: "/images/fleet-tesla.jpg",
+    rate: 14500,
+    status: "available",
+    trips: 61,
+  },
+  {
+    id: "v-22",
+    name: "Discovery Metropolitan",
+    brand: "Range Rover",
+    category: "SUV",
+    plate: "DX-5544",
+    image: "/images/fleet-suv-velar.jpg",
+    rate: 9800,
+    status: "maintenance",
+    trips: 44,
+  },
+  {
+    id: "v-23",
+    name: "M3 Competition",
+    brand: "BMW",
+    category: "Sedan",
+    plate: "DX-3388",
+    image: "/images/fleet-bmw.jpg",
+    rate: 11500,
+    status: "rented",
+    trips: 83,
+  },
+  {
+    id: "v-24",
+    name: "GR Yaris Circuit",
+    brand: "Toyota",
+    category: "Economy",
+    plate: "DX-1899",
+    image: "/images/fleet-toyota.jpg",
+    rate: 3200,
+    status: "available",
+    trips: 102,
+  },
+  {
+    id: "v-25",
+    name: "Aventador SVJ",
+    brand: "Lamborghini",
+    category: "Sports",
+    plate: "DX-8801",
+    image: "/images/fleet-sports-huracan.jpg",
+    rate: 52000,
+    status: "rented",
+    trips: 15,
+  },
+  {
+    id: "v-26",
+    name: "Spectre EV Coupe",
+    brand: "Rolls-Royce",
+    category: "Luxury",
+    plate: "DX-7799",
+    image: "/images/fleet-rolls.jpg",
+    rate: 48000,
+    status: "available",
+    trips: 12,
+  },
+  {
+    id: "v-27",
+    name: "Defender 90 Trophy",
+    brand: "Range Rover",
+    category: "SUV",
+    plate: "DX-5511",
+    image: "/images/fleet-suv-velar.jpg",
+    rate: 10500,
+    status: "available",
+    trips: 39,
+  },
+  {
+    id: "v-28",
+    name: "C-Class AMG Line",
+    brand: "Mercedes-Benz",
+    category: "Sedan",
+    plate: "DX-2188",
+    image: "/images/fleet-mercedes.jpg",
+    rate: 5800,
+    status: "available",
+    trips: 88,
+  },
+  {
+    id: "v-29",
+    name: "Kicks e-Power Sport",
+    brand: "Nissan",
+    category: "Economy",
+    plate: "DX-4955",
+    image: "/images/fleet-nissan.jpg",
+    rate: 2600,
+    status: "available",
+    trips: 115,
+  },
+  {
+    id: "v-30",
+    name: "Taycan Turbo S",
+    brand: "Porsche",
+    category: "Sports",
+    plate: "DX-9950",
+    image: "/images/fleet-porsche.jpg",
+    rate: 26000,
+    status: "maintenance",
+    trips: 27,
+  },
 ];
 
 const INITIAL_BOOKINGS: AdminBooking[] = [
@@ -289,7 +521,11 @@ const INITIAL_CUSTOMERS: AdminCustomer[] = [
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "fleet" | "bookings" | "customers">("overview");
   const [searchQuery, setSearchQuery] = useState("");
-  const [fleetFilter, setFleetFilter] = useState<"all" | VehicleStatus>("all");
+  const [fleetCategoryFilter, setFleetCategoryFilter] = useState<string>("all");
+  const [fleetStatusFilter, setFleetStatusFilter] = useState<"all" | VehicleStatus>("all");
+  const [fleetSearchQuery, setFleetSearchQuery] = useState("");
+  const [fleetPage, setFleetPage] = useState(1);
+  const [fleetPageSize, setFleetPageSize] = useState(10);
   const [bookingFilter, setBookingFilter] = useState<"all" | BookingStatus>("all");
 
   const [vehicles, setVehicles] = useState<AdminVehicle[]>(INITIAL_VEHICLES);
@@ -372,13 +608,27 @@ export default function AdminDashboard() {
 
   // Filtered lists
   const filteredVehicles = vehicles
-    .filter((v) => (fleetFilter === "all" ? true : v.status === fleetFilter))
-    .filter(
-      (v) =>
-        v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.plate.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    .filter((v) => (fleetStatusFilter === "all" ? true : v.status === fleetStatusFilter))
+    .filter((v) => (fleetCategoryFilter === "all" ? true : v.category.toLowerCase() === fleetCategoryFilter.toLowerCase()))
+    .filter((v) => {
+      const query = (fleetSearchQuery || searchQuery).toLowerCase().trim();
+      if (!query) return true;
+      return (
+        v.name.toLowerCase().includes(query) ||
+        v.brand.toLowerCase().includes(query) ||
+        v.plate.toLowerCase().includes(query) ||
+        v.category.toLowerCase().includes(query)
+      );
+    });
+
+  // Fleet Pagination
+  const totalFleetPages = Math.max(1, Math.ceil(filteredVehicles.length / fleetPageSize));
+  const currentFleetPage = Math.min(fleetPage, totalFleetPages);
+  const startFleetIndex = (currentFleetPage - 1) * fleetPageSize;
+  const paginatedVehicles = filteredVehicles.slice(
+    startFleetIndex,
+    startFleetIndex + fleetPageSize
+  );
 
   const filteredBookings = bookings
     .filter((b) => (bookingFilter === "all" ? true : b.status === bookingFilter))
@@ -716,22 +966,118 @@ export default function AdminDashboard() {
                   <h2 className="panel-title">Fleet Vehicles ({filteredVehicles.length})</h2>
                   <p className="panel-subtitle">Manage vehicle statuses, pricing, and live deployment</p>
                 </div>
+              </div>
 
-                <div className="filter-bar" style={{ margin: 0 }}>
-                  {(["all", "available", "rented", "maintenance"] as const).map((st) => (
+              {/* Fleet Toolbar: Search + Car Type Filter + Status Filter */}
+              <div className="fleet-toolbar">
+                <div className="fleet-search-wrapper">
+                  <Search size={14} className="fleet-search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Search car name, brand, plate..."
+                    value={fleetSearchQuery}
+                    onChange={(e) => {
+                      setFleetSearchQuery(e.target.value);
+                      setFleetPage(1);
+                    }}
+                    className="fleet-search-input"
+                  />
+                  {fleetSearchQuery && (
                     <button
-                      key={st}
-                      className={`filter-btn ${fleetFilter === st ? "active" : ""}`}
-                      onClick={() => setFleetFilter(st)}
+                      type="button"
+                      className="fleet-search-clear"
+                      onClick={() => {
+                        setFleetSearchQuery("");
+                        setFleetPage(1);
+                      }}
+                      title="Clear search"
                     >
-                      {st.toUpperCase()}
+                      <X size={13} />
                     </button>
-                  ))}
+                  )}
+                </div>
+
+                <div className="fleet-filters-group">
+                  {/* Filter 1: Car Type */}
+                  <div className="filter-select-wrapper">
+                    <label className="filter-select-label">Type:</label>
+                    <select
+                      value={fleetCategoryFilter}
+                      onChange={(e) => {
+                        setFleetCategoryFilter(e.target.value);
+                        setFleetPage(1);
+                      }}
+                      className="fleet-filter-select"
+                    >
+                      <option value="all">All Types ({vehicles.length})</option>
+                      <option value="Sports">Sports ({vehicles.filter((v) => v.category === "Sports").length})</option>
+                      <option value="Luxury">Luxury ({vehicles.filter((v) => v.category === "Luxury").length})</option>
+                      <option value="Sedan">Sedan ({vehicles.filter((v) => v.category === "Sedan").length})</option>
+                      <option value="SUV">SUV ({vehicles.filter((v) => v.category === "SUV").length})</option>
+                      <option value="Economy">Economy ({vehicles.filter((v) => v.category === "Economy").length})</option>
+                    </select>
+                  </div>
+
+                  {/* Filter 2: Status */}
+                  <div className="filter-select-wrapper">
+                    <label className="filter-select-label">Status:</label>
+                    <select
+                      value={fleetStatusFilter}
+                      onChange={(e) => {
+                        setFleetStatusFilter(e.target.value as any);
+                        setFleetPage(1);
+                      }}
+                      className="fleet-filter-select"
+                    >
+                      <option value="all">All Statuses ({vehicles.length})</option>
+                      <option value="available">🟢 Available ({vehicles.filter((v) => v.status === "available").length})</option>
+                      <option value="rented">🔵 Rented ({vehicles.filter((v) => v.status === "rented").length})</option>
+                      <option value="maintenance">🟡 Maintenance ({vehicles.filter((v) => v.status === "maintenance").length})</option>
+                    </select>
+                  </div>
+
+                  {(fleetCategoryFilter !== "all" || fleetStatusFilter !== "all" || fleetSearchQuery) && (
+                    <button
+                      type="button"
+                      className="filter-reset-btn"
+                      onClick={() => {
+                        setFleetCategoryFilter("all");
+                        setFleetStatusFilter("all");
+                        setFleetSearchQuery("");
+                        setFleetPage(1);
+                      }}
+                      title="Reset all fleet filters"
+                    >
+                      <RefreshCw size={12} />
+                      <span>Reset</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
               <div className="admin-table-wrap">
-                <table className="admin-table">
+                {filteredVehicles.length === 0 ? (
+                  <div className="table-empty-state">
+                    <Car size={34} style={{ color: "var(--admin-text-muted)", opacity: 0.4 }} />
+                    <p className="table-empty-title">No vehicles match your search or filter</p>
+                    <p className="table-empty-sub">Try changing your car type, status filter, or search keyword</p>
+                    <button
+                      type="button"
+                      className="admin-primary-btn"
+                      style={{ marginTop: 8 }}
+                      onClick={() => {
+                        setFleetCategoryFilter("all");
+                        setFleetStatusFilter("all");
+                        setFleetSearchQuery("");
+                        setFleetPage(1);
+                      }}
+                    >
+                      <RefreshCw size={13} />
+                      <span>Reset Filters</span>
+                    </button>
+                  </div>
+                ) : (
+                  <table className="admin-table">
                   <thead>
                     <tr>
                       <th>Vehicle</th>
@@ -744,7 +1090,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredVehicles.map((car) => (
+                    {paginatedVehicles.map((car) => (
                       <tr key={car.id}>
                         <td>
                           <div className="vehicle-cell">
@@ -866,9 +1212,80 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              )}
             </div>
-          )}
+
+            {/* Pagination Controls */}
+            {filteredVehicles.length > 0 && (
+              <div className="table-pagination">
+                <div className="pagination-info">
+                  Showing <strong>{startFleetIndex + 1}</strong>–
+                  <strong>
+                    {Math.min(startFleetIndex + fleetPageSize, filteredVehicles.length)}
+                  </strong>{" "}
+                  of <strong>{filteredVehicles.length}</strong> vehicles
+                </div>
+
+                <div className="pagination-controls">
+                  <div className="page-size-selector">
+                    <span className="page-size-label">Show</span>
+                    <select
+                      value={fleetPageSize}
+                      onChange={(e) => {
+                        setFleetPageSize(Number(e.target.value));
+                        setFleetPage(1);
+                      }}
+                      className="page-size-select"
+                    >
+                      <option value={10}>10</option>
+                      <option value={15}>15</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                    </select>
+                    <span className="page-size-label">per page</span>
+                  </div>
+
+                  <div className="pagination-nav-group">
+                    <button
+                      type="button"
+                      className="pagination-btn"
+                      disabled={currentFleetPage <= 1}
+                      onClick={() => setFleetPage((p) => Math.max(1, p - 1))}
+                      title="Previous page"
+                    >
+                      <ChevronLeft size={14} />
+                      <span>Prev</span>
+                    </button>
+
+                    <div className="pagination-pages">
+                      {Array.from({ length: totalFleetPages }, (_, i) => i + 1).map((pageNum) => (
+                        <button
+                          key={pageNum}
+                          type="button"
+                          className={`pagination-page-btn ${pageNum === currentFleetPage ? "active" : ""}`}
+                          onClick={() => setFleetPage(pageNum)}
+                        >
+                          {pageNum}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="pagination-btn"
+                      disabled={currentFleetPage >= totalFleetPages}
+                      onClick={() => setFleetPage((p) => Math.min(totalFleetPages, p + 1))}
+                      title="Next page"
+                    >
+                      <span>Next</span>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
           {/* TAB 3: BOOKINGS */}
           {activeTab === "bookings" && (
