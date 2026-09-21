@@ -463,6 +463,90 @@ const INITIAL_BOOKINGS: AdminBooking[] = [
     totalPrice: 34000,
     status: "completed",
   },
+  {
+    id: "DX-9406",
+    customerName: "Alexander Wright",
+    customerEmail: "a.wright@solaris.co",
+    carName: "Tesla Model S Plaid",
+    carImage: "/images/fleet-tesla.jpg",
+    startDate: "2026-09-24",
+    endDate: "2026-09-26",
+    days: 2,
+    totalPrice: 25000,
+    status: "confirmed",
+  },
+  {
+    id: "DX-9407",
+    customerName: "Beatrice Gomez",
+    customerEmail: "bgomez@luxuryescapes.ph",
+    carName: "Mercedes-Benz E-Class",
+    carImage: "/images/fleet-mercedes.jpg",
+    startDate: "2026-09-27",
+    endDate: "2026-10-04",
+    days: 7,
+    totalPrice: 47600,
+    status: "pending",
+  },
+  {
+    id: "DX-9408",
+    customerName: "Liam Montgomery",
+    customerEmail: "liam.mont@apexcapital.hk",
+    carName: "Porsche 911 GT3 RS",
+    carImage: "/images/fleet-porsche.jpg",
+    startDate: "2026-09-20",
+    endDate: "2026-09-22",
+    days: 2,
+    totalPrice: 64000,
+    status: "active",
+  },
+  {
+    id: "DX-9409",
+    customerName: "Hannah Chen",
+    customerEmail: "hchen@creativestudio.sg",
+    carName: "Toyota GR Sport Hatch",
+    carImage: "/images/fleet-toyota.jpg",
+    startDate: "2026-09-12",
+    endDate: "2026-09-15",
+    days: 3,
+    totalPrice: 6600,
+    status: "completed",
+  },
+  {
+    id: "DX-9410",
+    customerName: "Gabriel Santos",
+    customerEmail: "gsantos@metroventures.com",
+    carName: "Rolls-Royce Ghost Extended",
+    carImage: "/images/fleet-rolls.jpg",
+    startDate: "2026-09-25",
+    endDate: "2026-09-29",
+    days: 4,
+    totalPrice: 152000,
+    status: "confirmed",
+  },
+  {
+    id: "DX-9411",
+    customerName: "Natasha Romanoff",
+    customerEmail: "n.romanoff@shield.io",
+    carName: "Defender 110 V8",
+    carImage: "/images/fleet-suv-velar.jpg",
+    startDate: "2026-09-30",
+    endDate: "2026-10-05",
+    days: 5,
+    totalPrice: 55000,
+    status: "pending",
+  },
+  {
+    id: "DX-9412",
+    customerName: "Julian Mercado",
+    customerEmail: "jmercado@nexus-tech.ph",
+    carName: "BMW M5 Competition",
+    carImage: "/images/fleet-bmw.jpg",
+    startDate: "2026-09-17",
+    endDate: "2026-09-19",
+    days: 2,
+    totalPrice: 29000,
+    status: "completed",
+  },
 ];
 
 const INITIAL_CUSTOMERS: AdminCustomer[] = [
@@ -527,6 +611,10 @@ export default function AdminDashboard() {
   const [fleetPage, setFleetPage] = useState(1);
   const [fleetPageSize, setFleetPageSize] = useState(10);
   const [bookingFilter, setBookingFilter] = useState<"all" | BookingStatus>("all");
+  const [bookingSearchQuery, setBookingSearchQuery] = useState("");
+  const [bookingVehicleFilter, setBookingVehicleFilter] = useState<string>("all");
+  const [bookingPage, setBookingPage] = useState(1);
+  const [bookingPageSize, setBookingPageSize] = useState(10);
 
   const [vehicles, setVehicles] = useState<AdminVehicle[]>(INITIAL_VEHICLES);
   const [bookings, setBookings] = useState<AdminBooking[]>(INITIAL_BOOKINGS);
@@ -535,6 +623,7 @@ export default function AdminDashboard() {
   // Modal & Action Menu State
   const [showAddModal, setShowAddModal] = useState(false);
   const [openActionMenuId, setOpenActionMenuId] = useState<string | null>(null);
+  const [openBookingMenuId, setOpenBookingMenuId] = useState<string | null>(null);
   const [editingVehicle, setEditingVehicle] = useState<AdminVehicle | null>(null);
   const [newVehicle, setNewVehicle] = useState({
     name: "",
@@ -576,6 +665,7 @@ export default function AdminDashboard() {
     setBookings((prev) =>
       prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
     );
+    setOpenBookingMenuId(null);
   };
 
   const handleCreateVehicle = (e: React.FormEvent) => {
@@ -632,12 +722,26 @@ export default function AdminDashboard() {
 
   const filteredBookings = bookings
     .filter((b) => (bookingFilter === "all" ? true : b.status === bookingFilter))
-    .filter(
-      (b) =>
-        b.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        b.carName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        b.id.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    .filter((b) => (bookingVehicleFilter === "all" ? true : b.carName.toLowerCase().includes(bookingVehicleFilter.toLowerCase())))
+    .filter((b) => {
+      const query = (bookingSearchQuery || searchQuery).toLowerCase().trim();
+      if (!query) return true;
+      return (
+        b.customerName.toLowerCase().includes(query) ||
+        b.customerEmail.toLowerCase().includes(query) ||
+        b.carName.toLowerCase().includes(query) ||
+        b.id.toLowerCase().includes(query)
+      );
+    });
+
+  // Booking Pagination
+  const totalBookingPages = Math.max(1, Math.ceil(filteredBookings.length / bookingPageSize));
+  const currentBookingPage = Math.min(bookingPage, totalBookingPages);
+  const startBookingIndex = (currentBookingPage - 1) * bookingPageSize;
+  const paginatedBookings = filteredBookings.slice(
+    startBookingIndex,
+    startBookingIndex + bookingPageSize
+  );
 
   const filteredCustomers = customers.filter(
     (c) =>
@@ -1292,27 +1396,125 @@ export default function AdminDashboard() {
             <div className="dashboard-panel">
               <div className="panel-head">
                 <div>
-                  <h2 className="panel-title">Customer Bookings & Contracts</h2>
+                  <h2 className="panel-title">Customer Bookings & Contracts ({filteredBookings.length})</h2>
                   <p className="panel-subtitle">Approve, dispatch, and monitor ongoing client hires</p>
                 </div>
+              </div>
 
-                <div className="filter-bar" style={{ margin: 0 }}>
-                  {(["all", "active", "confirmed", "pending", "completed"] as const).map(
-                    (st) => (
-                      <button
-                        key={st}
-                        className={`filter-btn ${bookingFilter === st ? "active" : ""}`}
-                        onClick={() => setBookingFilter(st)}
-                      >
-                        {st.toUpperCase()}
-                      </button>
-                    )
+              {/* Reservations Toolbar: Search + Status Filter + Vehicle Filter */}
+              <div className="fleet-toolbar">
+                <div className="fleet-search-wrapper">
+                  <Search size={14} className="fleet-search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Search by ID, renter, email, vehicle..."
+                    value={bookingSearchQuery}
+                    onChange={(e) => {
+                      setBookingSearchQuery(e.target.value);
+                      setBookingPage(1);
+                    }}
+                    className="fleet-search-input"
+                  />
+                  {bookingSearchQuery && (
+                    <button
+                      type="button"
+                      className="fleet-search-clear"
+                      onClick={() => {
+                        setBookingSearchQuery("");
+                        setBookingPage(1);
+                      }}
+                      title="Clear search"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="fleet-filters-group">
+                  {/* Status Filter */}
+                  <div className="filter-select-wrapper">
+                    <label className="filter-select-label">Status:</label>
+                    <select
+                      value={bookingFilter}
+                      onChange={(e) => {
+                        setBookingFilter(e.target.value as any);
+                        setBookingPage(1);
+                      }}
+                      className="fleet-filter-select"
+                    >
+                      <option value="all">All Statuses ({bookings.length})</option>
+                      <option value="active">Active ({bookings.filter((b) => b.status === "active").length})</option>
+                      <option value="confirmed">Confirmed ({bookings.filter((b) => b.status === "confirmed").length})</option>
+                      <option value="pending">Pending ({bookings.filter((b) => b.status === "pending").length})</option>
+                      <option value="completed">Completed ({bookings.filter((b) => b.status === "completed").length})</option>
+                    </select>
+                  </div>
+
+                  {/* Vehicle Model / Brand Filter */}
+                  <div className="filter-select-wrapper">
+                    <label className="filter-select-label">Vehicle:</label>
+                    <select
+                      value={bookingVehicleFilter}
+                      onChange={(e) => {
+                        setBookingVehicleFilter(e.target.value);
+                        setBookingPage(1);
+                      }}
+                      className="fleet-filter-select"
+                    >
+                      <option value="all">All Vehicles ({bookings.length})</option>
+                      <option value="Lamborghini">Lamborghini ({bookings.filter((b) => b.carName.includes("Lamborghini")).length})</option>
+                      <option value="Porsche">Porsche ({bookings.filter((b) => b.carName.includes("Porsche")).length})</option>
+                      <option value="Rolls-Royce">Rolls-Royce ({bookings.filter((b) => b.carName.includes("Rolls-Royce")).length})</option>
+                      <option value="Tesla">Tesla ({bookings.filter((b) => b.carName.includes("Tesla")).length})</option>
+                      <option value="Range Rover">Range Rover ({bookings.filter((b) => b.carName.includes("Range Rover") || b.carName.includes("Velar") || b.carName.includes("Defender")).length})</option>
+                      <option value="BMW">BMW ({bookings.filter((b) => b.carName.includes("BMW")).length})</option>
+                      <option value="Mercedes-Benz">Mercedes-Benz ({bookings.filter((b) => b.carName.includes("Mercedes-Benz")).length})</option>
+                      <option value="Toyota">Toyota ({bookings.filter((b) => b.carName.includes("Toyota")).length})</option>
+                    </select>
+                  </div>
+
+                  {(bookingFilter !== "all" || bookingVehicleFilter !== "all" || bookingSearchQuery) && (
+                    <button
+                      type="button"
+                      className="filter-reset-btn"
+                      onClick={() => {
+                        setBookingFilter("all");
+                        setBookingVehicleFilter("all");
+                        setBookingSearchQuery("");
+                        setBookingPage(1);
+                      }}
+                      title="Reset all reservation filters"
+                    >
+                      <RefreshCw size={12} />
+                      <span>Reset</span>
+                    </button>
                   )}
                 </div>
               </div>
 
               <div className="admin-table-wrap">
-                <table className="admin-table">
+                {filteredBookings.length === 0 ? (
+                  <div className="table-empty-state">
+                    <CalendarCheck size={34} style={{ color: "var(--admin-text-muted)", opacity: 0.4 }} />
+                    <p className="table-empty-title">No reservations match your filter</p>
+                    <p className="table-empty-sub">Try changing your status, vehicle filter, or search keyword</p>
+                    <button
+                      type="button"
+                      className="admin-primary-btn"
+                      style={{ marginTop: 8 }}
+                      onClick={() => {
+                        setBookingFilter("all");
+                        setBookingVehicleFilter("all");
+                        setBookingSearchQuery("");
+                        setBookingPage(1);
+                      }}
+                    >
+                      <RefreshCw size={13} />
+                      <span>Reset Filters</span>
+                    </button>
+                  </div>
+                ) : (
+                  <table className="admin-table">
                   <thead>
                     <tr>
                       <th>Booking ID</th>
@@ -1322,11 +1524,11 @@ export default function AdminDashboard() {
                       <th>Duration</th>
                       <th>Total (₱)</th>
                       <th>Status</th>
-                      <th>Manage</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredBookings.map((b) => (
+                    {paginatedBookings.map((b) => (
                       <tr key={b.id}>
                         <td>
                           <span style={{ fontFamily: "var(--font-mono)", color: "#4da3ff", fontWeight: 700 }}>
@@ -1360,57 +1562,165 @@ export default function AdminDashboard() {
                             {b.status}
                           </span>
                         </td>
-                        <td>
-                          <div style={{ display: "flex", gap: 6 }}>
-                            {b.status === "pending" && (
-                              <button
-                                className="table-action-btn"
-                                style={{ color: "#10b981" }}
-                                title="Approve Booking"
-                                onClick={() => handleBookingAction(b.id, "confirmed")}
-                              >
-                                <CheckCircle2 size={16} />
-                              </button>
-                            )}
-                            {b.status === "confirmed" && (
-                              <button
-                                className="table-action-btn"
-                                style={{ color: "#3b82f6" }}
-                                title="Dispatch (Start Rental)"
-                                onClick={() => handleBookingAction(b.id, "active")}
-                              >
-                                <Car size={16} />
-                              </button>
-                            )}
-                            {b.status === "active" && (
-                              <button
-                                className="table-action-btn"
-                                style={{ color: "#9ca3af" }}
-                                title="Mark Return (Complete)"
-                                onClick={() => handleBookingAction(b.id, "completed")}
-                              >
-                                <CheckCircle2 size={16} />
-                              </button>
-                            )}
-                            {b.status !== "completed" && (
-                              <button
-                                className="table-action-btn"
-                                style={{ color: "#ef4444" }}
-                                title="Cancel Reservation"
-                                onClick={() => handleBookingAction(b.id, "completed")}
-                              >
-                                <X size={16} />
-                              </button>
-                            )}
-                          </div>
+                        <td className="actions-cell">
+                          <button
+                            className={`table-action-btn triple-dot-btn ${openBookingMenuId === b.id ? "active" : ""}`}
+                            title="Actions"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenBookingMenuId(openBookingMenuId === b.id ? null : b.id);
+                            }}
+                          >
+                            <MoreVertical size={16} />
+                          </button>
+
+                          {openBookingMenuId === b.id && (
+                            <>
+                              <div
+                                className="action-menu-backdrop"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenBookingMenuId(null);
+                                }}
+                              />
+                              <div className="action-dropdown-menu">
+                                <div className="action-menu-header">Update Status</div>
+
+                                {b.status === "pending" && (
+                                  <button
+                                    type="button"
+                                    className="action-menu-item"
+                                    onClick={() => handleBookingAction(b.id, "confirmed")}
+                                  >
+                                    <CheckCircle2 size={14} style={{ color: "#10b981" }} />
+                                    <span>Approve Booking</span>
+                                  </button>
+                                )}
+
+                                {(b.status === "confirmed" || b.status === "pending") && (
+                                  <button
+                                    type="button"
+                                    className="action-menu-item"
+                                    onClick={() => handleBookingAction(b.id, "active")}
+                                  >
+                                    <Car size={14} style={{ color: "#3b82f6" }} />
+                                    <span>Dispatch (Start Trip)</span>
+                                  </button>
+                                )}
+
+                                {b.status === "active" && (
+                                  <button
+                                    type="button"
+                                    className="action-menu-item"
+                                    onClick={() => handleBookingAction(b.id, "completed")}
+                                  >
+                                    <CheckCircle2 size={14} style={{ color: "#9ca3af" }} />
+                                    <span>Mark Returned</span>
+                                  </button>
+                                )}
+
+                                <div className="action-menu-divider" />
+
+                                {b.status !== "completed" ? (
+                                  <button
+                                    type="button"
+                                    className="action-menu-item danger"
+                                    onClick={() => handleBookingAction(b.id, "completed")}
+                                  >
+                                    <X size={14} />
+                                    <span>Cancel Reservation</span>
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="action-menu-item"
+                                    onClick={() => handleBookingAction(b.id, "confirmed")}
+                                  >
+                                    <RefreshCw size={13} />
+                                    <span>Re-open Booking</span>
+                                  </button>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
+              )}
             </div>
-          )}
+
+            {/* Reservation Pagination */}
+            {filteredBookings.length > 0 && (
+              <div className="table-pagination">
+                <div className="pagination-info">
+                  Showing <strong>{startBookingIndex + 1}</strong>–
+                  <strong>
+                    {Math.min(startBookingIndex + bookingPageSize, filteredBookings.length)}
+                  </strong>{" "}
+                  of <strong>{filteredBookings.length}</strong> reservations
+                </div>
+
+                <div className="pagination-controls">
+                  <div className="page-size-selector">
+                    <span className="page-size-label">Show</span>
+                    <select
+                      value={bookingPageSize}
+                      onChange={(e) => {
+                        setBookingPageSize(Number(e.target.value));
+                        setBookingPage(1);
+                      }}
+                      className="page-size-select"
+                    >
+                      <option value={10}>10</option>
+                      <option value={15}>15</option>
+                      <option value={20}>20</option>
+                    </select>
+                    <span className="page-size-label">per page</span>
+                  </div>
+
+                  <div className="pagination-nav-group">
+                    <button
+                      type="button"
+                      className="pagination-btn"
+                      disabled={currentBookingPage <= 1}
+                      onClick={() => setBookingPage((p) => Math.max(1, p - 1))}
+                      title="Previous page"
+                    >
+                      <ChevronLeft size={14} />
+                      <span>Prev</span>
+                    </button>
+
+                    <div className="pagination-pages">
+                      {Array.from({ length: totalBookingPages }, (_, i) => i + 1).map((pageNum) => (
+                        <button
+                          key={pageNum}
+                          type="button"
+                          className={`pagination-page-btn ${pageNum === currentBookingPage ? "active" : ""}`}
+                          onClick={() => setBookingPage(pageNum)}
+                        >
+                          {pageNum}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="pagination-btn"
+                      disabled={currentBookingPage >= totalBookingPages}
+                      onClick={() => setBookingPage((p) => Math.min(totalBookingPages, p + 1))}
+                      title="Next page"
+                    >
+                      <span>Next</span>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
           {/* TAB 4: CUSTOMERS */}
           {activeTab === "customers" && (
