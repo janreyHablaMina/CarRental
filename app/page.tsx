@@ -9,12 +9,118 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
+
 const vehicles = [
-  { name: "City", category: "Economy", seats: 5, price: "1,500", tone: "silver" },
-  { name: "Executive", category: "Sedan", seats: 5, price: "2,500", tone: "black" },
-  { name: "Explorer", category: "SUV", seats: 7, price: "3,500", tone: "blue" },
-  { name: "Prestige", category: "Luxury", seats: 5, price: "6,000", tone: "graphite" },
+  {
+    name: "Huracán EVO",
+    brand: "Lamborghini",
+    category: "Sports",
+    image: "/images/fleet-sports-huracan.jpg",
+    seats: 2,
+    transmission: "7-Spd Dual-Clutch",
+    engine: "640 HP V10",
+    acceleration: "2.9s 0-100",
+    price: "28,000",
+    featured: true,
+  },
+  {
+    name: "911 Carrera T",
+    brand: "Porsche",
+    category: "Sports",
+    image: "/images/fleet-porsche.jpg",
+    seats: 4,
+    transmission: "PDK Automatic",
+    engine: "385 HP Twin-Turbo",
+    acceleration: "4.0s 0-100",
+    price: "18,500",
+    featured: false,
+  },
+  {
+    name: "Phantom VIII",
+    brand: "Rolls-Royce",
+    category: "Luxury",
+    image: "/images/fleet-rolls.jpg",
+    seats: 5,
+    transmission: "8-Spd Satellite Aided",
+    engine: "563 HP Twin-Turbo V12",
+    acceleration: "5.1s 0-100",
+    price: "35,000",
+    featured: true,
+  },
+  {
+    name: "Model S Plaid",
+    brand: "Tesla",
+    category: "Luxury",
+    image: "/images/fleet-tesla.jpg",
+    seats: 5,
+    transmission: "Tri-Motor AWD",
+    engine: "1,020 HP Electric",
+    acceleration: "1.99s 0-100",
+    price: "12,500",
+    featured: false,
+  },
+  {
+    name: "Velar R-Dynamic",
+    brand: "Range Rover",
+    category: "SUV",
+    image: "/images/fleet-suv-velar.jpg",
+    seats: 5,
+    transmission: "8-Speed Automatic AWD",
+    engine: "395 HP Turbo Inline-6",
+    acceleration: "5.2s 0-100",
+    price: "8,500",
+    featured: false,
+  },
+  {
+    name: "330i M Sport",
+    brand: "BMW",
+    category: "Sedan",
+    image: "/images/fleet-bmw.jpg",
+    seats: 5,
+    transmission: "Steptronic 8-Spd",
+    engine: "255 HP TwinPower Turbo",
+    acceleration: "5.4s 0-100",
+    price: "5,500",
+    featured: false,
+  },
+  {
+    name: "E-Class Executive",
+    brand: "Mercedes-Benz",
+    category: "Sedan",
+    image: "/images/fleet-mercedes.jpg",
+    seats: 5,
+    transmission: "9G-TRONIC Automatic",
+    engine: "258 HP EQ Boost",
+    acceleration: "5.8s 0-100",
+    price: "6,800",
+    featured: false,
+  },
+  {
+    name: "GR Sport Hatch",
+    brand: "Toyota",
+    category: "Economy",
+    image: "/images/fleet-toyota.jpg",
+    seats: 5,
+    transmission: "Direct-Shift CVT",
+    engine: "170 HP Dynamic Force",
+    acceleration: "7.8s 0-100",
+    price: "2,200",
+    featured: false,
+  },
+  {
+    name: "Altima Premium",
+    brand: "Nissan",
+    category: "Economy",
+    image: "/images/fleet-nissan.jpg",
+    seats: 5,
+    transmission: "Xtronic CVT",
+    engine: "188 HP Direct Injection",
+    acceleration: "7.2s 0-100",
+    price: "2,800",
+    featured: false,
+  },
 ];
+
 const steps = [
   ["01", "Choose Your Car", "Find the right shape, pace, and comfort for your trip."],
   ["02", "Book Your Drive", "Choose your dates and reserve in a few clear steps."],
@@ -26,6 +132,7 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [heroProgress, setHeroProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -105,12 +212,69 @@ export default function Home() {
     </section>
 
     <section id="vehicles" className="vehicles-section section-pad">
-      <div className="section-head" data-reveal><div><p className="eyebrow">The collection</p><h2>Choose Your Drive</h2></div><p>From city streets to open roads, meet a collection selected for the way you move.</p></div>
-      <div className="category-tabs" data-reveal>{["All", "Economy", "Sedan", "SUV", "Luxury", "Sports"].map((tab, i) => <button className={i === 0 ? "active" : ""} key={tab}>{tab}</button>)}</div>
-      <div className="vehicle-grid">{vehicles.map((vehicle, index) => <article className="vehicle-item" key={vehicle.name} data-reveal><div className={`vehicle-visual vehicle-${vehicle.tone}`}><span className="vehicle-index">0{index + 1}</span><div className="car-silhouette"><div className="car-roof" /><div className="car-body" /><i /><i /></div><span className="vehicle-category">{vehicle.category}</span></div><div className="vehicle-info"><div><p className="eyebrow">DriveX</p><h3>{vehicle.name}</h3></div><div className="specs"><span><Users size={15} /> {vehicle.seats} seats</span><span><Gauge size={15} /> Automatic</span><span><Zap size={15} /> Hybrid</span></div><div className="price"><small>From</small><strong>₱{vehicle.price}</strong><span>/ day</span></div><button className="round-button" aria-label={`View ${vehicle.name}`}><ArrowRight /></button></div></article>)}</div>
+      <div className="section-head" data-reveal>
+        <div>
+          <p className="eyebrow">The collection</p>
+          <h2>Choose Your Drive</h2>
+        </div>
+        <p>From city streets to open roads, explore our hand-picked fleet of real high-performance and luxury automobiles.</p>
+      </div>
+      <div className="category-tabs" data-reveal>
+        {["All", "Sports", "Luxury", "Sedan", "SUV", "Economy"].map((tab) => (
+          <button
+            key={tab}
+            className={selectedCategory === tab ? "active" : ""}
+            onClick={() => setSelectedCategory(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      <div className="vehicle-grid">
+        {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).map((vehicle, index) => (
+          <article className="vehicle-item" key={vehicle.name} data-reveal>
+            <div className="vehicle-visual">
+              <Image
+                src={vehicle.image}
+                alt={`${vehicle.brand} ${vehicle.name}`}
+                fill
+                sizes="(max-width: 900px) 100vw, 50vw"
+                className="vehicle-real-photo"
+              />
+              <div className="vehicle-photo-overlay" />
+              <span className="vehicle-index">0{index + 1}</span>
+              <span className="vehicle-category">{vehicle.category}</span>
+              {vehicle.featured && <span className="vehicle-badge-pill">FEATURED</span>}
+            </div>
+            <div className="vehicle-info">
+              <div>
+                <p className="eyebrow">{vehicle.brand}</p>
+                <h3>{vehicle.name}</h3>
+              </div>
+              <div className="specs">
+                <span><Users size={14} /> {vehicle.seats} seats</span>
+                <span><Gauge size={14} /> {vehicle.transmission}</span>
+                <span><Zap size={14} /> {vehicle.engine}</span>
+              </div>
+              <div className="price">
+                <small>From</small>
+                <strong>₱{vehicle.price}</strong>
+                <span>/ day</span>
+              </div>
+              <button
+                className="round-button"
+                aria-label={`Book ${vehicle.brand} ${vehicle.name}`}
+                onClick={() => scrollTo("#booking")}
+              >
+                <ArrowRight size={18} />
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
 
-    <section id="booking" className="booking-section section-pad"><div className="booking-intro" data-reveal><p className="eyebrow">Start your journey</p><h2>Ready to<br />Drive?</h2><p>Your next car is closer than you think.</p></div><form className="booking-form" data-reveal onSubmit={(e) => e.preventDefault()}><label><span><MapPin size={15} /> Pickup location</span><input placeholder="Where are you starting?" /><ChevronDown size={16} /></label><label><span><MapPin size={15} /> Drop-off location</span><input placeholder="Same location" /><ChevronDown size={16} /></label><label><span><CalendarDays size={15} /> Pickup date</span><input type="date" /></label><label><span><CalendarDays size={15} /> Return date</span><input type="date" /></label><label><span><Gauge size={15} /> Vehicle type</span><select defaultValue=""><option value="" disabled>Choose a category</option><option>Economy</option><option>Sedan</option><option>SUV</option><option>Luxury</option></select><ChevronDown size={16} /></label><button className="search-button">Search available cars <ArrowRight size={18} /></button></form></section>
+    <section id="booking" className="booking-section section-pad"><div className="booking-intro" data-reveal><p className="eyebrow">Start your journey</p><h2>Ready to<br />Drive?</h2><p>Your next car is closer than you think.</p></div><form className="booking-form" data-reveal onSubmit={(e) => e.preventDefault()}><label><span><MapPin size={15} /> Pickup location</span><input placeholder="Where are you starting?" /><ChevronDown size={16} /></label><label><span><MapPin size={15} /> Drop-off location</span><input placeholder="Same location" /><ChevronDown size={16} /></label><label><span><CalendarDays size={15} /> Pickup date</span><input type="date" /></label><label><span><CalendarDays size={15} /> Return date</span><input type="date" /></label><label><span><Gauge size={15} /> Vehicle type</span><select defaultValue=""><option value="" disabled>Choose a category</option><option>Sports</option><option>Luxury</option><option>Sedan</option><option>SUV</option><option>Economy</option></select><ChevronDown size={16} /></label><button className="search-button">Search available cars <ArrowRight size={18} /></button></form></section>
 
     <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
