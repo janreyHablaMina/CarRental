@@ -8,17 +8,21 @@ import {
   ArrowUpRight,
   CalendarCheck,
   Car,
+  Check,
   CheckCircle2,
   ChevronRight,
   Clock,
   DollarSign,
+  Edit3,
   ExternalLink,
   Filter,
   LayoutDashboard,
+  MoreVertical,
   Plus,
   RefreshCw,
   Search,
   ShieldCheck,
+  Trash2,
   TrendingUp,
   Users,
   X,
@@ -292,8 +296,10 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<AdminBooking[]>(INITIAL_BOOKINGS);
   const [customers] = useState<AdminCustomer[]>(INITIAL_CUSTOMERS);
 
-  // Modal State
+  // Modal & Action Menu State
   const [showAddModal, setShowAddModal] = useState(false);
+  const [openActionMenuId, setOpenActionMenuId] = useState<string | null>(null);
+  const [editingVehicle, setEditingVehicle] = useState<AdminVehicle | null>(null);
   const [newVehicle, setNewVehicle] = useState({
     name: "",
     brand: "",
@@ -313,6 +319,21 @@ export default function AdminDashboard() {
     setVehicles((prev) =>
       prev.map((v) => (v.id === vehicleId ? { ...v, status: newStatus } : v))
     );
+    setOpenActionMenuId(null);
+  };
+
+  const handleDeleteVehicle = (vehicleId: string) => {
+    setVehicles((prev) => prev.filter((v) => v.id !== vehicleId));
+    setOpenActionMenuId(null);
+  };
+
+  const handleUpdateVehicle = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingVehicle) return;
+    setVehicles((prev) =>
+      prev.map((v) => (v.id === editingVehicle.id ? editingVehicle : v))
+    );
+    setEditingVehicle(null);
   };
 
   const handleBookingAction = (bookingId: string, newStatus: BookingStatus) => {
@@ -501,7 +522,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div className="kpi-value">
-                {activeRentalsCount} <small style={{ fontSize: 16, color: "#8b929d" }}>/ {vehicles.length}</small>
+                {activeRentalsCount} <small style={{ fontSize: 12, color: "#8b929d", fontWeight: 400 }}>/ {vehicles.length}</small>
               </div>
               <div className="kpi-footer">
                 <span className="kpi-trend-up">
@@ -758,35 +779,88 @@ export default function AdminDashboard() {
                           <span style={{ color: "#8b929d" }}>{car.trips} trips</span>
                         </td>
                         <td>
-                          <select
-                            value={car.status}
-                            onChange={(e) =>
-                              handleStatusChange(car.id, e.target.value as VehicleStatus)
-                            }
-                            className="status-select"
-                          >
-                            <option value="available">🟢 Available</option>
-                            <option value="rented">🔵 Rented</option>
-                            <option value="maintenance">🟡 Maintenance</option>
-                          </select>
+                          <span className={`status-pill status-${car.status}`}>
+                            {car.status}
+                          </span>
                         </td>
-                        <td>
+                        <td className="actions-cell">
                           <button
-                            className="table-action-btn"
-                            title="Quick Status Toggle"
-                            onClick={() =>
-                              handleStatusChange(
-                                car.id,
-                                car.status === "available"
-                                  ? "rented"
-                                  : car.status === "rented"
-                                  ? "maintenance"
-                                  : "available"
-                              )
-                            }
+                            className={`table-action-btn triple-dot-btn ${openActionMenuId === car.id ? "active" : ""}`}
+                            title="Actions"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenActionMenuId(openActionMenuId === car.id ? null : car.id);
+                            }}
                           >
-                            <RefreshCw size={15} />
+                            <MoreVertical size={16} />
                           </button>
+
+                          {openActionMenuId === car.id && (
+                            <>
+                              <div
+                                className="action-menu-backdrop"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenActionMenuId(null);
+                                }}
+                              />
+                              <div className="action-dropdown-menu">
+                                <div className="action-menu-header">Change Status</div>
+                                <button
+                                  type="button"
+                                  className={`action-menu-item ${car.status === "available" ? "selected" : ""}`}
+                                  onClick={() => handleStatusChange(car.id, "available")}
+                                >
+                                  <span className="menu-status-dot dot-available" />
+                                  <span>Available</span>
+                                  {car.status === "available" && <Check size={13} className="menu-check-icon" />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`action-menu-item ${car.status === "rented" ? "selected" : ""}`}
+                                  onClick={() => handleStatusChange(car.id, "rented")}
+                                >
+                                  <span className="menu-status-dot dot-rented" />
+                                  <span>Rented</span>
+                                  {car.status === "rented" && <Check size={13} className="menu-check-icon" />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`action-menu-item ${car.status === "maintenance" ? "selected" : ""}`}
+                                  onClick={() => handleStatusChange(car.id, "maintenance")}
+                                >
+                                  <span className="menu-status-dot dot-maintenance" />
+                                  <span>Maintenance</span>
+                                  {car.status === "maintenance" && <Check size={13} className="menu-check-icon" />}
+                                </button>
+
+                                <div className="action-menu-divider" />
+
+                                <button
+                                  type="button"
+                                  className="action-menu-item"
+                                  onClick={() => {
+                                    setEditingVehicle(car);
+                                    setOpenActionMenuId(null);
+                                  }}
+                                >
+                                  <Edit3 size={14} />
+                                  <span>Edit Vehicle</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className="action-menu-item danger"
+                                  onClick={() => {
+                                    handleDeleteVehicle(car.id);
+                                  }}
+                                >
+                                  <Trash2 size={14} />
+                                  <span>Delete Vehicle</span>
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -1110,7 +1184,129 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Edit Vehicle Modal */}
+      {editingVehicle && (
+        <div className="modal-overlay" onClick={() => setEditingVehicle(null)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <div>
+                <h3 className="modal-title">Edit Vehicle: {editingVehicle.name}</h3>
+                <p className="modal-subtitle">Update vehicle pricing, category, plate or status</p>
+              </div>
+              <button
+                className="modal-close-btn"
+                onClick={() => setEditingVehicle(null)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateVehicle} className="modal-form">
+              <label>
+                <span>Vehicle Model Name</span>
+                <input
+                  required
+                  value={editingVehicle.name}
+                  onChange={(e) =>
+                    setEditingVehicle({ ...editingVehicle, name: e.target.value })
+                  }
+                />
+              </label>
+
+              <label>
+                <span>Make / Brand</span>
+                <input
+                  required
+                  value={editingVehicle.brand}
+                  onChange={(e) =>
+                    setEditingVehicle({ ...editingVehicle, brand: e.target.value })
+                  }
+                />
+              </label>
+
+              <label>
+                <span>Vehicle Category</span>
+                <select
+                  value={editingVehicle.category}
+                  onChange={(e) =>
+                    setEditingVehicle({
+                      ...editingVehicle,
+                      category: e.target.value as any,
+                    })
+                  }
+                >
+                  <option value="Sports">Sports</option>
+                  <option value="Luxury">Luxury</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Economy">Economy</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Daily Rate (₱)</span>
+                <input
+                  type="number"
+                  required
+                  value={editingVehicle.rate}
+                  onChange={(e) =>
+                    setEditingVehicle({
+                      ...editingVehicle,
+                      rate: Number(e.target.value),
+                    })
+                  }
+                />
+              </label>
+
+              <label>
+                <span>License Plate</span>
+                <input
+                  value={editingVehicle.plate}
+                  onChange={(e) =>
+                    setEditingVehicle({ ...editingVehicle, plate: e.target.value })
+                  }
+                />
+              </label>
+
+              <label>
+                <span>Status</span>
+                <select
+                  value={editingVehicle.status}
+                  onChange={(e) =>
+                    setEditingVehicle({
+                      ...editingVehicle,
+                      status: e.target.value as any,
+                    })
+                  }
+                >
+                  <option value="available">🟢 Available</option>
+                  <option value="rented">🔵 Rented</option>
+                  <option value="maintenance">🟡 Maintenance</option>
+                </select>
+              </label>
+
+              <div className="modal-actions full-span">
+                <button
+                  type="button"
+                  className="modal-cancel-btn"
+                  onClick={() => setEditingVehicle(null)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="admin-primary-btn">
+                  Update Vehicle
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
