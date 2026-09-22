@@ -41,14 +41,20 @@ import "./admin.css";
 type VehicleStatus = "available" | "rented" | "maintenance";
 type BookingStatus = "confirmed" | "active" | "pending" | "completed";
 
-interface AdminVehicle {
+export interface DestinationPrice {
+  id: string;
+  route: string;
+  price: number;
+}
+
+export interface AdminVehicle {
   id: string;
   name: string;
   brand: string;
   category: "Sports" | "Luxury" | "Sedan" | "SUV" | "Economy";
   plate: string;
-  image: string;
-  rate: number;
+  images: string[];
+  destinations: DestinationPrice[];
   status: VehicleStatus;
   trips: number;
 }
@@ -84,8 +90,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Lamborghini",
     category: "Sports",
     plate: "DX-8890",
-    image: "/images/fleet-sports-huracan.jpg",
-    rate: 28000,
+    images: ["/images/fleet-sports-huracan.jpg"],
+    destinations: [
+      { id: "c6ffd5bb-b085-4384-8961-db90654ef155", route: "Pampanga to Zambales", price: 28000 },
+      { id: "a899908a-c7f8-4b5d-8254-0e5435a8a8d3", route: "Pampanga to Pangasinan", price: 28300 }
+    ],
     status: "rented",
     trips: 42,
   },
@@ -95,8 +104,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Porsche",
     category: "Sports",
     plate: "DX-9911",
-    image: "/images/fleet-porsche.jpg",
-    rate: 18500,
+    images: ["/images/fleet-porsche.jpg"],
+    destinations: [
+      { id: "5741c3f8-ee7e-44a2-a1f3-dda7b44acf6a", route: "Pampanga to Zambales", price: 18500 },
+      { id: "70922e8f-be28-4361-9907-3ddbcc2d4ca2", route: "Pampanga to Pangasinan", price: 18800 }
+    ],
     status: "available",
     trips: 68,
   },
@@ -106,8 +118,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Rolls-Royce",
     category: "Luxury",
     plate: "DX-7700",
-    image: "/images/fleet-rolls.jpg",
-    rate: 35000,
+    images: ["/images/fleet-rolls.jpg"],
+    destinations: [
+      { id: "7f4afbcd-d1a3-4dd7-9777-765db834c812", route: "Pampanga to Zambales", price: 35000 },
+      { id: "dbdcf78f-30cb-47c7-89f8-2bc878fc56ef", route: "Pampanga to Pangasinan", price: 35300 }
+    ],
     status: "rented",
     trips: 24,
   },
@@ -117,8 +132,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Tesla",
     category: "Luxury",
     plate: "DX-1020",
-    image: "/images/fleet-tesla.jpg",
-    rate: 12500,
+    images: ["/images/fleet-tesla.jpg"],
+    destinations: [
+      { id: "dab82c4c-64a6-41e3-86b1-168997229edb", route: "Pampanga to Zambales", price: 12500 },
+      { id: "0e577c27-a825-425a-a4f3-a5d08672bba5", route: "Pampanga to Pangasinan", price: 12800 }
+    ],
     status: "available",
     trips: 84,
   },
@@ -128,8 +146,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Range Rover",
     category: "SUV",
     plate: "DX-5521",
-    image: "/images/fleet-suv-velar.jpg",
-    rate: 8500,
+    images: ["/images/fleet-suv-velar.jpg"],
+    destinations: [
+      { id: "1c925ae5-0c86-4473-a573-311292a02d0c", route: "Pampanga to Zambales", price: 8500 },
+      { id: "9281ed7c-71d5-4a62-8e37-3f13e5aaa4f6", route: "Pampanga to Pangasinan", price: 8800 }
+    ],
     status: "available",
     trips: 53,
   },
@@ -139,8 +160,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "BMW",
     category: "Sedan",
     plate: "DX-3300",
-    image: "/images/fleet-bmw.jpg",
-    rate: 5500,
+    images: ["/images/fleet-bmw.jpg"],
+    destinations: [
+      { id: "e63c099b-b966-43af-bef6-d80c9ec53d64", route: "Pampanga to Zambales", price: 5500 },
+      { id: "97be5e24-ea27-4c2f-a6a4-beaff16cd2d7", route: "Pampanga to Pangasinan", price: 5800 }
+    ],
     status: "rented",
     trips: 92,
   },
@@ -150,8 +174,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Mercedes-Benz",
     category: "Sedan",
     plate: "DX-2130",
-    image: "/images/fleet-mercedes.jpg",
-    rate: 6800,
+    images: ["/images/fleet-mercedes.jpg"],
+    destinations: [
+      { id: "d9e43501-e7ce-4cdb-9ee6-e4284d94afa6", route: "Pampanga to Zambales", price: 6800 },
+      { id: "a147d75e-d84a-42bd-9ddd-90568b9a5658", route: "Pampanga to Pangasinan", price: 7100 }
+    ],
     status: "available",
     trips: 76,
   },
@@ -161,8 +188,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Toyota",
     category: "Economy",
     plate: "DX-1844",
-    image: "/images/fleet-toyota.jpg",
-    rate: 2200,
+    images: ["/images/fleet-toyota.jpg"],
+    destinations: [
+      { id: "fe1f1a14-ae51-4585-b3c8-2bbd26d273bd", route: "Pampanga to Zambales", price: 2200 },
+      { id: "c4722d2d-2d1f-4982-938e-49312d1359ff", route: "Pampanga to Pangasinan", price: 2500 }
+    ],
     status: "available",
     trips: 124,
   },
@@ -172,8 +202,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Nissan",
     category: "Economy",
     plate: "DX-4912",
-    image: "/images/fleet-nissan.jpg",
-    rate: 2800,
+    images: ["/images/fleet-nissan.jpg"],
+    destinations: [
+      { id: "b9ad920b-8209-44e8-9bfd-26571c062533", route: "Pampanga to Zambales", price: 2800 },
+      { id: "1ca49bd9-a065-4648-a6ca-510fe046f048", route: "Pampanga to Pangasinan", price: 3100 }
+    ],
     status: "maintenance",
     trips: 89,
   },
@@ -183,8 +216,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Porsche",
     category: "Sports",
     plate: "DX-9110",
-    image: "/images/fleet-porsche.jpg",
-    rate: 32000,
+    images: ["/images/fleet-porsche.jpg"],
+    destinations: [
+      { id: "5115feef-4873-4005-9992-18bd65589886", route: "Pampanga to Zambales", price: 32000 },
+      { id: "f163ae84-a8b2-4f94-854b-6359101bcb71", route: "Pampanga to Pangasinan", price: 32300 }
+    ],
     status: "available",
     trips: 31,
   },
@@ -194,8 +230,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Rolls-Royce",
     category: "Luxury",
     plate: "DX-7788",
-    image: "/images/fleet-rolls.jpg",
-    rate: 38000,
+    images: ["/images/fleet-rolls.jpg"],
+    destinations: [
+      { id: "33b57ad3-fa59-4a4d-aeb9-3263675e58d8", route: "Pampanga to Zambales", price: 38000 },
+      { id: "0bbe1acf-ced3-477b-843e-4430c7d5ccd4", route: "Pampanga to Pangasinan", price: 38300 }
+    ],
     status: "available",
     trips: 19,
   },
@@ -205,8 +244,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Range Rover",
     category: "SUV",
     plate: "DX-5580",
-    image: "/images/fleet-suv-velar.jpg",
-    rate: 11000,
+    images: ["/images/fleet-suv-velar.jpg"],
+    destinations: [
+      { id: "7197b578-6a28-4d4d-bf20-060f7cc202fb", route: "Pampanga to Zambales", price: 11000 },
+      { id: "64cc13bd-2ad2-4198-82ec-b27a687acf7a", route: "Pampanga to Pangasinan", price: 11300 }
+    ],
     status: "rented",
     trips: 65,
   },
@@ -216,8 +258,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "BMW",
     category: "Sedan",
     plate: "DX-3550",
-    image: "/images/fleet-bmw.jpg",
-    rate: 14500,
+    images: ["/images/fleet-bmw.jpg"],
+    destinations: [
+      { id: "a7cdbead-53e7-4ef7-999e-606a73ed66b9", route: "Pampanga to Zambales", price: 14500 },
+      { id: "52b8ba51-49cf-40ab-accc-4ca3d9ae87ce", route: "Pampanga to Pangasinan", price: 14800 }
+    ],
     status: "available",
     trips: 47,
   },
@@ -227,8 +272,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Toyota",
     category: "Economy",
     plate: "DX-1920",
-    image: "/images/fleet-toyota.jpg",
-    rate: 2500,
+    images: ["/images/fleet-toyota.jpg"],
+    destinations: [
+      { id: "2a1baa28-c758-4753-8844-d0adbe7b9839", route: "Pampanga to Zambales", price: 2500 },
+      { id: "e2877b65-b3f5-41f0-8354-f2f3c99ec854", route: "Pampanga to Pangasinan", price: 2800 }
+    ],
     status: "available",
     trips: 110,
   },
@@ -238,8 +286,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Lamborghini",
     category: "Sports",
     plate: "DX-8822",
-    image: "/images/fleet-sports-huracan.jpg",
-    rate: 42000,
+    images: ["/images/fleet-sports-huracan.jpg"],
+    destinations: [
+      { id: "9f8cddce-de07-4635-af50-d674fe27c95a", route: "Pampanga to Zambales", price: 42000 },
+      { id: "502403e4-e035-422b-ac6e-6c3302adcd9f", route: "Pampanga to Pangasinan", price: 42300 }
+    ],
     status: "maintenance",
     trips: 18,
   },
@@ -249,8 +300,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Rolls-Royce",
     category: "Luxury",
     plate: "DX-7744",
-    image: "/images/fleet-rolls.jpg",
-    rate: 45000,
+    images: ["/images/fleet-rolls.jpg"],
+    destinations: [
+      { id: "061ca6f3-2669-4212-aaab-792f64213195", route: "Pampanga to Zambales", price: 45000 },
+      { id: "41aa8e2f-5773-4323-aa1b-ad36e5cbbde3", route: "Pampanga to Pangasinan", price: 45300 }
+    ],
     status: "rented",
     trips: 29,
   },
@@ -260,8 +314,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Range Rover",
     category: "SUV",
     plate: "DX-5599",
-    image: "/images/fleet-suv-velar.jpg",
-    rate: 13500,
+    images: ["/images/fleet-suv-velar.jpg"],
+    destinations: [
+      { id: "4bb24569-8b88-4560-8645-b18e349b528e", route: "Pampanga to Zambales", price: 13500 },
+      { id: "e8a257fc-1886-4bbd-9f74-1bb10353f3e3", route: "Pampanga to Pangasinan", price: 13800 }
+    ],
     status: "available",
     trips: 58,
   },
@@ -271,8 +328,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Mercedes-Benz",
     category: "Sedan",
     plate: "DX-2255",
-    image: "/images/fleet-mercedes.jpg",
-    rate: 22000,
+    images: ["/images/fleet-mercedes.jpg"],
+    destinations: [
+      { id: "f63e85a4-faee-44f5-9c25-a137a52030b4", route: "Pampanga to Zambales", price: 22000 },
+      { id: "0013df16-c052-4e35-8b0f-83cae1f61f91", route: "Pampanga to Pangasinan", price: 22300 }
+    ],
     status: "rented",
     trips: 38,
   },
@@ -282,8 +342,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Nissan",
     category: "Economy",
     plate: "DX-4888",
-    image: "/images/fleet-nissan.jpg",
-    rate: 2400,
+    images: ["/images/fleet-nissan.jpg"],
+    destinations: [
+      { id: "969cd65a-951c-4d11-b6ec-7adeb29b6a7b", route: "Pampanga to Zambales", price: 2400 },
+      { id: "35d268b3-abde-4c6a-b950-fdc3c5ff1736", route: "Pampanga to Pangasinan", price: 2700 }
+    ],
     status: "available",
     trips: 95,
   },
@@ -293,8 +356,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Porsche",
     category: "Sports",
     plate: "DX-9718",
-    image: "/images/fleet-porsche.jpg",
-    rate: 16000,
+    images: ["/images/fleet-porsche.jpg"],
+    destinations: [
+      { id: "c1bdab0e-c659-49e0-aee0-44bf7b677631", route: "Pampanga to Zambales", price: 16000 },
+      { id: "02e74062-7f67-453d-8f0f-54890fb84a53", route: "Pampanga to Pangasinan", price: 16300 }
+    ],
     status: "available",
     trips: 72,
   },
@@ -304,8 +370,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Tesla",
     category: "Luxury",
     plate: "DX-1088",
-    image: "/images/fleet-tesla.jpg",
-    rate: 14500,
+    images: ["/images/fleet-tesla.jpg"],
+    destinations: [
+      { id: "e7e980f6-528b-4680-bea1-57a2c89c2e87", route: "Pampanga to Zambales", price: 14500 },
+      { id: "d65d1ad7-23e4-4353-82eb-cf45aef89d86", route: "Pampanga to Pangasinan", price: 14800 }
+    ],
     status: "available",
     trips: 61,
   },
@@ -315,8 +384,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Range Rover",
     category: "SUV",
     plate: "DX-5544",
-    image: "/images/fleet-suv-velar.jpg",
-    rate: 9800,
+    images: ["/images/fleet-suv-velar.jpg"],
+    destinations: [
+      { id: "27ae92ec-07b2-444d-8522-96d3aecf2bd2", route: "Pampanga to Zambales", price: 9800 },
+      { id: "f2e8e8c7-0ade-4f76-b4fc-53ac591b2791", route: "Pampanga to Pangasinan", price: 10100 }
+    ],
     status: "maintenance",
     trips: 44,
   },
@@ -326,8 +398,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "BMW",
     category: "Sedan",
     plate: "DX-3388",
-    image: "/images/fleet-bmw.jpg",
-    rate: 11500,
+    images: ["/images/fleet-bmw.jpg"],
+    destinations: [
+      { id: "743d09e9-eeb0-4a4e-9177-b92c6a6e96f0", route: "Pampanga to Zambales", price: 11500 },
+      { id: "ebeb3320-ff9e-443e-8bfb-2712714efae9", route: "Pampanga to Pangasinan", price: 11800 }
+    ],
     status: "rented",
     trips: 83,
   },
@@ -337,8 +412,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Toyota",
     category: "Economy",
     plate: "DX-1899",
-    image: "/images/fleet-toyota.jpg",
-    rate: 3200,
+    images: ["/images/fleet-toyota.jpg"],
+    destinations: [
+      { id: "37db979e-2880-44bf-9dc4-53293d047f6e", route: "Pampanga to Zambales", price: 3200 },
+      { id: "82b229c4-9384-4d59-9f6f-b2aa7879f15e", route: "Pampanga to Pangasinan", price: 3500 }
+    ],
     status: "available",
     trips: 102,
   },
@@ -348,8 +426,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Lamborghini",
     category: "Sports",
     plate: "DX-8801",
-    image: "/images/fleet-sports-huracan.jpg",
-    rate: 52000,
+    images: ["/images/fleet-sports-huracan.jpg"],
+    destinations: [
+      { id: "c8fe8020-ae30-4259-bd94-b2299f16b57a", route: "Pampanga to Zambales", price: 52000 },
+      { id: "2bc783d2-de25-4860-94eb-e605b905846e", route: "Pampanga to Pangasinan", price: 52300 }
+    ],
     status: "rented",
     trips: 15,
   },
@@ -359,8 +440,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Rolls-Royce",
     category: "Luxury",
     plate: "DX-7799",
-    image: "/images/fleet-rolls.jpg",
-    rate: 48000,
+    images: ["/images/fleet-rolls.jpg"],
+    destinations: [
+      { id: "b8dfe779-7569-4a3b-a330-768305fd05a9", route: "Pampanga to Zambales", price: 48000 },
+      { id: "9c78ca4d-c2a2-4c22-913c-0c5a2579fdc0", route: "Pampanga to Pangasinan", price: 48300 }
+    ],
     status: "available",
     trips: 12,
   },
@@ -370,8 +454,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Range Rover",
     category: "SUV",
     plate: "DX-5511",
-    image: "/images/fleet-suv-velar.jpg",
-    rate: 10500,
+    images: ["/images/fleet-suv-velar.jpg"],
+    destinations: [
+      { id: "bac172d2-4a2b-4e3d-a342-cad6f597f5e9", route: "Pampanga to Zambales", price: 10500 },
+      { id: "bb9ba5b1-3977-4225-a357-8e91e4242788", route: "Pampanga to Pangasinan", price: 10800 }
+    ],
     status: "available",
     trips: 39,
   },
@@ -381,8 +468,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Mercedes-Benz",
     category: "Sedan",
     plate: "DX-2188",
-    image: "/images/fleet-mercedes.jpg",
-    rate: 5800,
+    images: ["/images/fleet-mercedes.jpg"],
+    destinations: [
+      { id: "0b77cf0f-71b4-4826-b0e6-5a5f9f2ca817", route: "Pampanga to Zambales", price: 5800 },
+      { id: "253cb81c-9089-4819-83a0-c4bc377d1a0d", route: "Pampanga to Pangasinan", price: 6100 }
+    ],
     status: "available",
     trips: 88,
   },
@@ -392,8 +482,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Nissan",
     category: "Economy",
     plate: "DX-4955",
-    image: "/images/fleet-nissan.jpg",
-    rate: 2600,
+    images: ["/images/fleet-nissan.jpg"],
+    destinations: [
+      { id: "2a543953-6024-4e76-9c87-004ebf78b8a5", route: "Pampanga to Zambales", price: 2600 },
+      { id: "bb94027e-faac-4e04-a5f9-76b16f69a447", route: "Pampanga to Pangasinan", price: 2900 }
+    ],
     status: "available",
     trips: 115,
   },
@@ -403,8 +496,11 @@ const INITIAL_VEHICLES: AdminVehicle[] = [
     brand: "Porsche",
     category: "Sports",
     plate: "DX-9950",
-    image: "/images/fleet-porsche.jpg",
-    rate: 26000,
+    images: ["/images/fleet-porsche.jpg"],
+    destinations: [
+      { id: "ef980c2d-b95d-4a51-b73d-f1adb2819f55", route: "Pampanga to Zambales", price: 26000 },
+      { id: "fb700f33-c11d-4bfb-a1ce-5957c5fffc92", route: "Pampanga to Pangasinan", price: 26300 }
+    ],
     status: "maintenance",
     trips: 27,
   },
@@ -751,13 +847,20 @@ export default function AdminDashboard() {
   const [openActionMenuId, setOpenActionMenuId] = useState<string | null>(null);
   const [openBookingMenuId, setOpenBookingMenuId] = useState<string | null>(null);
   const [editingVehicle, setEditingVehicle] = useState<AdminVehicle | null>(null);
-  const [newVehicle, setNewVehicle] = useState({
+  const [newVehicle, setNewVehicle] = useState<{
+    name: string;
+    brand: string;
+    category: "Sports" | "Luxury" | "Sedan" | "SUV" | "Economy";
+    plate: string;
+    images: string[];
+    destinations: DestinationPrice[];
+  }>({
     name: "",
     brand: "",
-    category: "Sports" as const,
+    category: "Sports",
     plate: "",
-    rate: 5000,
-    image: "/images/fleet-sports-huracan.jpg",
+    images: ["/images/fleet-sports-huracan.jpg"],
+    destinations: [{ id: Date.now().toString(), route: "Pampanga to Zambales", price: 5000 }],
   });
 
   // KPI Calculations
@@ -839,8 +942,8 @@ export default function AdminDashboard() {
       brand: newVehicle.brand,
       category: newVehicle.category,
       plate: newVehicle.plate || `DX-${Math.floor(1000 + Math.random() * 9000)}`,
-      rate: Number(newVehicle.rate) || 5000,
-      image: newVehicle.image,
+      images: newVehicle.images,
+      destinations: newVehicle.destinations,
       status: "available",
       trips: 0,
     };
@@ -852,8 +955,8 @@ export default function AdminDashboard() {
       brand: "",
       category: "Sports",
       plate: "",
-      rate: 5000,
-      image: "/images/fleet-sports-huracan.jpg",
+      images: ["/images/fleet-sports-huracan.jpg"],
+      destinations: [{ id: Date.now().toString(), route: "Pampanga to Zambales", price: 5000 }],
     });
   };
 
@@ -1367,7 +1470,7 @@ export default function AdminDashboard() {
                         <div className="ops-card" key={`maint-${v.id}`}>
                           <div className="ops-card-left">
                             <div className="ops-thumb">
-                              <Image src={v.image} alt={v.name} fill sizes="60px" />
+                              <Image src={v.images[0] || ""} alt={v.name} fill sizes="60px" />
                             </div>
                             <div className="ops-vehicle-info">
                               <div className="ops-vehicle-title-row">
@@ -1393,7 +1496,7 @@ export default function AdminDashboard() {
                               <span className="ops-detail-value" style={{ fontSize: 11.5 }}>
                                 {meta.diagnostic}
                               </span>
-                              <span className="ops-detail-sub">Daily rate: ₱{v.rate.toLocaleString()}</span>
+                              <span className="ops-detail-sub">Rate from: ₱{v.destinations?.[0]?.price.toLocaleString() || 0}</span>
                             </div>
 
                             <div className="ops-detail-block">
@@ -1595,7 +1698,7 @@ export default function AdminDashboard() {
                           <div className="vehicle-cell">
                             <div className="vehicle-thumb">
                               <Image
-                                src={car.image}
+                                src={car.images[0] || ""}
                                 alt={car.name}
                                 fill
                                 sizes="60px"
@@ -1618,7 +1721,7 @@ export default function AdminDashboard() {
                           </span>
                         </td>
                         <td>
-                          <strong>₱{car.rate.toLocaleString()}</strong> / day
+                          <strong>₱{car.destinations?.[0]?.price.toLocaleString() || 0}</strong>+
                         </td>
                         <td>
                           <span style={{ color: "#8b929d" }}>{car.trips} trips</span>
@@ -2244,19 +2347,38 @@ export default function AdminDashboard() {
               </label>
 
               <label>
-                <span>Daily Rate (₱)</span>
-                <input
-                  type="number"
-                  required
-                  placeholder="e.g. 24000"
-                  value={newVehicle.rate}
-                  onChange={(e) =>
-                    setNewVehicle({
-                      ...newVehicle,
-                      rate: Number(e.target.value),
-                    })
-                  }
-                />
+                <div className="dynamic-list-container">
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
+                    <button type="button" onClick={() => setNewVehicle({ ...newVehicle, destinations: [...newVehicle.destinations, { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
+                  </div>
+                  {newVehicle.destinations.map((dest, i) => (
+                    <div key={dest.id} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                      <input
+                        placeholder="Route (e.g. Pampanga to Zambales)"
+                        value={dest.route}
+                        onChange={(e) => {
+                          const newDests = [...newVehicle.destinations];
+                          newDests[i].route = e.target.value;
+                          setNewVehicle({ ...newVehicle, destinations: newDests });
+                        }}
+                        style={{ flex: 2 }}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        value={dest.price}
+                        onChange={(e) => {
+                          const newDests = [...newVehicle.destinations];
+                          newDests[i].price = Number(e.target.value);
+                          setNewVehicle({ ...newVehicle, destinations: newDests });
+                        }}
+                        style={{ flex: 1 }}
+                      />
+                      <button type="button" onClick={() => setNewVehicle({ ...newVehicle, destinations: newVehicle.destinations.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
+                    </div>
+                  ))}
+                </div>
               </label>
 
               <label>
@@ -2270,25 +2392,27 @@ export default function AdminDashboard() {
                 />
               </label>
 
-              <label>
-                <span>Image Path / Preset</span>
-                <select
-                  value={newVehicle.image}
-                  onChange={(e) =>
-                    setNewVehicle({ ...newVehicle, image: e.target.value })
-                  }
-                >
-                  <option value="/images/fleet-sports-huracan.jpg">Lamborghini Huracán</option>
-                  <option value="/images/fleet-porsche.jpg">Porsche 911</option>
-                  <option value="/images/fleet-rolls.jpg">Rolls-Royce</option>
-                  <option value="/images/fleet-tesla.jpg">Tesla Model S</option>
-                  <option value="/images/fleet-suv-velar.jpg">Range Rover Velar</option>
-                  <option value="/images/fleet-bmw.jpg">BMW 330i</option>
-                  <option value="/images/fleet-mercedes.jpg">Mercedes-Benz E-Class</option>
-                  <option value="/images/fleet-toyota.jpg">Toyota GR</option>
-                  <option value="/images/fleet-nissan.jpg">Nissan Altima</option>
-                </select>
-              </label>
+              <div className="dynamic-list-container">
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
+                  <button type="button" onClick={() => setNewVehicle({ ...newVehicle, images: [...newVehicle.images, ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
+                </div>
+                {newVehicle.images.map((img, i) => (
+                  <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <input
+                      placeholder="Image URL or path"
+                      value={img}
+                      onChange={(e) => {
+                        const newImgs = [...newVehicle.images];
+                        newImgs[i] = e.target.value;
+                        setNewVehicle({ ...newVehicle, images: newImgs });
+                      }}
+                      style={{ flex: 1 }}
+                    />
+                    <button type="button" onClick={() => setNewVehicle({ ...newVehicle, images: newVehicle.images.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
+                  </div>
+                ))}
+              </div>
 
               <div className="modal-actions full-span">
                 <button
@@ -2370,18 +2494,38 @@ export default function AdminDashboard() {
               </label>
 
               <label>
-                <span>Daily Rate (₱)</span>
-                <input
-                  type="number"
-                  required
-                  value={editingVehicle.rate}
-                  onChange={(e) =>
-                    setEditingVehicle({
-                      ...editingVehicle,
-                      rate: Number(e.target.value),
-                    })
-                  }
-                />
+                <div className="dynamic-list-container">
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                    <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
+                    <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, destinations: [...(editingVehicle.destinations || []), { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
+                  </div>
+                  {editingVehicle.destinations?.map((dest, i) => (
+                    <div key={dest.id} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                      <input
+                        placeholder="Route (e.g. Pampanga to Zambales)"
+                        value={dest.route}
+                        onChange={(e) => {
+                          const newDests = [...editingVehicle.destinations];
+                          newDests[i] = { ...dest, route: e.target.value };
+                          setEditingVehicle({ ...editingVehicle, destinations: newDests });
+                        }}
+                        style={{ flex: 2 }}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        value={dest.price}
+                        onChange={(e) => {
+                          const newDests = [...editingVehicle.destinations];
+                          newDests[i] = { ...dest, price: Number(e.target.value) };
+                          setEditingVehicle({ ...editingVehicle, destinations: newDests });
+                        }}
+                        style={{ flex: 1 }}
+                      />
+                      <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, destinations: editingVehicle.destinations.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
+                    </div>
+                  ))}
+                </div>
               </label>
 
               <label>
@@ -2393,6 +2537,28 @@ export default function AdminDashboard() {
                   }
                 />
               </label>
+
+              <div className="dynamic-list-container">
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                  <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
+                  <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, images: [...(editingVehicle.images || []), ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
+                </div>
+                {editingVehicle.images?.map((img, i) => (
+                  <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <input
+                      placeholder="Image URL or path"
+                      value={img}
+                      onChange={(e) => {
+                        const newImgs = [...editingVehicle.images];
+                        newImgs[i] = e.target.value;
+                        setEditingVehicle({ ...editingVehicle, images: newImgs });
+                      }}
+                      style={{ flex: 1 }}
+                    />
+                    <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, images: editingVehicle.images.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
+                  </div>
+                ))}
+              </div>
 
               <label>
                 <span>Status</span>
