@@ -4,12 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Activity,
   AlertTriangle,
   ArrowUpRight,
   CalendarCheck,
   Car,
   Check,
   CheckCircle2,
+  CheckSquare,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -17,15 +19,21 @@ import {
   Edit3,
   ExternalLink,
   Filter,
+  Key,
   LayoutDashboard,
+  MapPin,
   MoreVertical,
+  Phone,
   Plus,
   RefreshCw,
   Search,
+  ShieldAlert,
   ShieldCheck,
+  Sparkles,
   Trash2,
   TrendingUp,
   Users,
+  Wrench,
   X,
 } from "lucide-react";
 import "./admin.css";
@@ -602,6 +610,120 @@ const INITIAL_CUSTOMERS: AdminCustomer[] = [
   },
 ];
 
+const OPS_METADATA: Record<string, {
+  window: string;
+  timeRemaining: string;
+  urgency: "urgent" | "soon" | "normal";
+  bay: string;
+  notes: string;
+  phone?: string;
+}> = {
+  "bk-01": {
+    window: "Today 5:30 PM",
+    timeRemaining: "Due in ~3h 45m",
+    urgency: "soon",
+    bay: "Valet Bay 2 (VIP Reception)",
+    notes: "VIP Renter · Fuel tank pre-paid",
+    phone: "+63 917 889 2041",
+  },
+  "bk-03": {
+    window: "Today 7:00 PM",
+    timeRemaining: "Due in ~5h 15m",
+    urgency: "soon",
+    bay: "Valet Bay 1 (Main Concierge)",
+    notes: "Chauffeur drop-off requested",
+    phone: "+63 920 441 9920",
+  },
+  "bk-08": {
+    window: "Tomorrow 11:00 AM",
+    timeRemaining: "Due in ~24 hours",
+    urgency: "normal",
+    bay: "Valet Bay 3 (Express Intake)",
+    notes: "Highway mileage audit required",
+    phone: "+63 918 552 1109",
+  },
+  "bk-02": {
+    window: "Today 2:30 PM",
+    timeRemaining: "Departs in ~45 mins",
+    urgency: "urgent",
+    bay: "Dispatch Bay A",
+    notes: "Ceramic detailing passed · Keys staged",
+    phone: "+63 919 332 7781",
+  },
+  "bk-06": {
+    window: "Today 4:15 PM",
+    timeRemaining: "Departs in ~2h 30m",
+    urgency: "soon",
+    bay: "Dispatch Bay B",
+    notes: "Full tank sanitized · Keycard programmed",
+    phone: "+63 922 881 4059",
+  },
+  "bk-10": {
+    window: "Tomorrow 9:00 AM",
+    timeRemaining: "Scheduled Tomorrow",
+    urgency: "normal",
+    bay: "Staging Bay C",
+    notes: "Interior leather conditioning complete",
+    phone: "+63 915 772 3341",
+  },
+};
+
+const MAINTENANCE_METADATA: Record<string, {
+  service: string;
+  bay: string;
+  eta: string;
+  diagnostic: string;
+}> = {
+  "v-9": {
+    service: "Brembo Carbon Ceramic Brake Inspection",
+    bay: "Tech Bay 3 · High-Performance",
+    eta: "Ready for Sign-Off",
+    diagnostic: "100% Pad thickness verified, sensors calibrated",
+  },
+  "v-15": {
+    service: "Synthetic Oil & Multi-Point Telemetry Scan",
+    bay: "Tech Bay 1 · Diagnostics",
+    eta: "Today 4:30 PM",
+    diagnostic: "Fluids topped up, zero ECU fault codes",
+  },
+  "v-22": {
+    service: "Pirelli P-Zero Tire Pressure & Tread Check",
+    bay: "Tech Bay 2 · Alignment",
+    eta: "Tomorrow 10:00 AM",
+    diagnostic: "Rear camber balanced, tread 7.8mm",
+  },
+  "v-30": {
+    service: "Tri-Motor EV Battery Health & Firmware 4.2",
+    bay: "EV Supercharging Bay 1",
+    eta: "Ready for Sign-Off",
+    diagnostic: "Battery pack balance: 99.4% SOH, flashed v4.2",
+  },
+};
+
+const getOpsMeta = (bookingId: string) => {
+  return (
+    OPS_METADATA[bookingId] || {
+      window: "Today 6:00 PM",
+      timeRemaining: "In Progress",
+      urgency: "normal" as const,
+      bay: "Intake Bay 1",
+      notes: "Standard concierge return protocol",
+      phone: "+63 917 000 1234",
+    }
+  );
+};
+
+const getMaintMeta = (vehicleId: string) => {
+  return (
+    MAINTENANCE_METADATA[vehicleId] || {
+      service: "Scheduled Multi-Point Safety Inspection",
+      bay: "Tech Bay 1",
+      eta: "Ready for Sign-Off",
+      diagnostic: "All diagnostics normal, fluids optimal",
+    }
+  );
+};
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "fleet" | "bookings" | "customers">("overview");
   const [searchQuery, setSearchQuery] = useState("");
@@ -615,6 +737,10 @@ export default function AdminDashboard() {
   const [bookingVehicleFilter, setBookingVehicleFilter] = useState<string>("all");
   const [bookingPage, setBookingPage] = useState(1);
   const [bookingPageSize, setBookingPageSize] = useState(10);
+
+  // Operations Hub State
+  const [opsTab, setOpsTab] = useState<"all" | "returns" | "dispatches" | "maintenance">("all");
+  const [opsNotification, setOpsNotification] = useState<string | null>(null);
 
   const [vehicles, setVehicles] = useState<AdminVehicle[]>(INITIAL_VEHICLES);
   const [bookings, setBookings] = useState<AdminBooking[]>(INITIAL_BOOKINGS);
@@ -639,6 +765,11 @@ export default function AdminDashboard() {
   const activeRentalsCount = vehicles.filter((v) => v.status === "rented").length;
   const availableCount = vehicles.filter((v) => v.status === "available").length;
   const maintenanceCount = vehicles.filter((v) => v.status === "maintenance").length;
+
+  // Live Turnaround Operations Lists
+  const activeReturns = bookings.filter((b) => b.status === "active");
+  const scheduledDispatches = bookings.filter((b) => b.status === "confirmed");
+  const maintenanceList = vehicles.filter((v) => v.status === "maintenance");
 
   const handleStatusChange = (vehicleId: string, newStatus: VehicleStatus) => {
     setVehicles((prev) =>
@@ -666,6 +797,36 @@ export default function AdminDashboard() {
       prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
     );
     setOpenBookingMenuId(null);
+  };
+
+  const handleOpsReturn = (bookingId: string, carName: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === bookingId ? { ...b, status: "completed" as BookingStatus } : b))
+    );
+    setVehicles((prev) =>
+      prev.map((v) => (v.name === carName ? { ...v, status: "available" as VehicleStatus } : v))
+    );
+    setOpsNotification(`✓ ${carName} returned & inspected. Restored to Available fleet.`);
+    setTimeout(() => setOpsNotification(null), 4000);
+  };
+
+  const handleOpsDispatch = (bookingId: string, carName: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === bookingId ? { ...b, status: "active" as BookingStatus } : b))
+    );
+    setVehicles((prev) =>
+      prev.map((v) => (v.name === carName ? { ...v, status: "rented" as VehicleStatus } : v))
+    );
+    setOpsNotification(`✓ Key dispatched for ${carName}. Rental trip is now Active on Road.`);
+    setTimeout(() => setOpsNotification(null), 4000);
+  };
+
+  const handleOpsReleaseMaintenance = (vehicleId: string, carName: string) => {
+    setVehicles((prev) =>
+      prev.map((v) => (v.id === vehicleId ? { ...v, status: "available" as VehicleStatus } : v))
+    );
+    setOpsNotification(`✓ Service inspection passed for ${carName}. Restored to Available fleet.`);
+    setTimeout(() => setOpsNotification(null), 4000);
   };
 
   const handleCreateVehicle = (e: React.FormEvent) => {
@@ -989,74 +1150,308 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Recent Activity Table */}
+              {/* Live Operations & Turnaround Hub */}
               <div className="dashboard-panel">
-                <div className="panel-head">
+                <div className="panel-head ops-hub-header">
                   <div>
-                    <h2 className="panel-title">Recent Rental Operations</h2>
-                    <p className="panel-subtitle">Real-time dispatches, check-ins, and reservations</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <h2 className="panel-title">Live Operations & Turnaround Hub</h2>
+                      <span className="ops-pulse-dot" title="Real-time telemetry stream active" />
+                    </div>
+                    <p className="panel-subtitle">
+                      Real-time on-road telemetry, today's return deadlines, dispatch staging, and fleet health
+                    </p>
                   </div>
                   <button
+                    type="button"
                     className="filter-btn"
                     onClick={() => setActiveTab("bookings")}
                   >
-                    View All Bookings <ArrowUpRight size={14} style={{ display: "inline" }} />
+                    All Reservations <ArrowUpRight size={14} style={{ display: "inline" }} />
                   </button>
                 </div>
 
-                <div className="admin-table-wrap">
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>Booking ID</th>
-                        <th>Renter</th>
-                        <th>Vehicle</th>
-                        <th>Rental Window</th>
-                        <th>Total (₱)</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {bookings.slice(0, 4).map((b) => (
-                        <tr key={b.id}>
-                          <td>
-                            <strong style={{ fontFamily: "var(--font-mono)", color: "#4da3ff" }}>
-                              {b.id}
-                            </strong>
-                          </td>
-                          <td>
-                            <div style={{ fontWeight: 600 }}>{b.customerName}</div>
-                            <div style={{ fontSize: 11, color: "#8b929d" }}>{b.customerEmail}</div>
-                          </td>
-                          <td>
-                            <div className="vehicle-cell">
-                              <div className="vehicle-thumb">
-                                <Image
-                                  src={b.carImage}
-                                  alt={b.carName}
-                                  fill
-                                  sizes="60px"
-                                />
-                              </div>
-                              <span className="vehicle-cell-title">{b.carName}</span>
+                {opsNotification && (
+                  <div className="ops-toast">
+                    <CheckCircle2 size={15} />
+                    <span>{opsNotification}</span>
+                  </div>
+                )}
+
+                {/* Operations Filter / Category Bar */}
+                <div className="ops-filter-bar">
+                  <button
+                    type="button"
+                    className={`ops-filter-tab ${opsTab === "all" ? "active" : ""}`}
+                    onClick={() => setOpsTab("all")}
+                  >
+                    <Activity size={13} />
+                    <span>All Active Tasks</span>
+                    <span className="ops-filter-badge">{activeReturns.length + scheduledDispatches.length + maintenanceList.length}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`ops-filter-tab ${opsTab === "returns" ? "active" : ""}`}
+                    onClick={() => setOpsTab("returns")}
+                  >
+                    <Car size={13} />
+                    <span>Returns Due</span>
+                    <span className="ops-filter-badge">{activeReturns.length}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`ops-filter-tab ${opsTab === "dispatches" ? "active" : ""}`}
+                    onClick={() => setOpsTab("dispatches")}
+                  >
+                    <Key size={13} />
+                    <span>Scheduled Dispatches</span>
+                    <span className="ops-filter-badge">{scheduledDispatches.length}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`ops-filter-tab ${opsTab === "maintenance" ? "active" : ""}`}
+                    onClick={() => setOpsTab("maintenance")}
+                  >
+                    <Wrench size={13} />
+                    <span>Fleet Service & Health</span>
+                    <span className="ops-filter-badge">{maintenanceList.length}</span>
+                  </button>
+                </div>
+
+                {/* Turnaround Cards List */}
+                <div className="ops-list">
+                  {/* Returns */}
+                  {(opsTab === "all" || opsTab === "returns") &&
+                    activeReturns.map((b) => {
+                      const meta = getOpsMeta(b.id);
+                      return (
+                        <div className="ops-card" key={`return-${b.id}`}>
+                          <div className="ops-card-left">
+                            <div className="ops-thumb">
+                              <Image src={b.carImage} alt={b.carName} fill sizes="60px" />
                             </div>
-                          </td>
-                          <td>
-                            <div>{b.startDate} to {b.endDate}</div>
-                            <small style={{ color: "#8b929d" }}>{b.days} Days</small>
-                          </td>
-                          <td>
-                            <strong>₱{b.totalPrice.toLocaleString()}</strong>
-                          </td>
-                          <td>
-                            <span className={`status-pill status-${b.status}`}>
-                              {b.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                            <div className="ops-vehicle-info">
+                              <div className="ops-vehicle-title-row">
+                                <span className="ops-vehicle-name">{b.carName}</span>
+                              </div>
+                              <div className="ops-type-tag">
+                                <span className="ops-plate-badge">{b.id}</span>
+                                <span>•</span>
+                                <span>Return Intake</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-center">
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Current Renter</span>
+                              <span className="ops-detail-value">{b.customerName}</span>
+                              <span className="ops-detail-sub">{meta.phone || b.customerEmail}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Return Window</span>
+                              <span className="ops-detail-value">{meta.window}</span>
+                              <span className="ops-detail-sub">{meta.bay}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Telemetry / Countdown</span>
+                              <span className="ops-telemetry-pill ops-telemetry-return">
+                                <Clock size={12} />
+                                {meta.timeRemaining}
+                              </span>
+                              <span className="ops-detail-sub">{meta.notes}</span>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-actions">
+                            <button
+                              type="button"
+                              className="ops-btn-primary ops-btn-return"
+                              onClick={() => handleOpsReturn(b.id, b.carName)}
+                              title="Sign off intake inspection and mark returned"
+                            >
+                              <CheckCircle2 size={13} />
+                              <span>Inspect & Return</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="ops-btn-secondary"
+                              onClick={() => setActiveTab("bookings")}
+                              title="View full booking record"
+                            >
+                              <span>Details</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {/* Dispatches */}
+                  {(opsTab === "all" || opsTab === "dispatches") &&
+                    scheduledDispatches.map((b) => {
+                      const meta = getOpsMeta(b.id);
+                      return (
+                        <div className="ops-card" key={`dispatch-${b.id}`}>
+                          <div className="ops-card-left">
+                            <div className="ops-thumb">
+                              <Image src={b.carImage} alt={b.carName} fill sizes="60px" />
+                            </div>
+                            <div className="ops-vehicle-info">
+                              <div className="ops-vehicle-title-row">
+                                <span className="ops-vehicle-name">{b.carName}</span>
+                              </div>
+                              <div className="ops-type-tag">
+                                <span className="ops-plate-badge">{b.id}</span>
+                                <span>•</span>
+                                <span>Staged for Pickup</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-center">
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Reserved By</span>
+                              <span className="ops-detail-value">{b.customerName}</span>
+                              <span className="ops-detail-sub">{meta.phone || b.customerEmail}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Dispatch Schedule</span>
+                              <span className="ops-detail-value">{meta.window}</span>
+                              <span className="ops-detail-sub">{meta.bay}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Prep Status</span>
+                              <span className="ops-telemetry-pill ops-telemetry-dispatch">
+                                <Key size={12} />
+                                {meta.timeRemaining}
+                              </span>
+                              <span className="ops-detail-sub">{meta.notes}</span>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-actions">
+                            <button
+                              type="button"
+                              className="ops-btn-primary ops-btn-dispatch"
+                              onClick={() => handleOpsDispatch(b.id, b.carName)}
+                              title="Hand over keys and start rental dispatch"
+                            >
+                              <Key size={13} />
+                              <span>Dispatch Key</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="ops-btn-secondary"
+                              onClick={() => setActiveTab("bookings")}
+                              title="View reservation agreement"
+                            >
+                              <span>Agreement</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {/* Maintenance */}
+                  {(opsTab === "all" || opsTab === "maintenance") &&
+                    maintenanceList.map((v) => {
+                      const meta = getMaintMeta(v.id);
+                      return (
+                        <div className="ops-card" key={`maint-${v.id}`}>
+                          <div className="ops-card-left">
+                            <div className="ops-thumb">
+                              <Image src={v.image} alt={v.name} fill sizes="60px" />
+                            </div>
+                            <div className="ops-vehicle-info">
+                              <div className="ops-vehicle-title-row">
+                                <span className="ops-vehicle-name">{v.name}</span>
+                              </div>
+                              <div className="ops-type-tag">
+                                <span className="ops-plate-badge">{v.plate}</span>
+                                <span>•</span>
+                                <span>{v.category} Tier</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-center">
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Service Required</span>
+                              <span className="ops-detail-value">{meta.service}</span>
+                              <span className="ops-detail-sub">{meta.bay}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Diagnostics & Notes</span>
+                              <span className="ops-detail-value" style={{ fontSize: 11.5 }}>
+                                {meta.diagnostic}
+                              </span>
+                              <span className="ops-detail-sub">Daily rate: ₱{v.rate.toLocaleString()}</span>
+                            </div>
+
+                            <div className="ops-detail-block">
+                              <span className="ops-detail-label">Est. Completion</span>
+                              <span className="ops-telemetry-pill ops-telemetry-maintenance">
+                                <Wrench size={12} />
+                                {meta.eta}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="ops-card-actions">
+                            <button
+                              type="button"
+                              className="ops-btn-primary ops-btn-service"
+                              onClick={() => handleOpsReleaseMaintenance(v.id, v.name)}
+                              title="Sign off completed service and return to ready fleet"
+                            >
+                              <CheckSquare size={13} />
+                              <span>Release to Fleet</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="ops-btn-secondary"
+                              onClick={() => setActiveTab("fleet")}
+                              title="View fleet inventory item"
+                            >
+                              <span>Inspect</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {/* Empty State */}
+                  {((opsTab === "returns" && activeReturns.length === 0) ||
+                    (opsTab === "dispatches" && scheduledDispatches.length === 0) ||
+                    (opsTab === "maintenance" && maintenanceList.length === 0) ||
+                    (opsTab === "all" &&
+                      activeReturns.length === 0 &&
+                      scheduledDispatches.length === 0 &&
+                      maintenanceList.length === 0)) && (
+                    <div className="ops-empty">
+                      <CheckCircle2 size={32} style={{ color: "var(--admin-success)", opacity: 0.8 }} />
+                      <p>All operational tasks in this category are completely cleared!</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Operations Advisory Bar */}
+                <div className="ops-notice-bar">
+                  <div className="ops-notice-left">
+                    <span className="ops-pulse-dot" />
+                    <span>
+                      <strong>Valet Intake Bays 1 & 2</strong> operating at optimal capacity. Digital key locker active.
+                    </span>
+                  </div>
+                  <span>Standard turnover requirement: dual-staff inspection & odometer verification.</span>
                 </div>
               </div>
             </>
