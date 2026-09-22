@@ -2346,8 +2346,8 @@ export default function AdminDashboard() {
                 </select>
               </label>
 
-              <label>
-                <div className="dynamic-list-container">
+              <label className="full-span">
+                <div className="dynamic-list-container full-span">
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                     <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
                     <button type="button" onClick={() => setNewVehicle({ ...newVehicle, destinations: [...newVehicle.destinations, { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
@@ -2392,7 +2392,7 @@ export default function AdminDashboard() {
                 />
               </label>
 
-              <div className="dynamic-list-container">
+              <div className="dynamic-list-container full-span">
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                   <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
                   <button type="button" onClick={() => setNewVehicle({ ...newVehicle, images: [...newVehicle.images, ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
@@ -2493,8 +2493,8 @@ export default function AdminDashboard() {
                 </select>
               </label>
 
-              <label>
-                <div className="dynamic-list-container">
+              <label className="full-span">
+                <div className="dynamic-list-container full-span">
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                     <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
                     <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, destinations: [...(editingVehicle.destinations || []), { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
@@ -2538,7 +2538,7 @@ export default function AdminDashboard() {
                 />
               </label>
 
-              <div className="dynamic-list-container">
+              <div className="dynamic-list-container full-span">
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                   <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
                   <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, images: [...(editingVehicle.images || []), ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
