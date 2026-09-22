@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   Activity,
   AlertTriangle,
+  ArrowLeft,
   ArrowUpRight,
   CalendarCheck,
   Car,
@@ -1028,14 +1029,14 @@ export default function AdminDashboard() {
         <nav className="admin-nav">
           <button
             className={`admin-nav-item ${activeTab === "overview" ? "active" : ""}`}
-            onClick={() => setActiveTab("overview")}
+            onClick={() => { setActiveTab("overview"); setShowAddModal(false); setEditingVehicle(null); }}
           >
             <LayoutDashboard size={18} />
             <span>Overview</span>
           </button>
           <button
-            className={`admin-nav-item ${activeTab === "fleet" ? "active" : ""}`}
-            onClick={() => setActiveTab("fleet")}
+            className={`admin-nav-item ${(activeTab === "fleet" || showAddModal || editingVehicle) ? "active" : ""}`}
+            onClick={() => { setActiveTab("fleet"); setShowAddModal(false); setEditingVehicle(null); }}
           >
             <Car size={18} />
             <span>Fleet Inventory</span>
@@ -1043,7 +1044,7 @@ export default function AdminDashboard() {
           </button>
           <button
             className={`admin-nav-item ${activeTab === "bookings" ? "active" : ""}`}
-            onClick={() => setActiveTab("bookings")}
+            onClick={() => { setActiveTab("bookings"); setShowAddModal(false); setEditingVehicle(null); }}
           >
             <CalendarCheck size={18} />
             <span>Reservations</span>
@@ -1051,7 +1052,7 @@ export default function AdminDashboard() {
           </button>
           <button
             className={`admin-nav-item ${activeTab === "customers" ? "active" : ""}`}
-            onClick={() => setActiveTab("customers")}
+            onClick={() => { setActiveTab("customers"); setShowAddModal(false); setEditingVehicle(null); }}
           >
             <Users size={18} />
             <span>Customers</span>
@@ -1080,40 +1081,586 @@ export default function AdminDashboard() {
         {/* Topbar */}
         <header className="admin-topbar">
           <div className="admin-page-title">
-            <h1>
-              {activeTab === "overview" && "Executive Dashboard"}
-              {activeTab === "fleet" && "Fleet Management"}
-              {activeTab === "bookings" && "Reservations & Bookings"}
-              {activeTab === "customers" && "Verified Customers Directory"}
-            </h1>
+            {showAddModal ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <button
+                  type="button"
+                  className="admin-secondary-btn"
+                  onClick={() => setShowAddModal(false)}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "12px" }}
+                >
+                  <ArrowLeft size={15} />
+                  <span>Back to Fleet</span>
+                </button>
+                <h1 style={{ margin: 0, fontSize: "17px" }}>Add New Fleet Vehicle</h1>
+              </div>
+            ) : editingVehicle ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <button
+                  type="button"
+                  className="admin-secondary-btn"
+                  onClick={() => setEditingVehicle(null)}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer", fontSize: "12px" }}
+                >
+                  <ArrowLeft size={15} />
+                  <span>Back to Fleet</span>
+                </button>
+                <h1 style={{ margin: 0, fontSize: "17px" }}>Edit Fleet Vehicle: {editingVehicle.name}</h1>
+              </div>
+            ) : (
+              <h1>
+                {activeTab === "overview" && "Executive Dashboard"}
+                {activeTab === "fleet" && "Fleet Management"}
+                {activeTab === "bookings" && "Reservations & Bookings"}
+                {activeTab === "customers" && "Verified Customers Directory"}
+              </h1>
+            )}
           </div>
 
           <div className="admin-topbar-actions">
-            <div className="admin-search-wrap">
-              <Search size={16} />
-              <input
-                type="text"
-                placeholder="Search fleet, booking, driver..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="admin-search-input"
-              />
-            </div>
+            {!showAddModal && !editingVehicle && (
+              <>
+                <div className="admin-search-wrap">
+                  <Search size={16} />
+                  <input
+                    type="text"
+                    placeholder="Search fleet, booking, driver..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="admin-search-input"
+                  />
+                </div>
 
-            {activeTab === "fleet" && (
-              <button
-                className="admin-primary-btn"
-                onClick={() => setShowAddModal(true)}
-              >
-                <Plus size={16} />
-                <span>Add Vehicle</span>
-              </button>
+                {activeTab === "fleet" && (
+                  <button
+                    className="admin-primary-btn"
+                    onClick={() => setShowAddModal(true)}
+                  >
+                    <Plus size={16} />
+                    <span>Add Vehicle</span>
+                  </button>
+                )}
+              </>
             )}
           </div>
         </header>
 
         {/* Content Body */}
         <div className="admin-content">
+          {showAddModal ? (
+            <div className="vehicle-form-page">
+              <div className="vehicle-form-banner">
+                <div>
+                  <h2 className="vehicle-form-title">Create New Fleet Listing</h2>
+                  <p className="vehicle-form-subtitle">Configure car specifications, multi-angle gallery photos, and destination route rates.</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleCreateVehicle} className="vehicle-form-layout">
+                {/* 1. Core Vehicle Details Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Vehicle Specifications</h3>
+                      <p className="vehicle-card-desc">General details and identifying vehicle information</p>
+                    </div>
+                    <span className="vehicle-card-badge">Basic Information</span>
+                  </div>
+
+                  <div className="vehicle-grid-2">
+                    <label className="vehicle-input-label">
+                      <span>Car Model Name *</span>
+                      <input
+                        required
+                        placeholder="e.g. 720S Spider"
+                        value={newVehicle.name}
+                        onChange={(e) => setNewVehicle({ ...newVehicle, name: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>Make / Brand *</span>
+                      <input
+                        required
+                        placeholder="e.g. McLaren"
+                        value={newVehicle.brand}
+                        onChange={(e) => setNewVehicle({ ...newVehicle, brand: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>Vehicle Category *</span>
+                      <select
+                        value={newVehicle.category}
+                        onChange={(e) => setNewVehicle({ ...newVehicle, category: e.target.value as any })}
+                        className="vehicle-select"
+                      >
+                        <option value="Sports">Sports</option>
+                        <option value="Luxury">Luxury</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Economy">Economy</option>
+                      </select>
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>License Plate</span>
+                      <input
+                        placeholder="e.g. DX-7799"
+                        value={newVehicle.plate}
+                        onChange={(e) => setNewVehicle({ ...newVehicle, plate: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* 2. Destination-Based Pricing Matrix Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Destination-Based Pricing Matrix</h3>
+                      <p className="vehicle-card-desc">Set specific rental rates depending on travel destination or trip route.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-secondary-btn"
+                      onClick={() => setNewVehicle({
+                        ...newVehicle,
+                        destinations: [...newVehicle.destinations, { id: Date.now().toString(), route: "", price: 0 }]
+                      })}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer" }}
+                    >
+                      <Plus size={14} />
+                      <span>Add Destination Route</span>
+                    </button>
+                  </div>
+
+                  <div className="routes-list-container">
+                    {newVehicle.destinations.map((dest, i) => (
+                      <div key={dest.id} className="route-editor-row">
+                        <div style={{ flex: 2 }}>
+                          <span className="sub-input-label">Route / Destination</span>
+                          <input
+                            placeholder="e.g. Pampanga to Zambales"
+                            value={dest.route}
+                            onChange={(e) => {
+                              const newDests = [...newVehicle.destinations];
+                              newDests[i].route = e.target.value;
+                              setNewVehicle({ ...newVehicle, destinations: newDests });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <span className="sub-input-label">Price Rate (₱)</span>
+                          <input
+                            type="number"
+                            placeholder="5000"
+                            value={dest.price}
+                            onChange={(e) => {
+                              const newDests = [...newVehicle.destinations];
+                              newDests[i].price = Number(e.target.value);
+                              setNewVehicle({ ...newVehicle, destinations: newDests });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          className="route-delete-btn"
+                          onClick={() => setNewVehicle({
+                            ...newVehicle,
+                            destinations: newVehicle.destinations.filter((_, idx) => idx !== i)
+                          })}
+                          title="Remove route"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Slider Gallery & Multiple Images Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Vehicle Photo Gallery (Slider Assets)</h3>
+                      <p className="vehicle-card-desc">Add image URLs for this car. The first photo will be used as the primary thumbnail in the fleet directory.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-secondary-btn"
+                      onClick={() => setNewVehicle({ ...newVehicle, images: [...newVehicle.images, ""] })}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer" }}
+                    >
+                      <Plus size={14} />
+                      <span>Add Photo URL</span>
+                    </button>
+                  </div>
+
+                  <div className="presets-quick-bar">
+                    <span style={{ fontSize: "11.5px", color: "var(--admin-text-muted)" }}>Quick presets:</span>
+                    {[
+                      { label: "Huracán", url: "/images/fleet-sports-huracan.jpg" },
+                      { label: "Porsche 911", url: "/images/fleet-porsche.jpg" },
+                      { label: "Rolls-Royce", url: "/images/fleet-rolls.jpg" },
+                      { label: "Tesla Model S", url: "/images/fleet-tesla.jpg" },
+                      { label: "Range Rover", url: "/images/fleet-suv-velar.jpg" },
+                      { label: "BMW 330i", url: "/images/fleet-bmw.jpg" },
+                      { label: "Mercedes E-Class", url: "/images/fleet-mercedes.jpg" },
+                    ].map((p) => (
+                      <button
+                        key={p.label}
+                        type="button"
+                        className="preset-pill-btn"
+                        onClick={() => setNewVehicle({
+                          ...newVehicle,
+                          images: newVehicle.images.includes(p.url) ? newVehicle.images : [...newVehicle.images, p.url]
+                        })}
+                      >
+                        + {p.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="images-list-container">
+                    {newVehicle.images.map((img, i) => (
+                      <div key={i} className="image-editor-row">
+                        <div className="image-preview-box">
+                          {img ? (
+                            <img
+                              src={img}
+                              alt="Thumbnail preview"
+                              className="image-preview-thumb"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div className="image-preview-placeholder">No img</div>
+                          )}
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <input
+                            placeholder="Image URL or public path (e.g. /images/fleet-sports-huracan.jpg)"
+                            value={img}
+                            onChange={(e) => {
+                              const newImgs = [...newVehicle.images];
+                              newImgs[i] = e.target.value;
+                              setNewVehicle({ ...newVehicle, images: newImgs });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          className="route-delete-btn"
+                          onClick={() => setNewVehicle({
+                            ...newVehicle,
+                            images: newVehicle.images.filter((_, idx) => idx !== i)
+                          })}
+                          title="Remove photo"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Action Buttons */}
+                <div className="vehicle-form-actions">
+                  <button
+                    type="button"
+                    className="admin-secondary-btn"
+                    onClick={() => setShowAddModal(false)}
+                    style={{ padding: "10px 22px", fontSize: "13px" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="admin-primary-btn"
+                    style={{ padding: "10px 24px", fontSize: "13px" }}
+                  >
+                    Save & Publish Vehicle
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : editingVehicle ? (
+            <div className="vehicle-form-page">
+              <div className="vehicle-form-banner">
+                <div>
+                  <h2 className="vehicle-form-title">Edit Fleet Listing: {editingVehicle.name}</h2>
+                  <p className="vehicle-form-subtitle">Update vehicle pricing, category, plate, operational status, or gallery images.</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleUpdateVehicle} className="vehicle-form-layout">
+                {/* 1. Core Vehicle Details Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Vehicle Specifications</h3>
+                      <p className="vehicle-card-desc">General details and identifying vehicle information</p>
+                    </div>
+                    <span className="vehicle-card-badge">Basic Information</span>
+                  </div>
+
+                  <div className="vehicle-grid-2">
+                    <label className="vehicle-input-label">
+                      <span>Car Model Name *</span>
+                      <input
+                        required
+                        value={editingVehicle.name}
+                        onChange={(e) => setEditingVehicle({ ...editingVehicle, name: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>Make / Brand *</span>
+                      <input
+                        required
+                        value={editingVehicle.brand}
+                        onChange={(e) => setEditingVehicle({ ...editingVehicle, brand: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>Vehicle Category *</span>
+                      <select
+                        value={editingVehicle.category}
+                        onChange={(e) => setEditingVehicle({ ...editingVehicle, category: e.target.value as any })}
+                        className="vehicle-select"
+                      >
+                        <option value="Sports">Sports</option>
+                        <option value="Luxury">Luxury</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Economy">Economy</option>
+                      </select>
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>License Plate</span>
+                      <input
+                        value={editingVehicle.plate}
+                        onChange={(e) => setEditingVehicle({ ...editingVehicle, plate: e.target.value })}
+                        className="vehicle-input"
+                      />
+                    </label>
+
+                    <label className="vehicle-input-label">
+                      <span>Operational Status</span>
+                      <select
+                        value={editingVehicle.status}
+                        onChange={(e) => setEditingVehicle({ ...editingVehicle, status: e.target.value as any })}
+                        className="vehicle-select"
+                      >
+                        <option value="available">🟢 Available for Rent</option>
+                        <option value="rented">🔵 Currently Rented</option>
+                        <option value="maintenance">🟡 In Maintenance</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+
+                {/* 2. Destination-Based Pricing Matrix Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Destination-Based Pricing Matrix</h3>
+                      <p className="vehicle-card-desc">Define rental rates based on travel destination or specific trip routes.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-secondary-btn"
+                      onClick={() => setEditingVehicle({
+                        ...editingVehicle,
+                        destinations: [...(editingVehicle.destinations || []), { id: Date.now().toString(), route: "", price: 0 }]
+                      })}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer" }}
+                    >
+                      <Plus size={14} />
+                      <span>Add Destination Route</span>
+                    </button>
+                  </div>
+
+                  <div className="routes-list-container">
+                    {(editingVehicle.destinations || []).map((dest, i) => (
+                      <div key={dest.id} className="route-editor-row">
+                        <div style={{ flex: 2 }}>
+                          <span className="sub-input-label">Route / Destination</span>
+                          <input
+                            placeholder="e.g. Pampanga to Zambales"
+                            value={dest.route}
+                            onChange={(e) => {
+                              const newDests = [...editingVehicle.destinations];
+                              newDests[i] = { ...dest, route: e.target.value };
+                              setEditingVehicle({ ...editingVehicle, destinations: newDests });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <span className="sub-input-label">Price Rate (₱)</span>
+                          <input
+                            type="number"
+                            placeholder="5000"
+                            value={dest.price}
+                            onChange={(e) => {
+                              const newDests = [...editingVehicle.destinations];
+                              newDests[i] = { ...dest, price: Number(e.target.value) };
+                              setEditingVehicle({ ...editingVehicle, destinations: newDests });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          className="route-delete-btn"
+                          onClick={() => setEditingVehicle({
+                            ...editingVehicle,
+                            destinations: editingVehicle.destinations.filter((_, idx) => idx !== i)
+                          })}
+                          title="Remove route"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Slider Gallery & Multiple Images Card */}
+                <div className="vehicle-form-card">
+                  <div className="vehicle-form-card-head">
+                    <div>
+                      <h3>Vehicle Photo Gallery (Slider Assets)</h3>
+                      <p className="vehicle-card-desc">Add multiple images for the car photo slider.</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-secondary-btn"
+                      onClick={() => setEditingVehicle({
+                        ...editingVehicle,
+                        images: [...(editingVehicle.images || []), ""]
+                      })}
+                      style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 12px", cursor: "pointer" }}
+                    >
+                      <Plus size={14} />
+                      <span>Add Image URL</span>
+                    </button>
+                  </div>
+
+                  <div className="presets-quick-bar">
+                    <span style={{ fontSize: "11.5px", color: "var(--admin-text-muted)" }}>Quick presets:</span>
+                    {[
+                      { label: "Huracán", url: "/images/fleet-sports-huracan.jpg" },
+                      { label: "Porsche 911", url: "/images/fleet-porsche.jpg" },
+                      { label: "Rolls-Royce", url: "/images/fleet-rolls.jpg" },
+                      { label: "Tesla Model S", url: "/images/fleet-tesla.jpg" },
+                      { label: "Range Rover", url: "/images/fleet-suv-velar.jpg" },
+                      { label: "BMW 330i", url: "/images/fleet-bmw.jpg" },
+                      { label: "Mercedes E-Class", url: "/images/fleet-mercedes.jpg" },
+                    ].map((p) => (
+                      <button
+                        key={p.label}
+                        type="button"
+                        className="preset-pill-btn"
+                        onClick={() => setEditingVehicle({
+                          ...editingVehicle,
+                          images: (editingVehicle.images || []).includes(p.url) ? editingVehicle.images : [...(editingVehicle.images || []), p.url]
+                        })}
+                      >
+                        + {p.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="images-list-container">
+                    {(editingVehicle.images || []).map((img, i) => (
+                      <div key={i} className="image-editor-row">
+                        <div className="image-preview-box">
+                          {img ? (
+                            <img
+                              src={img}
+                              alt="Thumbnail preview"
+                              className="image-preview-thumb"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div className="image-preview-placeholder">No img</div>
+                          )}
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <input
+                            placeholder="Image URL or public path"
+                            value={img}
+                            onChange={(e) => {
+                              const newImgs = [...editingVehicle.images];
+                              newImgs[i] = e.target.value;
+                              setEditingVehicle({ ...editingVehicle, images: newImgs });
+                            }}
+                            className="vehicle-input"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          className="route-delete-btn"
+                          onClick={() => setEditingVehicle({
+                            ...editingVehicle,
+                            images: editingVehicle.images.filter((_, idx) => idx !== i)
+                          })}
+                          title="Remove photo"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Action Buttons */}
+                <div className="vehicle-form-actions">
+                  <button
+                    type="button"
+                    className="admin-secondary-btn"
+                    onClick={() => setEditingVehicle(null)}
+                    style={{ padding: "10px 22px", fontSize: "13px" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="admin-primary-btn"
+                    style={{ padding: "10px 24px", fontSize: "13px" }}
+                  >
+                    Update Vehicle Details
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <>
+
           {/* KPI Stat Cards (always shown on Overview, compact on other tabs) */}
           <div className="kpi-grid">
             <div className="kpi-card">
@@ -2285,316 +2832,10 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+            </>
+          )}
         </div>
       </div>
-
-      {/* Add Vehicle Modal */}
-      {showAddModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddModal(false)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <h3>Add New Fleet Vehicle</h3>
-              <button
-                className="modal-close-btn"
-                onClick={() => setShowAddModal(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <form className="modal-form" onSubmit={handleCreateVehicle}>
-              <label>
-                <span>Car Model Name</span>
-                <input
-                  required
-                  placeholder="e.g. 720S Spider"
-                  value={newVehicle.name}
-                  onChange={(e) =>
-                    setNewVehicle({ ...newVehicle, name: e.target.value })
-                  }
-                />
-              </label>
-
-              <label>
-                <span>Make / Brand</span>
-                <input
-                  required
-                  placeholder="e.g. McLaren"
-                  value={newVehicle.brand}
-                  onChange={(e) =>
-                    setNewVehicle({ ...newVehicle, brand: e.target.value })
-                  }
-                />
-              </label>
-
-              <label>
-                <span>Vehicle Category</span>
-                <select
-                  value={newVehicle.category}
-                  onChange={(e) =>
-                    setNewVehicle({
-                      ...newVehicle,
-                      category: e.target.value as any,
-                    })
-                  }
-                >
-                  <option value="Sports">Sports</option>
-                  <option value="Luxury">Luxury</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Economy">Economy</option>
-                </select>
-              </label>
-
-              <label className="full-span">
-                <div className="dynamic-list-container full-span">
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
-                    <button type="button" onClick={() => setNewVehicle({ ...newVehicle, destinations: [...newVehicle.destinations, { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
-                  </div>
-                  {newVehicle.destinations.map((dest, i) => (
-                    <div key={dest.id} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                      <input
-                        placeholder="Route (e.g. Pampanga to Zambales)"
-                        value={dest.route}
-                        onChange={(e) => {
-                          const newDests = [...newVehicle.destinations];
-                          newDests[i].route = e.target.value;
-                          setNewVehicle({ ...newVehicle, destinations: newDests });
-                        }}
-                        style={{ flex: 2 }}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Price"
-                        value={dest.price}
-                        onChange={(e) => {
-                          const newDests = [...newVehicle.destinations];
-                          newDests[i].price = Number(e.target.value);
-                          setNewVehicle({ ...newVehicle, destinations: newDests });
-                        }}
-                        style={{ flex: 1 }}
-                      />
-                      <button type="button" onClick={() => setNewVehicle({ ...newVehicle, destinations: newVehicle.destinations.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
-                    </div>
-                  ))}
-                </div>
-              </label>
-
-              <label>
-                <span>License Plate</span>
-                <input
-                  placeholder="e.g. DX-7799"
-                  value={newVehicle.plate}
-                  onChange={(e) =>
-                    setNewVehicle({ ...newVehicle, plate: e.target.value })
-                  }
-                />
-              </label>
-
-              <div className="dynamic-list-container full-span">
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                  <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
-                  <button type="button" onClick={() => setNewVehicle({ ...newVehicle, images: [...newVehicle.images, ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
-                </div>
-                {newVehicle.images.map((img, i) => (
-                  <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                    <input
-                      placeholder="Image URL or path"
-                      value={img}
-                      onChange={(e) => {
-                        const newImgs = [...newVehicle.images];
-                        newImgs[i] = e.target.value;
-                        setNewVehicle({ ...newVehicle, images: newImgs });
-                      }}
-                      style={{ flex: 1 }}
-                    />
-                    <button type="button" onClick={() => setNewVehicle({ ...newVehicle, images: newVehicle.images.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="modal-actions full-span">
-                <button
-                  type="button"
-                  className="modal-cancel-btn"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn">
-                  Save Vehicle
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Vehicle Modal */}
-      {editingVehicle && (
-        <div className="modal-overlay" onClick={() => setEditingVehicle(null)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="modal-header">
-              <div>
-                <h3 className="modal-title">Edit Vehicle: {editingVehicle.name}</h3>
-                <p className="modal-subtitle">Update vehicle pricing, category, plate or status</p>
-              </div>
-              <button
-                className="modal-close-btn"
-                onClick={() => setEditingVehicle(null)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleUpdateVehicle} className="modal-form">
-              <label>
-                <span>Vehicle Model Name</span>
-                <input
-                  required
-                  value={editingVehicle.name}
-                  onChange={(e) =>
-                    setEditingVehicle({ ...editingVehicle, name: e.target.value })
-                  }
-                />
-              </label>
-
-              <label>
-                <span>Make / Brand</span>
-                <input
-                  required
-                  value={editingVehicle.brand}
-                  onChange={(e) =>
-                    setEditingVehicle({ ...editingVehicle, brand: e.target.value })
-                  }
-                />
-              </label>
-
-              <label>
-                <span>Vehicle Category</span>
-                <select
-                  value={editingVehicle.category}
-                  onChange={(e) =>
-                    setEditingVehicle({
-                      ...editingVehicle,
-                      category: e.target.value as any,
-                    })
-                  }
-                >
-                  <option value="Sports">Sports</option>
-                  <option value="Luxury">Luxury</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Economy">Economy</option>
-                </select>
-              </label>
-
-              <label className="full-span">
-                <div className="dynamic-list-container full-span">
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Destination Pricing</span>
-                    <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, destinations: [...(editingVehicle.destinations || []), { id: Date.now().toString(), route: "", price: 0 }] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Route</button>
-                  </div>
-                  {editingVehicle.destinations?.map((dest, i) => (
-                    <div key={dest.id} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                      <input
-                        placeholder="Route (e.g. Pampanga to Zambales)"
-                        value={dest.route}
-                        onChange={(e) => {
-                          const newDests = [...editingVehicle.destinations];
-                          newDests[i] = { ...dest, route: e.target.value };
-                          setEditingVehicle({ ...editingVehicle, destinations: newDests });
-                        }}
-                        style={{ flex: 2 }}
-                      />
-                      <input
-                        type="number"
-                        placeholder="Price"
-                        value={dest.price}
-                        onChange={(e) => {
-                          const newDests = [...editingVehicle.destinations];
-                          newDests[i] = { ...dest, price: Number(e.target.value) };
-                          setEditingVehicle({ ...editingVehicle, destinations: newDests });
-                        }}
-                        style={{ flex: 1 }}
-                      />
-                      <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, destinations: editingVehicle.destinations.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
-                    </div>
-                  ))}
-                </div>
-              </label>
-
-              <label>
-                <span>License Plate</span>
-                <input
-                  value={editingVehicle.plate}
-                  onChange={(e) =>
-                    setEditingVehicle({ ...editingVehicle, plate: e.target.value })
-                  }
-                />
-              </label>
-
-              <div className="dynamic-list-container full-span">
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                  <span style={{ fontSize: "0.85rem", color: "#8b929d", fontWeight: 500 }}>Images</span>
-                  <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, images: [...(editingVehicle.images || []), ""] })} style={{ background: "none", border: "none", color: "var(--brand-primary)", fontSize: "0.8rem", cursor: "pointer" }}>+ Add Image</button>
-                </div>
-                {editingVehicle.images?.map((img, i) => (
-                  <div key={i} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                    <input
-                      placeholder="Image URL or path"
-                      value={img}
-                      onChange={(e) => {
-                        const newImgs = [...editingVehicle.images];
-                        newImgs[i] = e.target.value;
-                        setEditingVehicle({ ...editingVehicle, images: newImgs });
-                      }}
-                      style={{ flex: 1 }}
-                    />
-                    <button type="button" onClick={() => setEditingVehicle({ ...editingVehicle, images: editingVehicle.images.filter((_, idx) => idx !== i) })} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer" }}><X size={16} /></button>
-                  </div>
-                ))}
-              </div>
-
-              <label>
-                <span>Status</span>
-                <select
-                  value={editingVehicle.status}
-                  onChange={(e) =>
-                    setEditingVehicle({
-                      ...editingVehicle,
-                      status: e.target.value as any,
-                    })
-                  }
-                >
-                  <option value="available">🟢 Available</option>
-                  <option value="rented">🔵 Rented</option>
-                  <option value="maintenance">🟡 Maintenance</option>
-                </select>
-              </label>
-
-              <div className="modal-actions full-span">
-                <button
-                  type="button"
-                  className="modal-cancel-btn"
-                  onClick={() => setEditingVehicle(null)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn">
-                  Update Vehicle
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-
-
