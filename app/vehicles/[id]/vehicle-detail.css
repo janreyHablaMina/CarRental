@@ -1,0 +1,336 @@
+/* --- Vehicle Detail Full Page --- */
+.vd-page {
+  min-height: 100vh;
+  background: #070809;
+  color: #f7f8fa;
+  display: flex;
+  flex-direction: column;
+}
+
+.vd-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 64px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 5vw;
+  background: rgba(7,8,9,0.9);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.vd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+.vd-back-btn:hover { color: #fff; }
+
+.vd-wordmark {
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: 0;
+  text-align: center;
+}
+.vd-wordmark span { color: #4da3ff; }
+
+.vd-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+@media (max-width: 900px) {
+  .vd-body { grid-template-columns: 1fr; }
+}
+
+/* Gallery */
+.vd-gallery {
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .vd-gallery {
+    position: static;
+    height: auto;
+  }
+}
+
+.vd-main-img-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.vd-main-img {
+  object-fit: cover;
+}
+
+.vd-thumbs {
+  display: flex;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #0e1016;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.vd-thumb {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  opacity: 0.5;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+.vd-thumb:hover { opacity: 0.8; }
+.vd-thumb.active {
+  border-color: #4f46e5;
+  opacity: 1;
+}
+
+/* Info panel */
+.vd-info {
+  padding: 56px 5vw 80px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vd-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a5b4fc;
+  margin: 0 0 10px;
+}
+
+.vd-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 750;
+  margin: 0 0 8px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.vd-category-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 3px 10px;
+  margin-bottom: 32px;
+}
+
+.vd-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+}
+
+.vd-spec-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #9ca3af;
+}
+.vd-spec-item svg { margin-top: 2px; flex-shrink: 0; }
+.vd-spec-item div { display: flex; flex-direction: column; gap: 2px; }
+.vd-spec-item small { font-size: 11px; color: #64748b; }
+.vd-spec-item span { font-size: 14px; color: #e2e8f0; font-weight: 500; }
+
+.vd-starting-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+.vd-starting-price small { font-size: 12px; color: #64748b; }
+.vd-starting-price strong { font-size: 2rem; font-weight: 700; color: #fff; }
+.vd-starting-price span { font-size: 13px; color: #64748b; }
+
+/* Destination search */
+.vd-dest-section { margin-bottom: 36px; }
+.vd-dest-section h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin: 0 0 14px;
+}
+
+.vd-dest-wrap { position: relative; }
+
+.vd-dest-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.vd-dest-input:focus {
+  border-color: rgba(99,102,241,0.6);
+  background: rgba(255,255,255,0.09);
+}
+.vd-dest-input::placeholder { color: #475569; }
+
+.vd-dest-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: #141820;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+  z-index: 100;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.vd-dest-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  gap: 12px;
+}
+.vd-dest-option:hover { background: rgba(255,255,255,0.06); }
+.vd-dest-option strong { color: #a5b4fc; font-weight: 600; white-space: nowrap; }
+
+.vd-dest-inquire { font-size: 11px; color: #475569; }
+
+.vd-dest-empty {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.vd-price-card {
+  margin-top: 16px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: vdPriceFadeIn 0.25s ease forwards;
+}
+
+@keyframes vdPriceFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vd-price-card--inquire {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.1);
+}
+.vd-price-card--inquire p { font-size: 13px; color: #94a3b8; margin: 0 0 4px; }
+.vd-price-card--inquire a {
+  display: inline-block;
+  margin-top: 12px;
+  color: #a5b4fc;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 13px;
+}
+.vd-price-card--inquire a:hover { text-decoration: underline; }
+
+.vd-price-route {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+.vd-price-amount {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #a5b4fc;
+  line-height: 1.1;
+}
+.vd-price-label { font-size: 12px; color: #64748b; }
+
+.vd-dest-hint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #334155;
+  font-style: italic;
+}
+
+/* Book button */
+.vd-book-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px 24px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.vd-book-btn:hover { background: #4338ca; transform: translateY(-1px); }
+
+.vd-not-found {
+  min-height: 100vh;
+  background: #070809;
+  color: #f7f8fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 18px;
+}
+.vd-not-found a { color: #a5b4fc; }

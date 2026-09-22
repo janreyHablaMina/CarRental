@@ -2,125 +2,15 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowRight, CalendarDays, ChevronDown, Gauge, MapPin, Menu, Users, X, Zap } from "lucide-react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { vehicles } from "@/lib/vehicles";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
-
-const vehicles = [
-  {
-    name: "Huracán EVO",
-    brand: "Lamborghini",
-    category: "Sports",
-    image: "/images/fleet-sports-huracan.jpg",
-    seats: 2,
-    transmission: "7-Spd Dual-Clutch",
-    engine: "640 HP V10",
-    acceleration: "2.9s 0-100",
-    price: "28,000",
-    featured: true,
-  },
-  {
-    name: "911 Carrera T",
-    brand: "Porsche",
-    category: "Sports",
-    image: "/images/fleet-porsche.jpg",
-    seats: 4,
-    transmission: "PDK Automatic",
-    engine: "385 HP Twin-Turbo",
-    acceleration: "4.0s 0-100",
-    price: "18,500",
-    featured: false,
-  },
-  {
-    name: "Phantom VIII",
-    brand: "Rolls-Royce",
-    category: "Luxury",
-    image: "/images/fleet-rolls.jpg",
-    seats: 5,
-    transmission: "8-Spd Satellite Aided",
-    engine: "563 HP Twin-Turbo V12",
-    acceleration: "5.1s 0-100",
-    price: "35,000",
-    featured: true,
-  },
-  {
-    name: "Model S Plaid",
-    brand: "Tesla",
-    category: "Luxury",
-    image: "/images/fleet-tesla.jpg",
-    seats: 5,
-    transmission: "Tri-Motor AWD",
-    engine: "1,020 HP Electric",
-    acceleration: "1.99s 0-100",
-    price: "12,500",
-    featured: false,
-  },
-  {
-    name: "Velar R-Dynamic",
-    brand: "Range Rover",
-    category: "SUV",
-    image: "/images/fleet-suv-velar.jpg",
-    seats: 5,
-    transmission: "8-Speed Automatic AWD",
-    engine: "395 HP Turbo Inline-6",
-    acceleration: "5.2s 0-100",
-    price: "8,500",
-    featured: false,
-  },
-  {
-    name: "330i M Sport",
-    brand: "BMW",
-    category: "Sedan",
-    image: "/images/fleet-bmw.jpg",
-    seats: 5,
-    transmission: "Steptronic 8-Spd",
-    engine: "255 HP TwinPower Turbo",
-    acceleration: "5.4s 0-100",
-    price: "5,500",
-    featured: false,
-  },
-  {
-    name: "E-Class Executive",
-    brand: "Mercedes-Benz",
-    category: "Sedan",
-    image: "/images/fleet-mercedes.jpg",
-    seats: 5,
-    transmission: "9G-TRONIC Automatic",
-    engine: "258 HP EQ Boost",
-    acceleration: "5.8s 0-100",
-    price: "6,800",
-    featured: false,
-  },
-  {
-    name: "GR Sport Hatch",
-    brand: "Toyota",
-    category: "Economy",
-    image: "/images/fleet-toyota.jpg",
-    seats: 5,
-    transmission: "Direct-Shift CVT",
-    engine: "170 HP Dynamic Force",
-    acceleration: "7.8s 0-100",
-    price: "2,200",
-    featured: false,
-  },
-  {
-    name: "Altima Premium",
-    brand: "Nissan",
-    category: "Economy",
-    image: "/images/fleet-nissan.jpg",
-    seats: 5,
-    transmission: "Xtronic CVT",
-    engine: "188 HP Direct Injection",
-    acceleration: "7.2s 0-100",
-    price: "2,800",
-    featured: false,
-  },
-];
 
 const steps = [
   ["01", "Choose Your Car", "Find the right shape, pace, and comfort for your trip."],
@@ -130,6 +20,7 @@ const steps = [
 
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
+  const router = useRouter();
   const [progress, setProgress] = useState(0);
   const [heroProgress, setHeroProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -154,140 +45,142 @@ export default function Home() {
 
   const scrollTo = (id: string) => { document.querySelector(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
 
-  return <main ref={mainRef} className="site-shell">
-    <header className={`topbar ${progress > 0.015 ? "topbar-scrolled" : ""}`}>
-      <button className="wordmark" onClick={() => scrollTo("#hero")} aria-label="DriveX home">DRIVE<span>X</span></button>
-      <nav className="desktop-nav" aria-label="Primary navigation">
-        <button onClick={() => scrollTo("#vehicles")}>Vehicles</button>
-        <button onClick={() => scrollTo("#how")}>How It Works</button>
-        <button onClick={() => scrollTo("#why")}>About</button>
-        <button onClick={() => scrollTo("#footer")}>Contact</button>
-      </nav>
-      <button className="nav-cta desktop-cta" onClick={() => scrollTo("#booking")}>Book now <ArrowRight size={16} /></button>
-      <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
-      {menuOpen && <nav className="mobile-nav"><button onClick={() => scrollTo("#vehicles")}>Vehicles</button><button onClick={() => scrollTo("#how")}>How It Works</button><button onClick={() => scrollTo("#why")}>About</button><button onClick={() => scrollTo("#booking")}>Book Now</button></nav>}
-    </header>
-    <div className="progress-rail" aria-hidden="true"><span style={{ transform: `scaleY(${progress})` }} /></div>
-    <div className="chapter-count" aria-hidden="true">{String(Math.min(6, Math.floor(heroProgress * 6) + 1)).padStart(2, "0")} <i /> 06</div>
+  return (
+    <main ref={mainRef} className="site-shell">
+      <header className={`topbar ${progress > 0.015 ? "topbar-scrolled" : ""}`}>
+        <button className="wordmark" onClick={() => scrollTo("#hero")} aria-label="DriveX home">DRIVE<span>X</span></button>
+        <nav className="desktop-nav" aria-label="Primary navigation">
+          <button onClick={() => scrollTo("#vehicles")}>Vehicles</button>
+          <button onClick={() => scrollTo("#how")}>How It Works</button>
+          <button onClick={() => scrollTo("#why")}>About</button>
+          <button onClick={() => scrollTo("#footer")}>Contact</button>
+        </nav>
+        <button className="nav-cta desktop-cta" onClick={() => scrollTo("#booking")}>Book now <ArrowRight size={16} /></button>
+        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
+        {menuOpen && <nav className="mobile-nav"><button onClick={() => scrollTo("#vehicles")}>Vehicles</button><button onClick={() => scrollTo("#how")}>How It Works</button><button onClick={() => scrollTo("#why")}>About</button><button onClick={() => scrollTo("#booking")}>Book Now</button></nav>}
+      </header>
+      <div className="progress-rail" aria-hidden="true"><span style={{ transform: `scaleY(${progress})` }} /></div>
+      <div className="chapter-count" aria-hidden="true">{String(Math.min(6, Math.floor(heroProgress * 6) + 1)).padStart(2, "0")} <i /> 06</div>
 
-    <section id="hero" className="story-section">
-      <div className="scene-sticky"><CarScene progress={heroProgress} /></div>
-      <div className="story-frame hero-copy">
-        <p className="eyebrow">01 // The Flagship</p>
-        <h1>Drive More.<br /><span>Experience More.</span></h1>
-        <p className="hero-sub">Premium sports cars. Flexible rentals.<br />A smarter way to move.</p>
-        <div className="hero-actions">
-          <button className="primary-button" onClick={() => scrollTo("#vehicles")}>Explore cars <ArrowRight size={18} /></button>
-          <button className="text-button" onClick={() => scrollTo("#how")}>How DriveX works</button>
+      <section id="hero" className="story-section">
+        <div className="scene-sticky"><CarScene progress={heroProgress} /></div>
+        <div className="story-frame hero-copy">
+          <p className="eyebrow">01 // The Flagship</p>
+          <h1>Drive More.<br /><span>Experience More.</span></h1>
+          <p className="hero-sub">Premium sports cars. Flexible rentals.<br />A smarter way to move.</p>
+          <div className="hero-actions">
+            <button className="primary-button" onClick={() => scrollTo("#vehicles")}>Explore cars <ArrowRight size={18} /></button>
+            <button className="text-button" onClick={() => scrollTo("#how")}>How DriveX works</button>
+          </div>
         </div>
-      </div>
-      <div className="story-frame profile-copy">
-        <p className="eyebrow">02 // Dynamic Turn & Smoke</p>
-        <h2>Awaken the<br /><span>Machine.</span></h2>
-        <p>Tires spin and smoke surges as the supercar pivots with aggressive mid-engine torque.</p>
-        <div className="feature-labels"><span>Dynamic Torque</span><span>Launch Control</span><span>Twin-Turbo V8</span></div>
-      </div>
-      <div className="story-frame experience-copy">
-        <p className="eyebrow">03 // Aero & Rear Profile</p>
-        <h2>Sculpted to<br /><span>Dominate.</span></h2>
-        <p>Twin LED lightbars illuminate through billowing clouds, revealing active aero and race diffusers.</p>
-        <div className="feature-labels"><span>Aero Diffuser</span><span>LED Taillights</span><span>Ground Effects</span></div>
-      </div>
-      <div className="story-frame interior-copy">
-        <p className="eyebrow">04 // 360° Cinematic Turn</p>
-        <h2>Unfiltered<br /><span>Power.</span></h2>
-        <p>A full 360-degree turnaround caught mid-burnout, capturing raw exotic athleticism.</p>
-        <div className="feature-labels"><span>Mid-Engine</span><span>Carbon Chassis</span><span>Active Dynamics</span></div>
-      </div>
-      <div className="story-frame performance-copy">
-        <p className="eyebrow">05 // Pure Adrenaline</p>
-        <h2>Engineered to<br /><span>Thrill.</span></h2>
-        <p>Turn heads the instant you arrive. Experience uncompromising supercar performance at your command.</p>
-        <div className="feature-labels"><span>Launch Ready</span><span>Track Stance</span><span>Exotic Fleet</span></div>
-      </div>
-      <div className="story-frame drive-copy">
-        <p className="eyebrow">06 // Take the Wheel</p>
-        <h2>Your Road.<br /><span>Your Rules.</span></h2>
-        <p>Choose the vehicle that fits your journey and take off when you&apos;re ready.</p>
-        <div className="hero-actions">
-          <button className="primary-button" onClick={() => scrollTo("#booking")}>Book this car <ArrowRight size={18} /></button>
-          <button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore collection</button>
+        <div className="story-frame profile-copy">
+          <p className="eyebrow">02 // Dynamic Turn & Smoke</p>
+          <h2>Awaken the<br /><span>Machine.</span></h2>
+          <p>Tires spin and smoke surges as the supercar pivots with aggressive mid-engine torque.</p>
+          <div className="feature-labels"><span>Dynamic Torque</span><span>Launch Control</span><span>Twin-Turbo V8</span></div>
         </div>
-      </div>
-      <button className="scroll-cue" onClick={() => scrollTo("#vehicles")}>Scroll to explore <ArrowDown size={15} /></button>
-    </section>
-
-    <section id="vehicles" className="vehicles-section section-pad">
-      <div className="section-head" data-reveal>
-        <div>
-          <p className="eyebrow">The collection</p>
-          <h2>Choose Your Drive</h2>
+        <div className="story-frame experience-copy">
+          <p className="eyebrow">03 // Aero & Rear Profile</p>
+          <h2>Sculpted to<br /><span>Dominate.</span></h2>
+          <p>Twin LED lightbars illuminate through billowing clouds, revealing active aero and race diffusers.</p>
+          <div className="feature-labels"><span>Aero Diffuser</span><span>LED Taillights</span><span>Ground Effects</span></div>
         </div>
-        <p>From city streets to open roads, explore our hand-picked fleet of real high-performance and luxury automobiles.</p>
-      </div>
-      <div className="category-tabs" data-reveal>
-        {["All", "Sports", "Luxury", "Sedan", "SUV", "Economy"].map((tab) => (
-          <button
-            key={tab}
-            className={selectedCategory === tab ? "active" : ""}
-            onClick={() => setSelectedCategory(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-      <div className="vehicle-grid">
-        {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).map((vehicle, index) => (
-          <article className="vehicle-item" key={vehicle.name} data-reveal>
-            <div className="vehicle-visual">
-              <Image
-                src={vehicle.image}
-                alt={`${vehicle.brand} ${vehicle.name}`}
-                fill
-                sizes="(max-width: 900px) 100vw, 50vw"
-                className="vehicle-real-photo"
-              />
-              <div className="vehicle-photo-overlay" />
-              <span className="vehicle-index">0{index + 1}</span>
-              <span className="vehicle-category">{vehicle.category}</span>
-              {vehicle.featured && <span className="vehicle-badge-pill">FEATURED</span>}
-            </div>
-            <div className="vehicle-info">
-              <div>
-                <p className="eyebrow">{vehicle.brand}</p>
-                <h3>{vehicle.name}</h3>
+        <div className="story-frame interior-copy">
+          <p className="eyebrow">04 // 360° Cinematic Turn</p>
+          <h2>Unfiltered<br /><span>Power.</span></h2>
+          <p>A full 360-degree turnaround caught mid-burnout, capturing raw exotic athleticism.</p>
+          <div className="feature-labels"><span>Mid-Engine</span><span>Carbon Chassis</span><span>Active Dynamics</span></div>
+        </div>
+        <div className="story-frame performance-copy">
+          <p className="eyebrow">05 // Pure Adrenaline</p>
+          <h2>Engineered to<br /><span>Thrill.</span></h2>
+          <p>Turn heads the instant you arrive. Experience uncompromising supercar performance at your command.</p>
+          <div className="feature-labels"><span>Launch Ready</span><span>Track Stance</span><span>Exotic Fleet</span></div>
+        </div>
+        <div className="story-frame drive-copy">
+          <p className="eyebrow">06 // Take the Wheel</p>
+          <h2>Your Road.<br /><span>Your Rules.</span></h2>
+          <p>Choose the vehicle that fits your journey and take off when you&apos;re ready.</p>
+          <div className="hero-actions">
+            <button className="primary-button" onClick={() => scrollTo("#booking")}>Book this car <ArrowRight size={18} /></button>
+            <button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore collection</button>
+          </div>
+        </div>
+        <button className="scroll-cue" onClick={() => scrollTo("#vehicles")}>Scroll to explore <ArrowDown size={15} /></button>
+      </section>
+
+      <section id="vehicles" className="vehicles-section section-pad">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="eyebrow">The collection</p>
+            <h2>Choose Your Drive</h2>
+          </div>
+          <p>From city streets to open roads, explore our hand-picked fleet of real high-performance and luxury automobiles.</p>
+        </div>
+        <div className="category-tabs" data-reveal>
+          {["All", "Sports", "Luxury", "Sedan", "SUV", "Economy"].map((tab) => (
+            <button
+              key={tab}
+              className={selectedCategory === tab ? "active" : ""}
+              onClick={() => setSelectedCategory(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        <div className="vehicle-grid">
+          {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).map((vehicle, index) => (
+            <article className="vehicle-item" key={vehicle.id} data-reveal>
+              <div className="vehicle-visual">
+                <Image
+                  src={vehicle.image}
+                  alt={`${vehicle.brand} ${vehicle.name}`}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  className="vehicle-real-photo"
+                />
+                <div className="vehicle-photo-overlay" />
+                <span className="vehicle-index">0{index + 1}</span>
+                <span className="vehicle-category">{vehicle.category}</span>
+                {vehicle.featured && <span className="vehicle-badge-pill">FEATURED</span>}
               </div>
-              <div className="specs">
-                <span><Users size={14} /> {vehicle.seats} seats</span>
-                <span><Gauge size={14} /> {vehicle.transmission}</span>
-                <span><Zap size={14} /> {vehicle.engine}</span>
+              <div className="vehicle-info">
+                <div>
+                  <p className="eyebrow">{vehicle.brand}</p>
+                  <h3>{vehicle.name}</h3>
+                </div>
+                <div className="specs">
+                  <span><Users size={14} /> {vehicle.seats} seats</span>
+                  <span><Gauge size={14} /> {vehicle.transmission}</span>
+                  <span><Zap size={14} /> {vehicle.engine}</span>
+                </div>
+                <div className="price">
+                  <small>From</small>
+                  <strong>₱{vehicle.price}</strong>
+                  <span>/ day</span>
+                </div>
+                <button
+                  className="round-button"
+                  aria-label={`View details for ${vehicle.brand} ${vehicle.name}`}
+                  onClick={() => router.push(`/vehicles/${vehicle.id}`)}
+                >
+                  <ArrowRight size={18} />
+                </button>
               </div>
-              <div className="price">
-                <small>From</small>
-                <strong>₱{vehicle.price}</strong>
-                <span>/ day</span>
-              </div>
-              <button
-                className="round-button"
-                aria-label={`Book ${vehicle.brand} ${vehicle.name}`}
-                onClick={() => scrollTo("#booking")}
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+            </article>
+          ))}
+        </div>
+      </section>
 
-    <section id="booking" className="booking-section section-pad"><div className="booking-intro" data-reveal><p className="eyebrow">Start your journey</p><h2>Ready to<br />Drive?</h2><p>Your next car is closer than you think.</p></div><form className="booking-form" data-reveal onSubmit={(e) => e.preventDefault()}><label><span><MapPin size={15} /> Pickup location</span><input placeholder="Where are you starting?" /><ChevronDown size={16} /></label><label><span><MapPin size={15} /> Drop-off location</span><input placeholder="Same location" /><ChevronDown size={16} /></label><label><span><CalendarDays size={15} /> Pickup date</span><input type="date" /></label><label><span><CalendarDays size={15} /> Return date</span><input type="date" /></label><label><span><Gauge size={15} /> Vehicle type</span><select defaultValue=""><option value="" disabled>Choose a category</option><option>Sports</option><option>Luxury</option><option>Sedan</option><option>SUV</option><option>Economy</option></select><ChevronDown size={16} /></label><button className="search-button">Search available cars <ArrowRight size={18} /></button></form></section>
+      <section id="booking" className="booking-section section-pad"><div className="booking-intro" data-reveal><p className="eyebrow">Start your journey</p><h2>Ready to<br />Drive?</h2><p>Your next car is closer than you think.</p></div><form className="booking-form" data-reveal onSubmit={(e) => e.preventDefault()}><label><span><MapPin size={15} /> Pickup location</span><input placeholder="Where are you starting?" /><ChevronDown size={16} /></label><label><span><MapPin size={15} /> Drop-off location</span><input placeholder="Same location" /><ChevronDown size={16} /></label><label><span><CalendarDays size={15} /> Pickup date</span><input type="date" /></label><label><span><CalendarDays size={15} /> Return date</span><input type="date" /></label><label><span><Gauge size={15} /> Vehicle type</span><select defaultValue=""><option value="" disabled>Choose a category</option><option>Sports</option><option>Luxury</option><option>Sedan</option><option>SUV</option><option>Economy</option></select><ChevronDown size={16} /></label><button className="search-button">Search available cars <ArrowRight size={18} /></button></form></section>
 
-    <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
+      <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
-    <section id="why" className="why-section section-pad"><div className="why-title" data-reveal><p className="eyebrow">The DriveX standard</p><h2>Built Around<br /><span>Your Journey</span></h2></div><div className="why-list">{[["Flexible Rentals", "An afternoon, a weekend, or longer. Keep the car for exactly the time you need."], ["Transparent Pricing", "The price you see is the price you drive away with. No last-minute surprises."], ["Quality Vehicles", "Every car is inspected, maintained, and prepared before every drive."], ["Effortless Booking", "From search to confirmation in a few considered steps."]].map(([title, copy], i) => <article key={title} data-reveal><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+      <section id="why" className="why-section section-pad"><div className="why-title" data-reveal><p className="eyebrow">The DriveX standard</p><h2>Built Around<br /><span>Your Journey</span></h2></div><div className="why-list">{[["Flexible Rentals", "An afternoon, a weekend, or longer. Keep the car for exactly the time you need."], ["Transparent Pricing", "The price you see is the price you drive away with. No last-minute surprises."], ["Quality Vehicles", "Every car is inspected, maintained, and prepared before every drive."], ["Effortless Booking", "From search to confirmation in a few considered steps."]].map(([title, copy], i) => <article key={title} data-reveal><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
 
-    <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => scrollTo("#booking")}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
+      <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => scrollTo("#booking")}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
 
-    <footer id="footer"><div className="footer-main"><div><div className="wordmark">DRIVE<span>X</span></div><p>Drive more. Experience more.</p></div><div><h4>Explore</h4><a href="#vehicles">Vehicles</a><a href="#how">How It Works</a><a href="#why">About</a><a href="mailto:hello@drivex.ph">Contact</a></div><div><h4>Support</h4><a href="#footer">Help Center</a><a href="#footer">Rental Policies</a><a href="#footer">Terms</a><a href="#footer">Privacy</a></div><div><h4>Follow</h4><a href="#footer">Instagram</a><a href="#footer">Facebook</a><a href="#footer">LinkedIn</a></div></div><div className="footer-bottom"><span>© 2026 DriveX. All rights reserved.</span><span>Manila, Philippines</span></div></footer>
-  </main>;
+      <footer id="footer"><div className="footer-main"><div><div className="wordmark">DRIVE<span>X</span></div><p>Drive more. Experience more.</p></div><div><h4>Explore</h4><a href="#vehicles">Vehicles</a><a href="#how">How It Works</a><a href="#why">About</a><a href="mailto:hello@drivex.ph">Contact</a></div><div><h4>Support</h4><a href="#footer">Help Center</a><a href="#footer">Rental Policies</a><a href="#footer">Terms</a><a href="#footer">Privacy</a></div><div><h4>Follow</h4><a href="#footer">Instagram</a><a href="#footer">Facebook</a><a href="#footer">LinkedIn</a></div></div><div className="footer-bottom"><span>© 2026 DriveX. All rights reserved.</span><span>Manila, Philippines</span></div></footer>
+    </main>
+  );
 }

@@ -54,7 +54,7 @@ export interface AdminVehicle {
   id: string;
   name: string;
   brand: string;
-  category: "Sports" | "Luxury" | "Sedan" | "SUV" | "Economy";
+  category: string;
   plate: string;
   images: string[];
   destinations: DestinationPrice[];
@@ -829,7 +829,7 @@ interface VehicleEditorProps {
   formData: {
     name: string;
     brand: string;
-    category: "Sports" | "Luxury" | "Sedan" | "SUV" | "Economy";
+    category: string;
     plate: string;
     images: string[];
     destinations: DestinationPrice[];
@@ -840,6 +840,9 @@ interface VehicleEditorProps {
   onCancel: () => void;
   tab: "specs" | "pricing" | "photos";
   setTab: (tab: "specs" | "pricing" | "photos") => void;
+  categories: string[];
+  onAddCategory: (cat: string) => void;
+  onDeleteCategory: (cat: string) => void;
 }
 
 function VehicleEditorView({
@@ -850,10 +853,15 @@ function VehicleEditorView({
   onCancel,
   tab,
   setTab,
+  categories,
+  onAddCategory,
+  onDeleteCategory,
 }: VehicleEditorProps) {
   const [newRouteInput, setNewRouteInput] = useState("");
   const [newPriceInput, setNewPriceInput] = useState<number | "">("");
   const [newPhotoInput, setNewPhotoInput] = useState("");
+  const [categorySearch, setCategorySearch] = useState("");
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
   const handleAddRoute = () => {
     if (!newRouteInput.trim()) return;
@@ -869,13 +877,31 @@ function VehicleEditorView({
     setNewPriceInput("");
   };
 
-  const handleAddPhoto = () => {
-    if (!newPhotoInput.trim()) return;
-    setFormData((prev: any) => ({
-      ...prev,
-      images: [...prev.images, newPhotoInput.trim()],
-    }));
-    setNewPhotoInput("");
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const newImages: string[] = [];
+    let processedCount = 0;
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          newImages.push(reader.result as string);
+        }
+        processedCount++;
+        if (processedCount === files.length) {
+          setFormData((prev: any) => ({
+            ...prev,
+            images: [...prev.images, ...newImages],
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    e.target.value = "";
   };
 
   const handleSetPrimary = (index: number) => {
@@ -1003,19 +1029,96 @@ function VehicleEditorView({
                 />
               </label>
 
-              <label className="vehicle-input-label">
-                <span>Vehicle Category Tier *</span>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
-                  className="vehicle-select"
-                >
-                  <option value="Sports">Sports</option>
-                  <option value="Luxury">Luxury</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Economy">Economy</option>
-                </select>
+              <label className="vehicle-input-label" style={{ position: "relative" }}>
+                <span>Vehicle Category *</span>
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="text"
+                    className="vehicle-input"
+                    placeholder="Search or type a new category..."
+                    value={showCategoryDropdown ? categorySearch : formData.category}
+                    onFocus={() => {
+                      setCategorySearch("");
+                      setShowCategoryDropdown(true);
+                    }}
+                    onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 180)}
+                    onChange={(e) => {
+                      setCategorySearch(e.target.value);
+                    }}
+                  />
+                  {showCategoryDropdown && (
+                    <div className="category-dropdown">
+                      {(() => {
+                        const q = categorySearch.trim().toLowerCase();
+                        const filtered = categories.filter((c) =>
+                          c.toLowerCase().includes(q)
+                        );
+                        const exactMatch = categories.some(
+                          (c) => c.toLowerCase() === q
+                        );
+                        return (
+                          <>
+                            {filtered.map((cat) => (
+                              <div
+                                key={cat}
+                                className={`category-option ${formData.category === cat ? "active" : ""}`}
+                                onMouseDown={(e) => {
+                                  if ((e.target as HTMLElement).closest('.category-delete-btn')) {
+                                    return;
+                                  }
+                                  setFormData({ ...formData, category: cat });
+                                  setShowCategoryDropdown(false);
+                                  setCategorySearch("");
+                                }}
+                              >
+                                <span style={{ flex: 1 }}>{cat}</span>
+                                {formData.category === cat && (
+                                  <Check size={13} style={{ marginLeft: "auto" }} />
+                                )}
+                                <button
+                                  type="button"
+                                  className="category-delete-btn"
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    onDeleteCategory(cat);
+                                    if (formData.category === cat) {
+                                      setFormData({ ...formData, category: "" });
+                                    }
+                                  }}
+                                  title="Delete category"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              </div>
+                            ))}
+                            {q && !exactMatch && (
+                              <button
+                                type="button"
+                                className="category-option create-new"
+                                onMouseDown={() => {
+                                  const newCat = categorySearch.trim();
+                                  onAddCategory(newCat);
+                                  setFormData({ ...formData, category: newCat });
+                                  setShowCategoryDropdown(false);
+                                  setCategorySearch("");
+                                }}
+                              >
+                                <Plus size={13} />
+                                <span>Create &quot;{categorySearch.trim()}&quot;</span>
+                              </button>
+                            )}
+                            {filtered.length === 0 && !q && (
+                              <div className="category-empty">
+                                Type to search or create a new category
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  )}
+                </div>
               </label>
 
               <label className="vehicle-input-label">
@@ -1292,30 +1395,22 @@ function VehicleEditorView({
               </div>
             </div>
 
-            {/* Add Photo URL Input Box */}
-            <div className="add-photo-inline-card">
-              <input
-                placeholder="Paste or enter public image URL (e.g. /images/fleet-sports-huracan.jpg or https://...)"
-                value={newPhotoInput}
-                onChange={(e) => setNewPhotoInput(e.target.value)}
-                className="vehicle-input"
-                style={{ flex: 1 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleAddPhoto();
-                  }
-                }}
-              />
-              <button
-                type="button"
-                className="admin-primary-btn"
-                onClick={handleAddPhoto}
-                style={{ display: "inline-flex", alignItems: "center", gap: 6, height: "38px", padding: "0 18px", flexShrink: 0 }}
-              >
-                <Plus size={15} />
-                <span>Add to Slider</span>
-              </button>
+            {/* File Upload Box */}
+            <div className="add-photo-inline-card" style={{ padding: '16px', border: '1px dashed rgba(255, 255, 255, 0.2)', background: 'transparent', textAlign: 'center', justifyContent: 'center' }}>
+              <label style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  style={{ display: 'none' }}
+                />
+                <div style={{ background: '#4f46e5', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                  <Plus size={15} />
+                  <span>Upload Images</span>
+                </div>
+                <span style={{ fontSize: '12px', color: '#9ca3af' }}>Click to select photo files from your device</span>
+              </label>
             </div>
 
             {/* Visual Photo Card Grid */}
@@ -1365,7 +1460,7 @@ function VehicleEditorView({
                   <div className="photo-card-footer">
                     <span className="photo-card-index">Slide #{idx + 1} {idx === 0 ? "(Cover)" : ""}</span>
                     <span className="photo-card-url-text" title={img}>
-                      {img}
+                      {img.startsWith('data:image') ? 'Local File (Base64)' : img}
                     </span>
                   </div>
                 </div>
@@ -1426,10 +1521,11 @@ export default function AdminDashboard() {
   const [openBookingMenuId, setOpenBookingMenuId] = useState<string | null>(null);
   const [editingVehicle, setEditingVehicle] = useState<AdminVehicle | null>(null);
   const [vehicleEditorTab, setVehicleEditorTab] = useState<"specs" | "pricing" | "photos">("specs");
+  const [vehicleCategories, setVehicleCategories] = useState<string[]>(["Sports", "Luxury", "Sedan", "SUV", "Economy"]);
   const [newVehicle, setNewVehicle] = useState<{
     name: string;
     brand: string;
-    category: "Sports" | "Luxury" | "Sedan" | "SUV" | "Economy";
+    category: string;
     plate: string;
     images: string[];
     destinations: DestinationPrice[];
@@ -1441,6 +1537,16 @@ export default function AdminDashboard() {
     images: ["/images/fleet-sports-huracan.jpg"],
     destinations: [{ id: Date.now().toString(), route: "Pampanga to Zambales", price: 5000 }],
   });
+
+  const handleAddCategory = (cat: string) => {
+    setVehicleCategories((prev) =>
+      prev.includes(cat) ? prev : [...prev, cat]
+    );
+  };
+
+  const handleDeleteCategory = (cat: string) => {
+    setVehicleCategories((prev) => prev.filter((c) => c !== cat));
+  };
 
   // KPI Calculations
   const totalRevenue = bookings.reduce((sum, b) => sum + b.totalPrice, 0) + 1606500; // includes past cycle
@@ -1734,6 +1840,9 @@ export default function AdminDashboard() {
               onCancel={() => setShowAddModal(false)}
               tab={vehicleEditorTab}
               setTab={setVehicleEditorTab}
+              categories={vehicleCategories}
+              onAddCategory={handleAddCategory}
+              onDeleteCategory={handleDeleteCategory}
             />
           ) : editingVehicle ? (
             <VehicleEditorView
@@ -1744,6 +1853,9 @@ export default function AdminDashboard() {
               onCancel={() => setEditingVehicle(null)}
               tab={vehicleEditorTab}
               setTab={setVehicleEditorTab}
+              categories={vehicleCategories}
+              onAddCategory={handleAddCategory}
+              onDeleteCategory={handleDeleteCategory}
             />
           ) : (
             <>
@@ -2246,11 +2358,11 @@ export default function AdminDashboard() {
                       className="fleet-filter-select"
                     >
                       <option value="all">All Types ({vehicles.length})</option>
-                      <option value="Sports">Sports ({vehicles.filter((v) => v.category === "Sports").length})</option>
-                      <option value="Luxury">Luxury ({vehicles.filter((v) => v.category === "Luxury").length})</option>
-                      <option value="Sedan">Sedan ({vehicles.filter((v) => v.category === "Sedan").length})</option>
-                      <option value="SUV">SUV ({vehicles.filter((v) => v.category === "SUV").length})</option>
-                      <option value="Economy">Economy ({vehicles.filter((v) => v.category === "Economy").length})</option>
+                      {vehicleCategories.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat} ({vehicles.filter((v) => v.category === cat).length})
+                        </option>
+                      ))}
                     </select>
                   </div>
 

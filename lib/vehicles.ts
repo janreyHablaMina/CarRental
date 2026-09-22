@@ -1,0 +1,205 @@
+export interface Destination {
+  route: string;
+  price: number;
+}
+
+export interface Vehicle {
+  id: string;
+  name: string;
+  brand: string;
+  category: string;
+  image: string;
+  images: string[];
+  seats: number;
+  transmission: string;
+  engine: string;
+  acceleration: string;
+  price: string;
+  featured: boolean;
+  destinations: Destination[];
+}
+
+export const PH_LOCATIONS = [
+  "Metro Manila", "Clark", "Subic", "Baguio City", "Abra", "Agusan del Norte",
+  "Agusan del Sur", "Aklan", "Albay", "Antique", "Apayao", "Aurora", "Basilan",
+  "Bataan", "Batanes", "Batangas", "Benguet", "Biliran", "Bohol", "Bukidnon",
+  "Bulacan", "Cagayan", "Camarines Norte", "Camarines Sur", "Camiguin", "Capiz",
+  "Catanduanes", "Cavite", "Cebu", "Cotabato", "Davao de Oro", "Davao del Norte",
+  "Davao del Sur", "Davao Occidental", "Davao Oriental", "Dinagat Islands",
+  "Eastern Samar", "Guimaras", "Ifugao", "Ilocos Norte", "Ilocos Sur", "Iloilo",
+  "Isabela", "Kalinga", "La Union", "Laguna", "Lanao del Norte", "Lanao del Sur",
+  "Leyte", "Maguindanao", "Marinduque", "Masbate", "Misamis Occidental",
+  "Misamis Oriental", "Mountain Province", "Negros Occidental", "Negros Oriental",
+  "Northern Samar", "Nueva Ecija", "Nueva Vizcaya", "Occidental Mindoro",
+  "Oriental Mindoro", "Palawan", "Pampanga", "Pangasinan", "Quezon", "Quirino",
+  "Rizal", "Romblon", "Samar", "Sarangani", "Siquijor", "Sorsogon",
+  "South Cotabato", "Southern Leyte", "Sultan Kudarat", "Sulu", "Surigao del Norte",
+  "Surigao del Sur", "Tarlac", "Tawi-Tawi", "Zambales", "Zamboanga del Norte",
+  "Zamboanga del Sur", "Zamboanga Sibugay",
+];
+
+export const vehicles: Vehicle[] = [
+  {
+    id: "lamborghini-huracan-evo",
+    name: "Huracán EVO",
+    brand: "Lamborghini",
+    category: "Sports",
+    image: "/images/fleet-sports-huracan.jpg",
+    images: ["/images/fleet-sports-huracan.jpg", "/images/ezgif-frame-001.jpg", "/images/ezgif-frame-044.jpg"],
+    seats: 2,
+    transmission: "7-Spd Dual-Clutch",
+    engine: "640 HP V10",
+    acceleration: "2.9s 0-100",
+    price: "28,000",
+    featured: true,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 28000 },
+      { route: "Pampanga to Pangasinan", price: 28300 },
+      { route: "Metro Manila Airport Drop-off", price: 32000 },
+    ],
+  },
+  {
+    id: "porsche-911-carrera-t",
+    name: "911 Carrera T",
+    brand: "Porsche",
+    category: "Sports",
+    image: "/images/fleet-porsche.jpg",
+    images: ["/images/fleet-porsche.jpg", "/images/ezgif-frame-050.jpg", "/images/ezgif-frame-060.jpg"],
+    seats: 4,
+    transmission: "PDK Automatic",
+    engine: "385 HP Twin-Turbo",
+    acceleration: "4.0s 0-100",
+    price: "18,500",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 18500 },
+      { route: "Pampanga to Pangasinan", price: 18800 },
+    ],
+  },
+  {
+    id: "rolls-royce-phantom-viii",
+    name: "Phantom VIII",
+    brand: "Rolls-Royce",
+    category: "Luxury",
+    image: "/images/fleet-rolls.jpg",
+    images: ["/images/fleet-rolls.jpg", "/images/ezgif-frame-100.jpg", "/images/ezgif-frame-120.jpg"],
+    seats: 5,
+    transmission: "8-Spd Satellite Aided",
+    engine: "563 HP Twin-Turbo V12",
+    acceleration: "5.1s 0-100",
+    price: "35,000",
+    featured: true,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 35000 },
+      { route: "Pampanga to Baguio City", price: 42000 },
+    ],
+  },
+  {
+    id: "tesla-model-s-plaid",
+    name: "Model S Plaid",
+    brand: "Tesla",
+    category: "Luxury",
+    image: "/images/fleet-tesla.jpg",
+    images: ["/images/fleet-tesla.jpg", "/images/ezgif-frame-150.jpg", "/images/ezgif-frame-180.jpg"],
+    seats: 5,
+    transmission: "Tri-Motor AWD",
+    engine: "1,020 HP Electric",
+    acceleration: "1.99s 0-100",
+    price: "12,500",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 12500 },
+      { route: "Pampanga to Bataan", price: 13000 },
+    ],
+  },
+  {
+    id: "range-rover-velar-r-dynamic",
+    name: "Velar R-Dynamic",
+    brand: "Range Rover",
+    category: "SUV",
+    image: "/images/fleet-suv-velar.jpg",
+    images: ["/images/fleet-suv-velar.jpg", "/images/ezgif-frame-200.jpg", "/images/ezgif-frame-240.jpg"],
+    seats: 5,
+    transmission: "8-Speed Automatic AWD",
+    engine: "395 HP Turbo Inline-6",
+    acceleration: "5.2s 0-100",
+    price: "8,500",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 8500 },
+      { route: "Pampanga to La Union", price: 9200 },
+    ],
+  },
+  {
+    id: "bmw-330i-m-sport",
+    name: "330i M Sport",
+    brand: "BMW",
+    category: "Sedan",
+    image: "/images/fleet-bmw.jpg",
+    images: ["/images/fleet-bmw.jpg"],
+    seats: 5,
+    transmission: "Steptronic 8-Spd",
+    engine: "255 HP TwinPower Turbo",
+    acceleration: "5.4s 0-100",
+    price: "5,500",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 5500 },
+      { route: "Pampanga to Metro Manila", price: 6200 },
+    ],
+  },
+  {
+    id: "mercedes-e-class-executive",
+    name: "E-Class Executive",
+    brand: "Mercedes-Benz",
+    category: "Sedan",
+    image: "/images/fleet-mercedes.jpg",
+    images: ["/images/fleet-mercedes.jpg"],
+    seats: 5,
+    transmission: "9G-TRONIC Automatic",
+    engine: "258 HP EQ Boost",
+    acceleration: "5.8s 0-100",
+    price: "6,800",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 6800 },
+      { route: "Pampanga to Pangasinan", price: 7200 },
+    ],
+  },
+  {
+    id: "toyota-gr-sport-hatch",
+    name: "GR Sport Hatch",
+    brand: "Toyota",
+    category: "Economy",
+    image: "/images/fleet-toyota.jpg",
+    images: ["/images/fleet-toyota.jpg"],
+    seats: 5,
+    transmission: "Direct-Shift CVT",
+    engine: "170 HP Dynamic Force",
+    acceleration: "7.8s 0-100",
+    price: "2,200",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 2200 },
+      { route: "Pampanga to Subic", price: 2500 },
+    ],
+  },
+  {
+    id: "nissan-altima-premium",
+    name: "Altima Premium",
+    brand: "Nissan",
+    category: "Economy",
+    image: "/images/fleet-nissan.jpg",
+    images: ["/images/fleet-nissan.jpg"],
+    seats: 5,
+    transmission: "Xtronic CVT",
+    engine: "188 HP Direct Injection",
+    acceleration: "7.2s 0-100",
+    price: "2,800",
+    featured: false,
+    destinations: [
+      { route: "Pampanga to Zambales", price: 2800 },
+      { route: "Pampanga to Clark", price: 3000 },
+    ],
+  },
+];
