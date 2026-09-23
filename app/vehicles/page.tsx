@@ -138,22 +138,6 @@ export default function VehiclesCollectionPage() {
   return (
     <div className="vc-page">
       {/* Topbar */}
-      <header className="vc-topbar">
-        <div className="vc-topbar-left">
-          <Link href="/" className="vc-back-link">
-            <ArrowLeft size={16} />
-            <span>Home</span>
-          </Link>
-          <Link href="/" className="vc-brand">
-            DRIVE<span>X</span>
-          </Link>
-        </div>
-        <div className="vc-topbar-right">
-          <Link href="/#booking" className="vc-topbar-cta">
-            Book a Drive <ArrowRight size={15} />
-          </Link>
-        </div>
-      </header>
 
       {/* Hero Banner */}
       <section className="vc-hero">

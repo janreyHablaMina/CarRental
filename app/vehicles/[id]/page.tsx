@@ -35,14 +35,6 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
   return (
     <div className="vd-page">
       {/* Top bar */}
-      <header className="vd-topbar">
-        <button className="vd-back-btn" onClick={() => router.push("/vehicles")}>
-          <ArrowLeft size={18} />
-          <span>Back to Collection</span>
-        </button>
-        <div className="vd-wordmark">DRIVE<span>X</span></div>
-        <div />
-      </header>
 
       <div className="vd-body">
         {/* Left — Gallery */}

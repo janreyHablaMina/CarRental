@@ -48,19 +48,6 @@ export default function Home() {
 
   return (
     <main ref={mainRef} className="site-shell">
-      <header className={`topbar ${progress > 0.015 ? "topbar-scrolled" : ""}`}>
-        <button className="wordmark" onClick={() => scrollTo("#hero")} aria-label="DriveX home">DRIVE<span>X</span></button>
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          <button onClick={() => scrollTo("#vehicles")}>Fleet</button>
-          <Link href="/vehicles" style={{ color: "inherit", textDecoration: "none" }}>All Cars</Link>
-          <button onClick={() => scrollTo("#how")}>How It Works</button>
-          <button onClick={() => scrollTo("#why")}>About</button>
-          <button onClick={() => scrollTo("#footer")}>Contact</button>
-        </nav>
-        <button className="nav-cta desktop-cta" onClick={() => scrollTo("#booking")}>Book now <ArrowRight size={16} /></button>
-        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
-        {menuOpen && <nav className="mobile-nav"><button onClick={() => scrollTo("#vehicles")}>Vehicles</button><button onClick={() => scrollTo("#how")}>How It Works</button><button onClick={() => scrollTo("#why")}>About</button><button onClick={() => scrollTo("#booking")}>Book Now</button></nav>}
-      </header>
       <div className="progress-rail" aria-hidden="true"><span style={{ transform: `scaleY(${progress})` }} /></div>
       <div className="chapter-count" aria-hidden="true">{String(Math.min(6, Math.floor(heroProgress * 6) + 1)).padStart(2, "0")} <i /> 06</div>
 

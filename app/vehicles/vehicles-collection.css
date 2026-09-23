@@ -99,9 +99,7 @@
 
 /* ---------------- Hero Section ---------------- */
 .vc-hero {
-  padding: 56px 5vw 36px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 110px max(5vw, calc((100vw - 1400px) / 2)) 36px;
   width: 100%;
 }
 
@@ -190,9 +188,7 @@
 
 /* ---------------- Filter & Search Controls ---------------- */
 .vc-controls-container {
-  padding: 0 5vw 28px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 0 max(5vw, calc((100vw - 1400px) / 2)) 28px;
   width: 100%;
 }
 
@@ -448,9 +444,7 @@
 
 /* ---------------- Vehicle Grid ---------------- */
 .vc-grid-container {
-  padding: 0 5vw 48px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 0 max(5vw, calc((100vw - 1400px) / 2)) 80px;
   width: 100%;
   flex: 1;
 }
@@ -849,7 +843,7 @@
   margin-top: auto;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(5, 6, 8, 0.95);
-  padding: 32px 5vw;
+  padding: 32px max(5vw, calc((100vw - 1400px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
