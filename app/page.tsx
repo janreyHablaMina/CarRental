@@ -193,7 +193,7 @@ export default function Home() {
       {/* Infinite Auto-Scrolling VIP Testimonials */}
       <TestimonialsSection />
 
-      <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
+      <section className="cinematic-cta"><div className="cta-image-wrapper"><Image src="/images/4e591f35-31f9-4069-803e-f03c0f6e74db.jpg" alt="Luxury car interior" fill sizes="(max-width: 960px) 100vw, 50vw" className="cta-image" /></div><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
  
       {/* Map Background VIP Concierge & Contact Section */}
       <HomeContactSection />

@@ -1,20 +1,26 @@
 /* ==========================================================================
-   DriveX Section Separator / Architectural Transition Ribbon (Dark Obsidian Edition)
+   DriveX Section Separator / Infinite Kinetic Ribbon (Muted Platinum)
    Sits between the Cinematic CTA and Section 05
    ========================================================================== */
 
 .home-section-divider {
   position: relative !important;
   width: 100% !important;
-  background: #090d16 !important;
-  color: #ffffff !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  padding: 42px 0 48px 0 !important;
+  background: #f0f2f6 !important;
+  color: #0f172a !important;
+  border-top: 1px solid #dce1e8 !important;
+  border-bottom: 1px solid #dce1e8 !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
   z-index: 10 !important;
-  display: block !important;
 }
 
 /* Subtle architectural radial lighting */
@@ -24,28 +30,34 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;
+  width: 60%;
   height: 100%;
-  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(14, 165, 233, 0.05) 0%, transparent 70%);
   pointer-events: none;
 }
 
 /* ---------------- Marquee Ticker ---------------- */
 .divider-marquee-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  margin-bottom: 28px;
+  position: relative !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
   mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
 }
 
 .divider-marquee-track {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  white-space: nowrap;
+  display: flex !important;
+  align-items: center !important;
+  gap: 36px !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
   animation: homeDividerMarqueeScroll 45s linear infinite;
   -webkit-animation: homeDividerMarqueeScroll 45s linear infinite;
   will-change: transform;
@@ -74,165 +86,49 @@
 }
 
 .divider-marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  font-family: var(--font-mono, monospace);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: #94a3b8 !important;
-  text-transform: uppercase;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  color: #475569 !important;
+  text-transform: uppercase !important;
+  vertical-align: middle !important;
   transition: color 0.2s ease;
 }
 
 .divider-marquee-item:hover {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .marquee-dot {
-  color: #38bdf8 !important;
-  font-size: 8px;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
-}
-
-/* ---------------- Hairline Row with Badge ---------------- */
-.divider-hairline-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  max-width: 1440px;
-  margin: 0 auto 30px auto;
-  padding: 0 max(5vw, calc((100vw - 1400px) / 2));
-  box-sizing: border-box;
-}
-
-.divider-hairline-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12) 35%, rgba(255, 255, 255, 0.12) 65%, transparent);
-}
-
-.divider-monogram-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: rgba(15, 23, 42, 0.85) !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-radius: 999px;
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.12em;
-  color: #e2e8f0 !important;
-  text-transform: uppercase;
-  white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(56, 189, 248, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.divider-sparkle-icon {
-  color: #38bdf8 !important;
-}
-
-/* ---------------- 4-Pillar Grid ---------------- */
-.divider-pillars-container {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 max(5vw, calc((100vw - 1400px) / 2));
-  box-sizing: border-box;
-}
-
-.divider-pillars-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.divider-pillar-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 20px 22px;
-  background: linear-gradient(145deg, rgba(17, 24, 39, 0.75) 0%, rgba(11, 16, 28, 0.85) 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 14px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.divider-pillar-card:hover {
-  background: linear-gradient(145deg, rgba(24, 34, 56, 0.9) 0%, rgba(15, 22, 38, 0.95) 100%) !important;
-  border-color: rgba(56, 189, 248, 0.45) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.18);
-}
-
-.divider-pillar-icon-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(56, 189, 248, 0.12) !important;
-  border: 1px solid rgba(56, 189, 248, 0.32) !important;
-  flex-shrink: 0;
-}
-
-.divider-pillar-icon {
-  color: #38bdf8 !important;
-}
-
-.divider-pillar-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.divider-pillar-title {
-  font-size: 14px;
-  font-weight: 650;
-  color: #ffffff !important;
-  letter-spacing: -0.01em;
-}
-
-.divider-pillar-subtitle {
-  font-size: 12px;
-  color: #94a3b8 !important;
-  line-height: 1.5;
-}
-
-/* ---------------- Responsive ---------------- */
-@media (max-width: 1100px) {
-  .divider-pillars-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  display: inline-flex !important;
+  align-items: center !important;
+  color: #0284c7 !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  opacity: 0.95;
 }
 
 @media (max-width: 640px) {
   .home-section-divider {
-    padding: 28px 0 32px 0 !important;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
   }
-
-  .divider-marquee-wrapper {
-    margin-bottom: 20px;
+  
+  .divider-marquee-item {
+    font-size: 11px !important;
+    gap: 12px !important;
   }
-
-  .divider-hairline-row {
-    margin-bottom: 24px;
-  }
-
-  .divider-pillars-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .divider-pillar-card {
-    padding: 16px 18px;
+  
+  .divider-marquee-track {
+    gap: 24px !important;
   }
 }
+
