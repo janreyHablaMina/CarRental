@@ -12,7 +12,8 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Zap,
+  Compass,
+  Mountain,
 } from "lucide-react";
 import "./home-contact.css";
 
@@ -29,6 +30,9 @@ export interface HubLocation {
   lng: number;
   googleMapsUrl: string;
   features: string[];
+  scenicRoute: string;
+  elevation: string;
+  speed: string;
 }
 
 const HUBS: HubLocation[] = [
@@ -45,6 +49,9 @@ const HUBS: HubLocation[] = [
     lng: 121.0509,
     googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
     features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"],
+    scenicRoute: "Sierra Madre Mountain Pass // Luzon Foothills",
+    elevation: "540m ASL",
+    speed: "112 KM/H",
   },
   {
     id: "makati",
@@ -59,6 +66,9 @@ const HUBS: HubLocation[] = [
     lng: 121.0232,
     googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
     features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk"],
+    scenicRoute: "Tagaytay Ridge Pass & Taal Lake Scenic Route",
+    elevation: "680m ASL",
+    speed: "96 KM/H",
   },
   {
     id: "naia",
@@ -73,6 +83,9 @@ const HUBS: HubLocation[] = [
     lng: 121.0159,
     googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
     features: ["Tarmac Fast-Track", "Luggage Valet", "Keyless Mobile Unlock"],
+    scenicRoute: "South Luzon Coastal Corridor & Batangas Coast",
+    elevation: "42m ASL",
+    speed: "124 KM/H",
   },
   {
     id: "clark",
@@ -87,6 +100,9 @@ const HUBS: HubLocation[] = [
     lng: 120.5312,
     googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
     features: ["Track Preparation", "North Luzon Dispatch", "Helipad Access"],
+    scenicRoute: "Bamban Peaks & Zambales Mountain Range Expedition",
+    elevation: "410m ASL",
+    speed: "135 KM/H",
   },
   {
     id: "cebu",
@@ -101,6 +117,9 @@ const HUBS: HubLocation[] = [
     lng: 123.9056,
     googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
     features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"],
+    scenicRoute: "Cebu Trans-Central Mountain Highway & Coastal Cliffs",
+    elevation: "830m ASL",
+    speed: "108 KM/H",
   },
 ];
 
@@ -137,7 +156,7 @@ export default function HomeContactSection() {
             <h2>Nationwide Hubs &amp; Lounges</h2>
           </div>
           <p className="home-contact-header-desc">
-            Direct delivery at NAIA, private turnarounds in BGC, and executive lounges across Metro Manila &amp; the Philippines.
+            Direct airport delivery, private VIP turnarounds, and nationwide touring fleets engineered for scenic road trips across the Philippines.
           </p>
         </div>
 
@@ -157,7 +176,7 @@ export default function HomeContactSection() {
         </div>
       </div>
 
-      {/* FULL WIDTH CINEMATIC CAR VIDEO EXPERIENCE */}
+      {/* FULL WIDTH CINEMATIC NATURE TRIP / MOVING CAR VIDEO */}
       <div className="home-video-fullwidth">
         <video
           ref={videoRef}
@@ -165,11 +184,12 @@ export default function HomeContactSection() {
           loop
           muted={isMuted}
           playsInline
-          poster="/images/drivex-hero-front.jpg"
+          poster="/images/drivex-coastal-drive.png"
           className="home-car-video-element"
         >
+          <source src="/videos/nature-road-trip.mp4" type="video/mp4" />
+          <source src="https://shotstack-assets.s3-ap-southeast-2.amazonaws.com/footage/road.mp4" type="video/mp4" />
           <source src="/videos/luxury-car.mp4" type="video/mp4" />
-          <source src="https://res.cloudinary.com/demo/video/upload/blue_sports_car.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
 
@@ -181,18 +201,25 @@ export default function HomeContactSection() {
         <div className="home-video-hud-top">
           <div className="home-hud-chip live">
             <span className="home-hud-dot" />
-            <span>CINEMATIC TELEMETRY // 4K HIGHWAY RUN</span>
+            <span>NATURE EXPEDITION // 4K SCENIC HIGHWAY RUN</span>
           </div>
           <div className="home-hud-chip secondary">
-            <Zap size={13} />
-            <span>SUPERCAR DYNAMICS ACTIVE</span>
+            <Mountain size={13} />
+            <span>COASTAL &amp; MOUNTAIN GRAND TOURING</span>
           </div>
         </div>
 
         {/* Video Overlay Center Callout */}
         <div className="home-video-center-info">
           <span className="home-video-watermark">{selectedHub.name.toUpperCase()}</span>
-          <p className="home-video-coords">{selectedHub.coords || "METRO MANILA // 14.5507° N, 121.0509° E"}</p>
+          <p className="home-video-scenic-sub">{selectedHub.scenicRoute}</p>
+          <div className="home-video-telemetry-strip">
+            <span>{selectedHub.coords || "14.5507° N, 121.0509° E"}</span>
+            <span className="telemetry-divider">•</span>
+            <span>ELEV: {selectedHub.elevation}</span>
+            <span className="telemetry-divider">•</span>
+            <span>CRUISE: {selectedHub.speed}</span>
+          </div>
         </div>
 
         {/* Video Player Floating Controls */}

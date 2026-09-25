@@ -116,11 +116,29 @@ button { color:inherit; }
 .booking-form label>svg:last-child { position:absolute; right:4px; bottom:22px; color:#70767d; }
 .booking-form input::placeholder { color:#c6c8cb; }.booking-form input[type=date] { color-scheme:dark; }
 .search-button { grid-column:1/-1; margin-top:40px; width:100%; }
-.how-section { background:#121519; }
-.how-section .section-head h2 { font-size:clamp(52px,6vw,92px); }
-.steps-list { border-top:1px solid var(--line); }
-.steps-list article { display:grid; grid-template-columns:80px 1fr 1fr auto; gap:30px; align-items:center; padding:38px 0; border-bottom:1px solid var(--line); }
-.steps-list article>span { color:var(--accent); font:12px var(--font-mono); }.steps-list h3 { font-size:25px; font-weight:520; margin:0; }.steps-list p { color:#8e949b; max-width:400px; line-height:1.6; }.steps-list svg { color:#646a71; }
+.how-section {
+  position: relative;
+  background-color: #07090e;
+  background-image:
+    linear-gradient(180deg, rgba(5, 7, 11, 0.90) 0%, rgba(8, 11, 17, 0.74) 50%, rgba(5, 7, 11, 0.92) 100%),
+    url('/images/drivex-side-profile.jpg');
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.how-section .section-head h2 { font-size:clamp(52px,6vw,92px); color:#ffffff; }
+.steps-list { border-top:1px solid rgba(255, 255, 255, 0.12); }
+.steps-list article { display:grid; grid-template-columns:80px 1fr 1fr auto; gap:30px; align-items:center; padding:38px 24px; border-bottom:1px solid rgba(255, 255, 255, 0.08); border-radius:10px; transition:all .3s cubic-bezier(.16,1,.3,1); }
+.steps-list article:hover { background:rgba(255, 255, 255, 0.04); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-color:rgba(77, 163, 255, 0.25); }
+.steps-list article>span { color:var(--accent,#4da3ff); font:13px var(--font-mono); font-weight:700; letter-spacing:.08em; }
+.steps-list h3 { font-size:26px; font-weight:600; color:#ffffff; margin:0; letter-spacing:-.01em; }
+.steps-list p { color:#94a3b8; max-width:420px; line-height:1.65; font-size:14.5px; margin:0; }
+.steps-list svg { color:#64748b; transition:all .3s ease; }
+.steps-list article:hover svg { color:var(--accent,#4da3ff); transform:translateX(8px); }
 .why-section { background:#e5e5df; color:#0b0c0e; display:grid; grid-template-columns:1fr 1fr; gap:10vw; }
 .why-title { position:sticky; top:140px; align-self:start; }.why-title h2 { font-size:clamp(58px,6vw,96px); }.why-title h2 span { color:#808388; }
 .why-list article { padding:44px 0; border-bottom:1px solid #bfc1bd; display:grid; grid-template-columns:60px 1fr; }.why-list article>span { font:11px var(--font-mono); color:#777; }.why-list h3 { font-size:28px; margin:0 0 14px; font-weight:550; }.why-list p { grid-column:2; color:#5f6365; line-height:1.7; max-width:430px; }
@@ -136,6 +154,7 @@ footer { padding:90px max(5vw, calc((100vw - 1400px) / 2)) 30px; background:#070
   .cinematic-vignette-left,.cinematic-vignette-right { width:100%; background:linear-gradient(0deg,rgba(5,6,8,.95) 0%,rgba(5,6,8,.5) 45%,transparent 100%); }
   .car-hud-badge { display:none; }
   .scene-vignette { z-index:2; background:linear-gradient(0deg,rgba(3,4,5,.95),rgba(3,4,5,.1) 70%); }.story-frame { left:24px; width:calc(100% - 48px); justify-content:flex-end; padding-bottom:10vh; }.profile-copy,.experience-copy,.interior-copy,.performance-copy,.drive-copy { left:24px; right:auto; text-align:left; align-items:flex-start; }.profile-copy { top:120vh; }.experience-copy { top:240vh; }.interior-copy { top:360vh; }.performance-copy { top:480vh; }.drive-copy { top:600vh; }.story-frame h1 { font-size:clamp(46px,14vw,72px); }.story-frame h2 { font-size:clamp(42px,12vw,64px); }.hero-sub { font-size:14px; }.scroll-cue { left:24px; }
+  .how-section { background-attachment: scroll; }
   .section-pad { padding:100px 24px; }.section-head { display:block; }.section-head>p { margin-top:25px; }.vehicle-grid { grid-template-columns:1fr; }.vehicle-visual { height:300px; }.booking-section,.why-section { grid-template-columns:1fr; gap:50px; }.booking-form { grid-template-columns:1fr; }.booking-form label { margin-right:0; }.search-button { grid-column:1; }.steps-list article { grid-template-columns:44px 1fr auto; }.steps-list article p { grid-column:2/4; margin:0; }.why-title { position:static; }.footer-main { grid-template-columns:1fr 1fr; }.footer-main>div:first-child { grid-column:1/-1; }
 }
 @media (max-width: 560px) {
