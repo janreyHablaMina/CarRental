@@ -9,6 +9,16 @@ import {
   Compass, ExternalLink
 } from "lucide-react";
 import { vehicles } from "@/lib/vehicles";
+import dynamic from "next/dynamic";
+
+const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
+  ssr: false,
+  loading: () => (
+    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#0a0a0a", borderRadius: "20px" }}>
+      <div className="cp-pulse-dot" style={{ width: 30, height: 30 }} />
+    </div>
+  )
+});
 
 const InstagramIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -53,9 +63,8 @@ interface HubLocation {
   phone: string;
   email: string;
   hours: string;
-  coords: string;
-  mapX: number;
-  mapY: number;
+  lat: number;
+  lng: number;
   googleMapsUrl: string;
   features: string[];
 }
@@ -69,9 +78,8 @@ const HUBS: HubLocation[] = [
     phone: "+63 (2) 8888-3748",
     email: "bgc.concierge@drivex.ph",
     hours: "Open 24/7 (VIP Turnaround)",
-    coords: "14.5507° N, 121.0509° E",
-    mapX: 260,
-    mapY: 190,
+    lat: 14.5507,
+    lng: 121.0509,
     googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
     features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"]
   },
@@ -83,9 +91,8 @@ const HUBS: HubLocation[] = [
     phone: "+63 (2) 8888-3749",
     email: "makati.fleet@drivex.ph",
     hours: "06:00 AM – 11:00 PM Daily",
-    coords: "14.5574° N, 121.0232° E",
-    mapX: 245,
-    mapY: 205,
+    lat: 14.5574,
+    lng: 121.0232,
     googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
     features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk"]
   },
@@ -97,9 +104,8 @@ const HUBS: HubLocation[] = [
     phone: "+63 (2) 8888-3750",
     email: "airport.vip@drivex.ph",
     hours: "Open 24/7 (Flight Tracked)",
-    coords: "14.5204° N, 121.0159° E",
-    mapX: 250,
-    mapY: 225,
+    lat: 14.5204,
+    lng: 121.0159,
     googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
     features: ["Tarmac Fast-Track", "Luggage Valet", "Keyless Mobile Unlock"]
   },
@@ -111,9 +117,8 @@ const HUBS: HubLocation[] = [
     phone: "+63 (45) 499-3748",
     email: "clark.fleet@drivex.ph",
     hours: "07:00 AM – 10:00 PM Daily",
-    coords: "15.1764° N, 120.5312° E",
-    mapX: 235,
-    mapY: 145,
+    lat: 15.1764,
+    lng: 120.5312,
     googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
     features: ["Track Preparation", "North Luzon Dispatch", "Helipad Access"]
   },
@@ -125,9 +130,8 @@ const HUBS: HubLocation[] = [
     phone: "+63 (32) 412-3748",
     email: "cebu.vip@drivex.ph",
     hours: "08:00 AM – 09:00 PM Daily",
-    coords: "10.3297° N, 123.9056° E",
-    mapX: 385,
-    mapY: 340,
+    lat: 10.3297,
+    lng: 123.9056,
     googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
     features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"]
   }
@@ -237,131 +241,9 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Stylized SVG Radar Map */}
-            <div className="cp-svg-container">
-              <svg 
-                className="cp-vector-svg" 
-                viewBox="0 0 600 480" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  {/* Grid Pattern */}
-                  <pattern id="radarGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" strokeWidth="1" />
-                  </pattern>
-
-                  {/* Radial Radar Glow */}
-                  <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#4da3ff" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#4da3ff" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-
-                {/* Grid Background */}
-                <rect width="600" height="480" fill="url(#radarGrid)" />
-
-                {/* Coordinate Reference Circles */}
-                <circle cx="260" cy="200" r="120" stroke="rgba(77, 163, 255, 0.08)" strokeDasharray="3 4" fill="none" />
-                <circle cx="260" cy="200" r="210" stroke="rgba(77, 163, 255, 0.05)" strokeDasharray="4 6" fill="none" />
-
-                {/* Simplified Archipelago Silhouettes */}
-                {/* Luzon Main Body */}
-                <path 
-                  d="M 210 90 L 250 80 L 280 110 L 290 150 L 310 180 L 280 230 L 250 250 L 230 230 L 220 180 L 195 140 Z" 
-                  fill="rgba(255, 255, 255, 0.03)" 
-                  stroke="rgba(255, 255, 255, 0.09)" 
-                  strokeWidth="1.5"
-                />
-                {/* Palawan Island */}
-                <path 
-                  d="M 160 260 L 190 310 L 175 330 L 140 280 Z" 
-                  fill="rgba(255, 255, 255, 0.02)" 
-                  stroke="rgba(255, 255, 255, 0.07)" 
-                  strokeWidth="1"
-                />
-                {/* Visayas Islands */}
-                <path 
-                  d="M 330 260 L 380 280 L 410 320 L 370 360 L 320 320 Z" 
-                  fill="rgba(255, 255, 255, 0.03)" 
-                  stroke="rgba(255, 255, 255, 0.09)" 
-                  strokeWidth="1.5"
-                />
-                {/* Mindanao Island */}
-                <path 
-                  d="M 320 380 L 400 370 L 440 410 L 390 460 L 330 440 Z" 
-                  fill="rgba(255, 255, 255, 0.025)" 
-                  stroke="rgba(255, 255, 255, 0.08)" 
-                  strokeWidth="1.5"
-                />
-
-                {/* Connecting Route Rays from Flagship BGC */}
-                {HUBS.filter(h => h.id !== "bgc").map(h => (
-                  <line 
-                    key={h.id}
-                    x1={260} 
-                    y1={190} 
-                    x2={h.mapX} 
-                    y2={h.mapY} 
-                    stroke="rgba(77, 163, 255, 0.16)" 
-                    strokeDasharray="2 3"
-                  />
-                ))}
-
-                {/* Render Interactive Hub Pins */}
-                {HUBS.map((hub) => {
-                  const isActive = selectedHub.id === hub.id;
-                  return (
-                    <g 
-                      key={hub.id} 
-                      className="cp-map-pin"
-                      onClick={() => setSelectedHub(hub)}
-                    >
-                      {/* Outer pulse wave on active */}
-                      {isActive && (
-                        <circle 
-                          cx={hub.mapX} 
-                          cy={hub.mapY} 
-                          r="18" 
-                          fill="url(#hubGlow)" 
-                          stroke="#4da3ff" 
-                          className="cp-radar-pulse"
-                        />
-                      )}
-
-                      {/* Outer Pin Ring */}
-                      <circle 
-                        cx={hub.mapX} 
-                        cy={hub.mapY} 
-                        r={isActive ? 8 : 5} 
-                        fill={isActive ? "#4da3ff" : "#1a2230"} 
-                        stroke={isActive ? "#ffffff" : "#4da3ff"} 
-                        strokeWidth={isActive ? 2.5 : 1.5}
-                      />
-
-                      {/* Inner Core */}
-                      <circle 
-                        cx={hub.mapX} 
-                        cy={hub.mapY} 
-                        r={isActive ? 3 : 2} 
-                        fill={isActive ? "#070809" : "#ffffff"} 
-                      />
-
-                      {/* Text Tag */}
-                      <text 
-                        x={hub.mapX + 12} 
-                        y={hub.mapY + 4} 
-                        fill={isActive ? "#4da3ff" : "#94a3b8"} 
-                        fontSize="11" 
-                        fontWeight={isActive ? "700" : "500"}
-                        fontFamily="var(--font-mono, monospace)"
-                      >
-                        {hub.name.split(" ")[0]}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
+            {/* Interactive Leaflet Map */}
+            <div className="cp-svg-container" style={{ padding: 0, overflow: "hidden" }}>
+              <LeafletMap hubs={HUBS} selectedHub={selectedHub} onSelectHub={setSelectedHub} />
 
               {/* Active Hub Info Bottom Overlay */}
               <div className="cp-map-active-badge">
