@@ -1,33 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
   Phone,
   Mail,
-  Clock,
-  Send,
-  CheckCircle2,
   MessageSquare,
   ArrowRight,
-  ShieldCheck,
-  ChevronDown,
+  CheckCircle2,
   MapPin,
+  Clock,
   ExternalLink,
+  ChevronDown,
   Sparkles,
-  Check
 } from "lucide-react";
 import { vehicles } from "@/lib/vehicles";
-import { HubLocation } from "@/components/LeafletMap";
+import { type HubLocation } from "@/components/LeafletMap";
 import "./contact.css";
 
-// Dynamically import Leaflet Map (client-side only, no SSR)
+// Dynamically import Leaflet Map to prevent SSR errors
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ssr: false,
   loading: () => (
-    <div className="contact-map-loading">
-      <div className="contact-map-spinner" />
-      <span>Loading interactive map...</span>
+    <div className="contact-map-loader">
+      <div className="contact-map-spin" />
+      <span>Loading Interactive Map...</span>
     </div>
   ),
 });
@@ -36,8 +34,8 @@ const HUBS: HubLocation[] = [
   {
     id: "bgc",
     name: "BGC Flagship Lounge",
-    category: "Supercar Handover & Private Lounge",
-    address: "5th Ave cor. 28th St, Bonifacio High Street Central, Taguig City, Metro Manila",
+    category: "Supercar Handover & VIP Lounge",
+    address: "5th Ave cor. 28th St, Bonifacio High Street Central, Taguig City",
     phone: "+63 (2) 8888-3748",
     email: "bgc.concierge@drivex.ph",
     hours: "Open 24/7 (VIP Turnaround)",
@@ -45,13 +43,13 @@ const HUBS: HubLocation[] = [
     lat: 14.5507,
     lng: 121.0509,
     googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
-    features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge", "Vehicle Detailing Bay"]
+    features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"],
   },
   {
     id: "naia",
     name: "NAIA Terminal 3 Concierge",
     category: "Airside & Curbside Airport Handover",
-    address: "Terminal 3 Arrival VIP Lounge, Andrews Ave, Pasay City, Metro Manila",
+    address: "Terminal 3 Arrival VIP Lounge, Andrews Ave, Pasay City",
     phone: "+63 (2) 8888-3750",
     email: "airport.vip@drivex.ph",
     hours: "Open 24/7 (Flight Tracked)",
@@ -59,12 +57,12 @@ const HUBS: HubLocation[] = [
     lat: 14.5204,
     lng: 121.0159,
     googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
-    features: ["Tarmac Fast-Track", "Luggage Valet", "Pre-Cooled Cabin", "Chauffeur Meet & Greet"]
+    features: ["Tarmac Fast-Track", "Inbound Flight Sync", "Pre-Cooled Cabin"],
   },
   {
     id: "makati",
     name: "Makati Executive Hub",
-    category: "Corporate Fleet & Chauffeur Logistics",
+    category: "Corporate Fleet & Chauffeur Desk",
     address: "Ayala Triangle Gardens Tower Two, Paseo de Roxas, Makati CBD",
     phone: "+63 (2) 8888-3749",
     email: "makati.fleet@drivex.ph",
@@ -73,13 +71,13 @@ const HUBS: HubLocation[] = [
     lat: 14.5574,
     lng: 121.0232,
     googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
-    features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk", "Diplomatic Escorts"]
+    features: ["Executive Sedans", "Armored Fleet Dispatch", "Corporate Desk"],
   },
   {
     id: "clark",
     name: "Clark Freeport Hub",
     category: "Grand Touring & Track Fleet Staging",
-    address: "Clark Global City, Manuel A. Roxas Hwy, Clark Freeport Zone, Pampanga",
+    address: "Clark Global City, Manuel A. Roxas Hwy, Clark Freeport Zone",
     phone: "+63 (45) 499-3748",
     email: "clark.fleet@drivex.ph",
     hours: "07:00 AM – 10:00 PM Daily",
@@ -87,7 +85,7 @@ const HUBS: HubLocation[] = [
     lat: 15.1764,
     lng: 120.5312,
     googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
-    features: ["Track Day Prep", "North Luzon Dispatch", "Helipad Direct Access", "High-Speed Staging"]
+    features: ["Track Day Prep", "Clark Airport Staging", "Helipad Access"],
   },
   {
     id: "cebu",
@@ -101,47 +99,41 @@ const HUBS: HubLocation[] = [
     lat: 10.3297,
     lng: 123.9056,
     googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
-    features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers", "Yacht Transfer Coordination"]
-  }
+    features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"],
+  },
 ];
 
 const FAQS = [
   {
     q: "How fast can a vehicle be delivered to my hotel or residence?",
-    a: "Within Metro Manila (BGC, Makati, NAIA, Alabang), our dedicated concierge team guarantees curbside delivery within 45 to 60 minutes for reserved bookings. Emergency and on-demand dispatches average under 90 minutes."
+    a: "Within Metro Manila (BGC, Makati, NAIA, Alabang), our dedicated concierge team guarantees curbside delivery within 45 to 60 minutes for confirmed bookings.",
   },
   {
     q: "Can my car be waiting curbside at NAIA when my flight lands?",
-    a: "Yes. Our NAIA Terminal 3 team is directly linked to real-time flight telemetry. Your assigned concierge tracks your inbound flight and ensures the vehicle is parked curbside with climate control pre-set to your preference."
+    a: "Yes. Our team tracks your inbound flight number and coordinates curbside staging so your vehicle is pre-cooled and waiting the moment you exit the terminal.",
   },
   {
     q: "What credentials do I need to rent a luxury vehicle?",
-    a: "Drivers must be at least 21 years of age with a valid Philippine Driver's License or an International Driving Permit (IDP) alongside a valid passport. A major credit card or verified security deposit is required for supercars."
+    a: "Drivers must be at least 21 years of age with a valid Philippine Driver's License or an International Driving Permit (IDP) alongside a valid passport or government ID. A major credit card security hold is required for supercars.",
   },
   {
     q: "Is insurance included in the daily rental rate?",
-    a: "Every DriveX rental includes Tier-1 Comprehensive Collision Damage Waiver (CDW) and Third-Party Liability (TPL) insurance. Zero-deductible VIP excess waiver coverage is also available during booking."
+    a: "Every rental includes Tier-1 Comprehensive Collision Damage Waiver (CDW) and Third-Party Liability (TPL). Zero-deductible VIP excess waiver coverage is also available during booking.",
   },
-  {
-    q: "Can you accommodate custom driving tours or chauffeur services?",
-    a: "Yes. We offer professional executive chauffeurs as well as bespoke convoy planning for mountain routes (Sierra Madre, Tagaytay) and multi-day provincial grand tours."
-  }
 ];
 
 export default function ContactPage() {
   const [selectedHub, setSelectedHub] = useState<HubLocation>(HUBS[0]);
-  const [inquiryType, setInquiryType] = useState("Vehicle Reservation");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   // Form State
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
+    name: "",
     phone: "",
-    targetDate: "",
-    vehicleInterest: "",
-    pickupLocation: "BGC Flagship Lounge",
-    message: ""
+    email: "",
+    vehicle: "",
+    location: "BGC Flagship Lounge",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -152,422 +144,308 @@ export default function ContactPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 800);
+    }, 600);
   };
 
   const handleResetForm = () => {
     setFormData({
-      fullName: "",
-      email: "",
+      name: "",
       phone: "",
-      targetDate: "",
-      vehicleInterest: "",
-      pickupLocation: "BGC Flagship Lounge",
-      message: ""
+      email: "",
+      vehicle: "",
+      location: "BGC Flagship Lounge",
+      message: "",
     });
     setSubmitted(false);
   };
 
   return (
     <div className="contact-page">
-      {/* ---------------- 1. Refined Page Header ---------------- */}
-      <section className="contact-hero">
-        <div className="contact-hero-container">
-          <div className="contact-badge">
-            <span className="contact-badge-dot" />
-            <span>24/7 PRIVATE CONCIERGE DESK</span>
-          </div>
-
-          <h1 className="contact-hero-title">
-            Contact <span>DriveX Concierge</span>
-          </h1>
-
-          <p className="contact-hero-subtitle">
-            Whether arranging an airport tarmac delivery at NAIA, reserving an exotic supercar, or organizing a custom mountain pass expedition, our team is available 24/7.
-          </p>
-        </div>
-      </section>
-
-      {/* ---------------- 2. Top Direct Contact Channels (3 Key Cards) ---------------- */}
-      <section className="contact-channels-section">
-        <div className="contact-channels-container">
-          {/* Card 1: Phone */}
-          <a href="tel:+63288883748" className="contact-channel-card">
-            <div className="channel-card-icon phone">
-              <Phone size={22} />
-            </div>
-            <div className="channel-card-content">
-              <span className="channel-card-label">Toll-Free VIP Hotline</span>
-              <span className="channel-card-value">+63 (2) 8888-DRIVEX</span>
-              <span className="channel-card-sub">Available 24/7 • Instant Call</span>
-            </div>
-            <span className="channel-card-action">
-              Call Now <ArrowRight size={14} />
-            </span>
-          </a>
-
-          {/* Card 2: WhatsApp */}
-          <a
-            href="https://wa.me/639178883748?text=Hello%20DriveX%20Concierge,%20I%20would%20like%20to%20inquire%20about%20a%20luxury%20vehicle%20reservation."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-channel-card highlight"
-          >
-            <div className="channel-card-icon whatsapp">
-              <MessageSquare size={22} />
-            </div>
-            <div className="channel-card-content">
-              <span className="channel-card-label">WhatsApp VIP Concierge</span>
-              <span className="channel-card-value">+63 917 888 3748</span>
-              <span className="channel-card-sub">Direct Chat • &lt; 5 Min Response</span>
-            </div>
-            <span className="channel-card-action">
-              Message on WhatsApp <ArrowRight size={14} />
-            </span>
-          </a>
-
-          {/* Card 3: Email */}
-          <a href="mailto:concierge@drivex.ph" className="contact-channel-card">
-            <div className="channel-card-icon email">
-              <Mail size={22} />
-            </div>
-            <div className="channel-card-content">
-              <span className="channel-card-label">Private Client Email</span>
-              <span className="channel-card-value">concierge@drivex.ph</span>
-              <span className="channel-card-sub">Official Quotes & Itineraries</span>
-            </div>
-            <span className="channel-card-action">
-              Send Email <ArrowRight size={14} />
-            </span>
-          </a>
-        </div>
-
-        {/* Roadside Emergency Banner */}
-        <div className="contact-emergency-strip">
-          <div className="emergency-strip-inner">
-            <div className="emergency-left">
-              <ShieldCheck size={16} className="emergency-icon" />
-              <span><strong>Active Fleet Roadside Emergency:</strong> In the event of an urgent roadside issue, dial our dedicated 24/7 dispatch team:</span>
-            </div>
-            <a href="tel:+63289994357" className="emergency-phone">
-              +63 (2) 8999-HELP
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- 3. Split 2-Column Main Contact Experience ---------------- */}
-      <section className="contact-main-section">
-        <div className="contact-main-grid">
-          {/* Left Column: Contact Form */}
-          <div className="contact-form-box">
-            <div className="contact-form-header">
-              <h2>Send an Inquiry</h2>
-              <p>Leave your details and requirements. A dedicated fleet coordinator will respond promptly.</p>
-            </div>
-
-            {submitted ? (
-              <div className="contact-form-success">
-                <div className="success-icon-wrap">
-                  <CheckCircle2 size={36} />
-                </div>
-                <h3>Message Received</h3>
-                <p>
-                  Thank you, <strong>{formData.fullName || "valued guest"}</strong>. Your inquiry regarding{" "}
-                  <strong>{formData.vehicleInterest || "our luxury fleet"}</strong> has been received. Our senior concierge will contact you via <strong>{formData.phone || formData.email}</strong> shortly.
-                </p>
-                <button type="button" className="contact-form-reset-btn" onClick={handleResetForm}>
-                  Send Another Message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="contact-form">
-                {/* Inquiry Category Pills */}
-                <div className="form-group full">
-                  <label className="form-label">Inquiry Purpose</label>
-                  <div className="category-pills">
-                    {[
-                      "Vehicle Reservation",
-                      "Airport VIP Handover",
-                      "Chauffeur & Corporate",
-                      "Custom Road Trip",
-                      "General Question"
-                    ].map((type) => (
-                      <button
-                        type="button"
-                        key={type}
-                        className={`category-pill ${inquiryType === type ? "active" : ""}`}
-                        onClick={() => setInquiryType(type)}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  {/* Name */}
-                  <div className="form-group">
-                    <label className="form-label">Full Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Alexander Vance"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="form-input"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div className="form-group">
-                    <label className="form-label">Email Address *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="alexander@domain.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  {/* Phone */}
-                  <div className="form-group">
-                    <label className="form-label">Phone / WhatsApp *</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="+63 900 000 0000"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="form-input"
-                    />
-                  </div>
-
-                  {/* Desired Date */}
-                  <div className="form-group">
-                    <label className="form-label">Target Date</label>
-                    <input
-                      type="date"
-                      value={formData.targetDate}
-                      onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  {/* Vehicle of Interest */}
-                  <div className="form-group">
-                    <label className="form-label">Vehicle of Interest</label>
-                    <div className="form-select-wrap">
-                      <select
-                        value={formData.vehicleInterest}
-                        onChange={(e) => setFormData({ ...formData, vehicleInterest: e.target.value })}
-                        className="form-select"
-                      >
-                        <option value="">Any available vehicle</option>
-                        {vehicles.map((v) => (
-                          <option key={v.id} value={v.name}>
-                            {v.name} ({v.price}/day)
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown size={14} className="select-arrow" />
-                    </div>
-                  </div>
-
-                  {/* Preferred Location */}
-                  <div className="form-group">
-                    <label className="form-label">Preferred Location</label>
-                    <div className="form-select-wrap">
-                      <select
-                        value={formData.pickupLocation}
-                        onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })}
-                        className="form-select"
-                      >
-                        <option value="BGC Flagship Lounge">BGC Flagship Lounge</option>
-                        <option value="NAIA Terminal 3 Airport">NAIA Terminal 3 Airport</option>
-                        <option value="Makati CBD Handover">Makati CBD Handover</option>
-                        <option value="Clark Freeport Zone">Clark Freeport Zone</option>
-                        <option value="Cebu IT Park">Cebu IT Park</option>
-                        <option value="Custom Address">Hotel / Private Residence</option>
-                      </select>
-                      <ChevronDown size={14} className="select-arrow" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Message */}
-                <div className="form-group full">
-                  <label className="form-label">Message or Special Requests</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Tell us about your trip dates, preferred delivery time, or any specific requirements..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="form-textarea"
-                  />
-                </div>
-
-                <button type="submit" disabled={isSubmitting} className="form-submit-btn">
-                  {isSubmitting ? (
-                    <span>Sending Inquiry...</span>
-                  ) : (
-                    <>
-                      <span>Send Priority Message</span>
-                      <Send size={15} />
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
-          </div>
-
-          {/* Right Column: Physical Lounges & Hubs Directory */}
-          <div className="contact-locations-box">
-            <div className="locations-header">
-              <h2>Flagship Lounges &amp; Hubs</h2>
-              <p>Pick up keys directly at our private lounges or request curbside delivery anywhere in Metro Manila.</p>
-            </div>
-
-            {/* Hub Selector Buttons */}
-            <div className="location-tabs">
-              {HUBS.map((hub) => (
-                <button
-                  type="button"
-                  key={hub.id}
-                  className={`location-tab ${selectedHub.id === hub.id ? "active" : ""}`}
-                  onClick={() => setSelectedHub(hub)}
-                >
-                  {hub.name.split(" ")[0]}
-                </button>
-              ))}
-            </div>
-
-            {/* Selected Location Card */}
-            <div className="selected-location-card">
-              <div className="location-badge">
-                <Sparkles size={13} />
-                <span>{selectedHub.category}</span>
-              </div>
-
-              <h3 className="location-name">{selectedHub.name}</h3>
-
-              <div className="location-details-list">
-                <div className="location-detail-item">
-                  <MapPin size={16} className="detail-icon" />
-                  <span>{selectedHub.address}</span>
-                </div>
-
-                <div className="location-detail-item">
-                  <Clock size={16} className="detail-icon" />
-                  <span>{selectedHub.hours}</span>
-                </div>
-
-                <div className="location-detail-item">
-                  <Phone size={16} className="detail-icon" />
-                  <a href={`tel:${selectedHub.phone.replace(/[^0-9+]/g, "")}`}>{selectedHub.phone}</a>
-                </div>
-
-                <div className="location-detail-item">
-                  <Mail size={16} className="detail-icon" />
-                  <a href={`mailto:${selectedHub.email}`}>{selectedHub.email}</a>
-                </div>
-              </div>
-
-              {/* Hub Features */}
-              <div className="location-features">
-                <span className="features-title">Hub Services:</span>
-                <div className="features-list">
-                  {selectedHub.features.map((feat, idx) => (
-                    <span key={idx} className="feature-pill">
-                      <Check size={12} /> {feat}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="location-card-actions">
-                <a
-                  href={selectedHub.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="location-btn primary"
-                >
-                  <span>Open in Google Maps</span>
-                  <ExternalLink size={14} />
-                </a>
-
-                <a
-                  href={`tel:${selectedHub.phone.replace(/[^0-9+]/g, "")}`}
-                  className="location-btn secondary"
-                >
-                  <Phone size={14} />
-                  <span>Call Desk</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- 4. Interactive Location Map ---------------- */}
-      <section className="contact-map-section">
-        <div className="contact-map-container">
-          <div className="map-section-head">
-            <div>
-              <p className="section-eyebrow">Location Overview</p>
-              <h2>Interactive Hubs Map</h2>
-            </div>
-            <p className="map-section-desc">
-              Explore our physical lounges across Luzon and Visayas. Click any pin to view details and get instant driving directions.
-            </p>
-          </div>
-
-          <div className="contact-map-wrapper">
-            <LeafletMap
-              hubs={HUBS}
-              selectedHub={selectedHub}
-              onSelectHub={setSelectedHub}
+      {/* ---------------- 1. Cinematic Automotive Banner ---------------- */}
+      <section className="contact-cinematic-banner">
+        <div className="contact-banner-stage">
+          {/* High-Resolution Background Image Layer */}
+          <div className="contact-banner-bg">
+            <Image
+              src="/images/drivex-coastal-drive.png"
+              alt="DriveX Concierge Luxury Grand Touring"
+              fill
+              priority
+              sizes="100vw"
             />
           </div>
+
+          {/* Luxury Atmospheric Overlays */}
+          <div className="contact-banner-glow" />
+          <div className="contact-banner-overlay" />
+          <div className="contact-banner-speedlines" />
+
+          {/* Banner Editorial Content */}
+          <div className="contact-banner-content">
+            <div className="contact-banner-container">
+              <div className="contact-hero-tag">
+                <span className="contact-tag-dot" />
+                <span>01 // 24/7 PRIVATE CONCIERGE &amp; OPERATIONS</span>
+              </div>
+
+              <h1 className="contact-hero-heading">
+                The Art of Bespoke Service.<br />
+                <span>Connect with Concierge.</span>
+              </h1>
+
+              <p className="contact-hero-subtext">
+                Whether arranging an airside tarmac delivery at NAIA, reserving an exotic supercar, or organizing a custom road expedition, our dedicated fleet operations team is at your command 24/7.
+              </p>
+
+              {/* Direct Contact Pills on Banner */}
+              <div className="contact-direct-pills">
+                <a href="tel:+63288883748" className="direct-pill">
+                  <Phone size={14} className="pill-icon" />
+                  <span>+63 (2) 8888-DRIVEX</span>
+                </a>
+                <a
+                  href="https://wa.me/639178883748?text=Hello%20DriveX%20Concierge,%20I%20would%20like%20to%20inquire%20about%20a%20luxury%20vehicle%20reservation."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="direct-pill whatsapp"
+                >
+                  <MessageSquare size={14} className="pill-icon" />
+                  <span>WhatsApp VIP Desk</span>
+                </a>
+                <a href="mailto:concierge@drivex.ph" className="direct-pill">
+                  <Mail size={14} className="pill-icon" />
+                  <span>concierge@drivex.ph</span>
+                </a>
+                <a href="tel:+63289994357" className="direct-pill emergency">
+                  <span className="emergency-indicator" />
+                  <span>Roadside: +63 (2) 8999-HELP</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ---------------- 5. Essential FAQs Accordion ---------------- */}
+      {/* ---------------- 2. Unified 2-Column Console (Form + Hubs/Map) ---------------- */}
+      <section className="contact-content-section">
+        <div className="contact-container">
+          <div className="contact-split-grid">
+            {/* Left Column: Clean Inquiry Form */}
+            <div className="contact-box form-box">
+              <div className="box-head">
+                <h2>Send a Priority Inquiry</h2>
+                <p>Leave your details and requirements. A fleet coordinator will respond promptly.</p>
+              </div>
+
+              {submitted ? (
+                <div className="form-success-state">
+                  <CheckCircle2 size={38} className="success-icon" />
+                  <h3>Inquiry Received</h3>
+                  <p>
+                    Thank you, <strong>{formData.name || "valued guest"}</strong>. Your request regarding{" "}
+                    <strong>{formData.vehicle || "our luxury fleet"}</strong> has been logged. Our concierge will contact you via <strong>{formData.phone || formData.email}</strong> shortly.
+                  </p>
+                  <div className="success-buttons">
+                    <button type="button" className="btn-reset" onClick={handleResetForm}>
+                      Send Another Message
+                    </button>
+                    <a
+                      href={`https://wa.me/639178883748?text=Hello%20DriveX,%20I%20just%20submitted%20an%20inquiry%20for%20${encodeURIComponent(
+                        formData.name
+                      )}.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-wa"
+                    >
+                      Message on WhatsApp <ArrowRight size={13} />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="contact-form">
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Sebastian Cruz"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="form-field">
+                      <label>Phone / WhatsApp *</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="+63 917 000 0000"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="client@prestige.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="form-field">
+                      <label>Vehicle of Interest</label>
+                      <div className="select-wrap">
+                        <select
+                          value={formData.vehicle}
+                          onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
+                        >
+                          <option value="">Any available vehicle</option>
+                          {vehicles.map((v) => (
+                            <option key={v.id} value={`${v.brand} ${v.name}`}>
+                              {v.brand} {v.name} (₱{v.price}/day)
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={14} className="select-icon" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label>Preferred Handover Hub</label>
+                    <div className="select-wrap">
+                      <select
+                        value={formData.location}
+                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      >
+                        <option value="BGC Flagship Lounge">BGC Flagship Lounge (Bonifacio High Street)</option>
+                        <option value="NAIA Terminal 3 Airport">NAIA Terminal 3 (Airside / Curbside VIP)</option>
+                        <option value="Makati CBD Handover">Makati Executive Hub (Ayala Triangle)</option>
+                        <option value="Clark Freeport Zone">Clark Freeport Zone (Pampanga / Helipad)</option>
+                        <option value="Cebu IT Park">Cebu IT Park Hub (Garden Bloc)</option>
+                        <option value="Custom Hotel or Residence">Private Residence or 5-Star Hotel Valet</option>
+                      </select>
+                      <ChevronDown size={14} className="select-icon" />
+                    </div>
+                  </div>
+
+                  <div className="form-field">
+                    <label>Trip Dates &amp; Special Requests</label>
+                    <textarea
+                      rows={3}
+                      placeholder="Please note your requested rental dates, delivery location, flight number, or chauffeur requirements..."
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    />
+                  </div>
+
+                  <button type="submit" disabled={isSubmitting} className="submit-btn">
+                    {isSubmitting ? "Transmitting Request..." : "Submit Priority Inquiry"}
+                    <ArrowRight size={15} />
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* Right Column: Physical Lounges + Integrated Interactive Map */}
+            <div className="contact-box locations-box">
+              <div className="box-head">
+                <h2>Flagship Lounges &amp; Hubs</h2>
+                <p>Pick up keys at our private lounges or request direct curbside delivery.</p>
+              </div>
+
+              {/* Hub Tabs */}
+              <div className="hub-tabs-row">
+                {HUBS.map((hub) => (
+                  <button
+                    type="button"
+                    key={hub.id}
+                    className={`hub-tab-btn ${selectedHub.id === hub.id ? "active" : ""}`}
+                    onClick={() => setSelectedHub(hub)}
+                  >
+                    {hub.name.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Selected Hub Details Card */}
+              <div className="selected-hub-dossier">
+                <div className="dossier-top">
+                  <div>
+                    <span className="dossier-category">{selectedHub.category}</span>
+                    <h3 className="dossier-title">{selectedHub.name}</h3>
+                  </div>
+                  <a
+                    href={selectedHub.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="dossier-map-btn"
+                  >
+                    <span>Google Maps</span>
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+
+                <div className="dossier-meta">
+                  <div className="meta-line">
+                    <MapPin size={14} className="meta-icon" />
+                    <span>{selectedHub.address}</span>
+                  </div>
+                  <div className="meta-line">
+                    <Clock size={14} className="meta-icon" />
+                    <span>{selectedHub.hours}</span>
+                  </div>
+                  <div className="meta-line">
+                    <Phone size={14} className="meta-icon" />
+                    <a href={`tel:${selectedHub.phone.replace(/[^0-9+]/g, "")}`}>{selectedHub.phone}</a>
+                  </div>
+                </div>
+
+                {/* Compact Embedded Leaflet Map */}
+                <div className="hub-embedded-map">
+                  <LeafletMap
+                    hubs={HUBS}
+                    selectedHub={selectedHub}
+                    onSelectHub={setSelectedHub}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- 3. Compact FAQs Accordion ---------------- */}
       <section className="contact-faq-section">
-        <div className="contact-faq-container">
-          <div className="faq-header">
-            <p className="section-eyebrow">Frequently Asked Questions</p>
-            <h2>Everything You Need to Know</h2>
-            <p>Clear, direct answers to common questions about reservations, delivery, and credentials.</p>
+        <div className="contact-container">
+          <div className="faq-head">
+            <span className="faq-tag">CLIENT INTELLIGENCE</span>
+            <h2>Frequently Asked Questions</h2>
           </div>
 
-          <div className="faq-accordion-list">
+          <div className="faq-list">
             {FAQS.map((faq, idx) => {
               const isOpen = openFaq === idx;
               return (
-                <div
-                  key={idx}
-                  className={`faq-accordion-item ${isOpen ? "open" : ""}`}
-                >
+                <div key={idx} className={`faq-card ${isOpen ? "open" : ""}`}>
                   <button
                     type="button"
-                    className="faq-accordion-btn"
+                    className="faq-trigger"
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
                     aria-expanded={isOpen}
                   >
-                    <span className="faq-question-text">{faq.q}</span>
-                    <ChevronDown size={18} className={`faq-chevron ${isOpen ? "rotate" : ""}`} />
+                    <span className="faq-question">{faq.q}</span>
+                    <ChevronDown size={16} className={`faq-arrow ${isOpen ? "rotate" : ""}`} />
                   </button>
-
                   {isOpen && (
-                    <div className="faq-accordion-answer">
+                    <div className="faq-body">
                       <p>{faq.a}</p>
                     </div>
                   )}
