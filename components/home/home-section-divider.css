@@ -4,15 +4,17 @@
    ========================================================================== */
 
 .home-section-divider {
-  position: relative;
-  width: 100%;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 40px 0 46px 0;
-  overflow: hidden;
-  box-sizing: border-box;
-  z-index: 10;
+  position: relative !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-top: 1px solid #e2e8f0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 44px 0 50px 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  z-index: 10 !important;
+  display: block !important;
 }
 
 /* Subtle architectural radial lighting */
@@ -44,7 +46,8 @@
   align-items: center;
   gap: 36px;
   white-space: nowrap;
-  animation: marqueeScroll 45s linear infinite;
+  animation: homeDividerMarqueeScroll 45s linear infinite;
+  -webkit-animation: homeDividerMarqueeScroll 45s linear infinite;
   will-change: transform;
 }
 
@@ -52,12 +55,21 @@
   animation-play-state: paused;
 }
 
-@keyframes marqueeScroll {
+@keyframes homeDividerMarqueeScroll {
   0% {
     transform: translateX(0);
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@-webkit-keyframes homeDividerMarqueeScroll {
+  0% {
+    -webkit-transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(-50%);
   }
 }
 
@@ -69,17 +81,17 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: #64748b;
+  color: #64748b !important;
   text-transform: uppercase;
   transition: color 0.2s ease;
 }
 
 .divider-marquee-item:hover {
-  color: #0f172a;
+  color: #0f172a !important;
 }
 
 .marquee-dot {
-  color: #0284c7;
+  color: #0284c7 !important;
   font-size: 8px;
   opacity: 0.9;
 }
@@ -106,21 +118,21 @@
   align-items: center;
   gap: 8px;
   padding: 5px 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 999px;
   font-family: var(--font-mono, monospace);
   font-size: 11px;
   font-weight: 750;
   letter-spacing: 0.12em;
-  color: #334155;
+  color: #334155 !important;
   text-transform: uppercase;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 .divider-sparkle-icon {
-  color: #0284c7;
+  color: #0284c7 !important;
 }
 
 /* ---------------- 4-Pillar Grid ---------------- */
@@ -142,16 +154,16 @@
   align-items: flex-start;
   gap: 14px;
   padding: 18px 20px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   transition: all 0.25s ease;
 }
 
 .divider-pillar-card:hover {
-  background: #ffffff;
-  border-color: #38bdf8;
+  background: #ffffff !important;
+  border-color: #38bdf8 !important;
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
 }
@@ -163,13 +175,13 @@
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
   flex-shrink: 0;
 }
 
 .divider-pillar-icon {
-  color: #0284c7;
+  color: #0284c7 !important;
 }
 
 .divider-pillar-text {
@@ -181,13 +193,13 @@
 .divider-pillar-title {
   font-size: 13.5px;
   font-weight: 700;
-  color: #0f172a;
+  color: #0f172a !important;
   letter-spacing: -0.01em;
 }
 
 .divider-pillar-subtitle {
   font-size: 12px;
-  color: #64748b;
+  color: #64748b !important;
   line-height: 1.45;
 }
 
@@ -200,7 +212,7 @@
 
 @media (max-width: 640px) {
   .home-section-divider {
-    padding: 28px 0 32px 0;
+    padding: 28px 0 32px 0 !important;
   }
 
   .divider-marquee-wrapper {

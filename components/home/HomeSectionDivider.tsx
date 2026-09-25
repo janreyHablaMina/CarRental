@@ -44,7 +44,18 @@ const DISTINCTIONS = [
 
 export default function HomeSectionDivider() {
   return (
-    <div className="home-section-divider" aria-hidden="false">
+    <div
+      className="home-section-divider"
+      aria-hidden="false"
+      style={{
+        background: "#ffffff",
+        color: "#0f172a",
+        position: "relative",
+        zIndex: 10,
+        display: "block",
+        width: "100%",
+      }}
+    >
       {/* Top Infinite Kinetic Marquee Ribbon */}
       <div className="divider-marquee-wrapper">
         <div className="divider-marquee-track">
