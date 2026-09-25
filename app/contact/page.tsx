@@ -2,13 +2,28 @@
 
 import "./contact.css";
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { 
   MapPin, Phone, Mail, Clock, Send, CheckCircle2, 
   MessageSquare, ArrowRight, ShieldCheck, ChevronDown, Sparkles,
   Compass, ExternalLink
 } from "lucide-react";
 import { vehicles } from "@/lib/vehicles";
+import { useBooking } from "@/context/BookingContext";
+import { type HubLocationItem } from "@/components/LeafletMap";
+
+const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="leaflet-map-wrapper" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 480 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#94a3b8", fontFamily: "var(--font-mono, monospace)", fontSize: 13 }}>
+        <span className="cp-pulse-dot" /> Initializing Dark Matter Telemetry Map...
+      </div>
+    </div>
+  ),
+});
 
 const InstagramIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -45,20 +60,7 @@ const YoutubeIcon = () => (
   </svg>
 );
 
-interface HubLocation {
-  id: string;
-  name: string;
-  category: string;
-  address: string;
-  phone: string;
-  email: string;
-  hours: string;
-  coords: string;
-  mapX: number;
-  mapY: number;
-  googleMapsUrl: string;
-  features: string[];
-}
+type HubLocation = HubLocationItem;
 
 const HUBS: HubLocation[] = [
   {
@@ -70,8 +72,8 @@ const HUBS: HubLocation[] = [
     email: "bgc.concierge@drivex.ph",
     hours: "Open 24/7 (VIP Turnaround)",
     coords: "14.5507° N, 121.0509° E",
-    mapX: 260,
-    mapY: 190,
+    lat: 14.5507,
+    lng: 121.0509,
     googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
     features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"]
   },
@@ -84,8 +86,8 @@ const HUBS: HubLocation[] = [
     email: "makati.fleet@drivex.ph",
     hours: "06:00 AM – 11:00 PM Daily",
     coords: "14.5574° N, 121.0232° E",
-    mapX: 245,
-    mapY: 205,
+    lat: 14.5574,
+    lng: 121.0232,
     googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
     features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk"]
   },
@@ -98,8 +100,8 @@ const HUBS: HubLocation[] = [
     email: "airport.vip@drivex.ph",
     hours: "Open 24/7 (Flight Tracked)",
     coords: "14.5204° N, 121.0159° E",
-    mapX: 250,
-    mapY: 225,
+    lat: 14.5204,
+    lng: 121.0159,
     googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
     features: ["Tarmac Fast-Track", "Luggage Valet", "Keyless Mobile Unlock"]
   },
@@ -112,8 +114,8 @@ const HUBS: HubLocation[] = [
     email: "clark.fleet@drivex.ph",
     hours: "07:00 AM – 10:00 PM Daily",
     coords: "15.1764° N, 120.5312° E",
-    mapX: 235,
-    mapY: 145,
+    lat: 15.1764,
+    lng: 120.5312,
     googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
     features: ["Track Preparation", "North Luzon Dispatch", "Helipad Access"]
   },
@@ -126,8 +128,8 @@ const HUBS: HubLocation[] = [
     email: "cebu.vip@drivex.ph",
     hours: "08:00 AM – 09:00 PM Daily",
     coords: "10.3297° N, 123.9056° E",
-    mapX: 385,
-    mapY: 340,
+    lat: 10.3297,
+    lng: 123.9056,
     googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
     features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"]
   }
@@ -153,6 +155,7 @@ const FAQS = [
 ];
 
 export default function ContactPage() {
+  const { openBooking } = useBooking();
   const [selectedHub, setSelectedHub] = useState<HubLocation>(HUBS[0]);
   const [inquiryType, setInquiryType] = useState("General Inquiry");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -185,34 +188,80 @@ export default function ContactPage() {
 
   return (
     <div className="cp-page">
-      {/* ---------------- Hero ---------------- */}
-      <section className="cp-hero">
-        <div className="cp-hero-eyebrow">
-          <span className="cp-pulse-dot" />
-          <span>DRIVEX CONCIERGE // 24/7 LUXURY ASSISTANCE</span>
+      {/* ---------------- Cinematic Hero Banner ---------------- */}
+      <section className="cp-hero-banner">
+        {/* Background Visual Layer */}
+        <div className="cp-hero-bg-wrap">
+          <Image
+            src="/images/fleet-porsche.jpg"
+            alt="DriveX Exotic Automotive Concierge"
+            fill
+            priority
+            sizes="100vw"
+          />
         </div>
-        
-        <h1 className="cp-hero-title">
-          Connect With Our <span>Private Concierge.</span>
-        </h1>
-        
-        <p className="cp-hero-sub">
-          Direct lines to our fleet specialists, VIP turnaround managers, and nationwide concierge lounges. 
-          Experience seamless curbside handover, executive chauffeur arrangements, and priority inquiries.
-        </p>
 
-        <div className="cp-quick-stats">
-          <div className="cp-stat-chip">
-            <Clock size={16} />
-            <span>&lt; 15 Min Response Time</span>
+        {/* Glow & Vignette Overlays */}
+        <div className="cp-hero-glow" />
+        <div className="cp-hero-overlay" />
+
+        <div className="cp-hero-content">
+          <div className="cp-hero-eyebrow">
+            <span className="cp-pulse-dot" />
+            <span>DRIVEX VIP CONCIERGE // 24/7 DISPATCH ACTIVE</span>
           </div>
-          <div className="cp-stat-chip">
-            <Compass size={16} />
-            <span>5 Nationwide Hubs</span>
+
+          <h1 className="cp-hero-title">
+            Connect With Our <span>Private Concierge.</span>
+          </h1>
+
+          <p className="cp-hero-sub">
+            Direct priority lines to our fleet specialists, VIP turnaround managers, and nationwide concierge lounges.
+            Guaranteed 15-minute verification with on-demand curbside delivery across the Philippines.
+          </p>
+
+          <div className="cp-hero-actions-row">
+            <a
+              href="https://wa.me/639171234567?text=Hello%20DriveX%20Concierge,%20I%20would%20like%20to%20inquire%20about%20a%20luxury%20vehicle%20reservation."
+              target="_blank"
+              rel="noreferrer"
+              className="cp-hero-direct-btn primary"
+            >
+              <MessageSquare size={16} /> WhatsApp VIP Concierge
+            </a>
+            <a href="tel:+63288883748" className="cp-hero-direct-btn secondary">
+              <Phone size={15} /> Priority Phone (+63 2 8888 3748)
+            </a>
+            <button
+              type="button"
+              className="cp-hero-direct-btn secondary"
+              onClick={() => openBooking({ step: 1 })}
+            >
+              <Sparkles size={15} /> Book Reservation Online
+            </button>
           </div>
-          <div className="cp-stat-chip">
-            <ShieldCheck size={16} />
-            <span>24/7 Roadside VIP Dispatch</span>
+
+          <div className="cp-hero-socials">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><InstagramIcon /></a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><TwitterIcon /></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><LinkedinIcon /></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FacebookIcon /></a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"><YoutubeIcon /></a>
+          </div>
+
+          <div className="cp-quick-stats">
+            <div className="cp-stat-chip">
+              <Clock size={16} />
+              <span>&lt; 15 Min Verification</span>
+            </div>
+            <div className="cp-stat-chip">
+              <Compass size={16} />
+              <span>5 Operational Hubs</span>
+            </div>
+            <div className="cp-stat-chip">
+              <ShieldCheck size={16} />
+              <span>24/7 Roadside VIP Dispatch</span>
+            </div>
           </div>
         </div>
       </section>
@@ -225,164 +274,12 @@ export default function ContactPage() {
         </div>
 
         <div className="cp-map-layout">
-          {/* Map Vector Frame */}
-          <div className="cp-map-frame">
-            <div className="cp-map-topbar">
-              <div className="cp-map-title">
-                <Compass size={15} />
-                <span>DriveX Radar Telemetry // Philippines Fleet Map</span>
-              </div>
-              <div className="cp-map-coords">
-                {selectedHub.coords}
-              </div>
-            </div>
-
-            {/* Stylized SVG Radar Map */}
-            <div className="cp-svg-container">
-              <svg 
-                className="cp-vector-svg" 
-                viewBox="0 0 600 480" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  {/* Grid Pattern */}
-                  <pattern id="radarGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.04)" strokeWidth="1" />
-                  </pattern>
-
-                  {/* Radial Radar Glow */}
-                  <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#4da3ff" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#4da3ff" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-
-                {/* Grid Background */}
-                <rect width="600" height="480" fill="url(#radarGrid)" />
-
-                {/* Coordinate Reference Circles */}
-                <circle cx="260" cy="200" r="120" stroke="rgba(77, 163, 255, 0.08)" strokeDasharray="3 4" fill="none" />
-                <circle cx="260" cy="200" r="210" stroke="rgba(77, 163, 255, 0.05)" strokeDasharray="4 6" fill="none" />
-
-                {/* Simplified Archipelago Silhouettes */}
-                {/* Luzon Main Body */}
-                <path 
-                  d="M 210 90 L 250 80 L 280 110 L 290 150 L 310 180 L 280 230 L 250 250 L 230 230 L 220 180 L 195 140 Z" 
-                  fill="rgba(255, 255, 255, 0.03)" 
-                  stroke="rgba(255, 255, 255, 0.09)" 
-                  strokeWidth="1.5"
-                />
-                {/* Palawan Island */}
-                <path 
-                  d="M 160 260 L 190 310 L 175 330 L 140 280 Z" 
-                  fill="rgba(255, 255, 255, 0.02)" 
-                  stroke="rgba(255, 255, 255, 0.07)" 
-                  strokeWidth="1"
-                />
-                {/* Visayas Islands */}
-                <path 
-                  d="M 330 260 L 380 280 L 410 320 L 370 360 L 320 320 Z" 
-                  fill="rgba(255, 255, 255, 0.03)" 
-                  stroke="rgba(255, 255, 255, 0.09)" 
-                  strokeWidth="1.5"
-                />
-                {/* Mindanao Island */}
-                <path 
-                  d="M 320 380 L 400 370 L 440 410 L 390 460 L 330 440 Z" 
-                  fill="rgba(255, 255, 255, 0.025)" 
-                  stroke="rgba(255, 255, 255, 0.08)" 
-                  strokeWidth="1.5"
-                />
-
-                {/* Connecting Route Rays from Flagship BGC */}
-                {HUBS.filter(h => h.id !== "bgc").map(h => (
-                  <line 
-                    key={h.id}
-                    x1={260} 
-                    y1={190} 
-                    x2={h.mapX} 
-                    y2={h.mapY} 
-                    stroke="rgba(77, 163, 255, 0.16)" 
-                    strokeDasharray="2 3"
-                  />
-                ))}
-
-                {/* Render Interactive Hub Pins */}
-                {HUBS.map((hub) => {
-                  const isActive = selectedHub.id === hub.id;
-                  return (
-                    <g 
-                      key={hub.id} 
-                      className="cp-map-pin"
-                      onClick={() => setSelectedHub(hub)}
-                    >
-                      {/* Outer pulse wave on active */}
-                      {isActive && (
-                        <circle 
-                          cx={hub.mapX} 
-                          cy={hub.mapY} 
-                          r="18" 
-                          fill="url(#hubGlow)" 
-                          stroke="#4da3ff" 
-                          className="cp-radar-pulse"
-                        />
-                      )}
-
-                      {/* Outer Pin Ring */}
-                      <circle 
-                        cx={hub.mapX} 
-                        cy={hub.mapY} 
-                        r={isActive ? 8 : 5} 
-                        fill={isActive ? "#4da3ff" : "#1a2230"} 
-                        stroke={isActive ? "#ffffff" : "#4da3ff"} 
-                        strokeWidth={isActive ? 2.5 : 1.5}
-                      />
-
-                      {/* Inner Core */}
-                      <circle 
-                        cx={hub.mapX} 
-                        cy={hub.mapY} 
-                        r={isActive ? 3 : 2} 
-                        fill={isActive ? "#070809" : "#ffffff"} 
-                      />
-
-                      {/* Text Tag */}
-                      <text 
-                        x={hub.mapX + 12} 
-                        y={hub.mapY + 4} 
-                        fill={isActive ? "#4da3ff" : "#94a3b8"} 
-                        fontSize="11" 
-                        fontWeight={isActive ? "700" : "500"}
-                        fontFamily="var(--font-mono, monospace)"
-                      >
-                        {hub.name.split(" ")[0]}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* Active Hub Info Bottom Overlay */}
-              <div className="cp-map-active-badge">
-                <div className="cp-mab-left">
-                  <h4>{selectedHub.name}</h4>
-                  <p>{selectedHub.address}</p>
-                </div>
-                <div className="cp-mab-right">
-                  <a 
-                    href={selectedHub.googleMapsUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="cp-btn-direct"
-                  >
-                    <span>Directions</span>
-                    <ExternalLink size={13} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Realistic Leaflet Dark Mode Map */}
+          <LeafletMap
+            hubs={HUBS}
+            selectedHub={selectedHub}
+            onSelectHub={setSelectedHub}
+          />
 
           {/* Hubs Selector Cards List */}
           <div className="cp-hubs-list">
@@ -476,40 +373,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Official Social Media Matrix */}
-            <div className="cp-channel-card">
-              <h3>
-                <Sparkles size={18} />
-                <span>Official Social Channels</span>
-              </h3>
 
-              <div className="cp-socials-grid">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="cp-social-btn">
-                  <InstagramIcon />
-                  <span>@drivex.ph</span>
-                </a>
-
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="cp-social-btn">
-                  <TwitterIcon />
-                  <span>@drivex_official</span>
-                </a>
-
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="cp-social-btn">
-                  <LinkedinIcon />
-                  <span>DriveX Mobility</span>
-                </a>
-
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="cp-social-btn">
-                  <FacebookIcon />
-                  <span>DriveX Philippines</span>
-                </a>
-
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="cp-social-btn" style={{ gridColumn: "1 / -1" }}>
-                  <YoutubeIcon />
-                  <span>DriveX Cinema & Track Experiences</span>
-                </a>
-              </div>
-            </div>
           </div>
 
           {/* Right Column: Inquiry & Booking Form */}
