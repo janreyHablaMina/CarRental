@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -1514,6 +1514,31 @@ export default function AdminDashboard() {
   const [vehicles, setVehicles] = useState<AdminVehicle[]>(INITIAL_VEHICLES);
   const [bookings, setBookings] = useState<AdminBooking[]>(INITIAL_BOOKINGS);
   const [customers] = useState<AdminCustomer[]>(INITIAL_CUSTOMERS);
+
+  // Load custom bookings submitted by clients through the booking & verification modal
+  useEffect(() => {
+    const loadCustomBookings = () => {
+      try {
+        const stored = localStorage.getItem("drivex_custom_bookings");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setBookings((prev) => {
+              const existingIds = new Set(prev.map((b) => b.id));
+              const newItems = parsed.filter((b: AdminBooking) => !existingIds.has(b.id));
+              return [...newItems, ...prev];
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load custom bookings:", e);
+      }
+    };
+
+    loadCustomBookings();
+    window.addEventListener("drivex_booking_created", loadCustomBookings);
+    return () => window.removeEventListener("drivex_booking_created", loadCustomBookings);
+  }, []);
 
   // Modal & Action Menu State
   const [showAddModal, setShowAddModal] = useState(false);

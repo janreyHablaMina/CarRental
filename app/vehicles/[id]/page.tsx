@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { useState, use } from "react";
 import { ArrowLeft, ArrowRight, Gauge, Users, Zap } from "lucide-react";
 import { vehicles, PH_LOCATIONS, type Vehicle } from "@/lib/vehicles";
+import { useBooking } from "@/context/BookingContext";
 
 export default function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
+  const { openBooking } = useBooking();
   const vehicle: Vehicle | undefined = vehicles.find((v) => v.id === resolvedParams.id);
 
   const [activeImage, setActiveImage] = useState(vehicle?.image ?? "");
@@ -173,7 +175,16 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
           </div>
 
           {/* Book CTA */}
-          <button className="vd-book-btn" onClick={() => router.push("/#booking")}>
+          <button
+            className="vd-book-btn"
+            onClick={() =>
+              openBooking({
+                vehicleId: vehicle.id,
+                destination: picked?.route,
+                step: 1,
+              })
+            }
+          >
             Book this car <ArrowRight size={18} />
           </button>
         </section>

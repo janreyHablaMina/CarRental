@@ -10,6 +10,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { vehicles } from "@/lib/vehicles";
+import { useBooking } from "@/context/BookingContext";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
 
@@ -22,10 +23,16 @@ const steps = [
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
   const router = useRouter();
+  const { openBooking } = useBooking();
   const [progress, setProgress] = useState(0);
   const [heroProgress, setHeroProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [formPickup, setFormPickup] = useState("");
+  const [formDropoff, setFormDropoff] = useState("");
+  const [formPickupDate, setFormPickupDate] = useState("");
+  const [formReturnDate, setFormReturnDate] = useState("");
+  const [formCategory, setFormCategory] = useState("");
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -91,7 +98,7 @@ export default function Home() {
           <h2>Your Road.<br /><span>Your Rules.</span></h2>
           <p>Choose the vehicle that fits your journey and take off when you&apos;re ready.</p>
           <div className="hero-actions">
-            <button className="primary-button" onClick={() => scrollTo("#booking")}>Book this car <ArrowRight size={18} /></button>
+            <button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book this car <ArrowRight size={18} /></button>
             <button className="text-button" onClick={() => router.push("/vehicles")}>Explore full collection</button>
           </div>
         </div>
@@ -170,13 +177,87 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="booking" className="booking-section section-pad"><div className="booking-intro" data-reveal><p className="eyebrow">Start your journey</p><h2>Ready to<br />Drive?</h2><p>Your next car is closer than you think.</p></div><form className="booking-form" data-reveal onSubmit={(e) => e.preventDefault()}><label><span><MapPin size={15} /> Pickup location</span><input placeholder="Where are you starting?" /><ChevronDown size={16} /></label><label><span><MapPin size={15} /> Drop-off location</span><input placeholder="Same location" /><ChevronDown size={16} /></label><label><span><CalendarDays size={15} /> Pickup date</span><input type="date" /></label><label><span><CalendarDays size={15} /> Return date</span><input type="date" /></label><label><span><Gauge size={15} /> Vehicle type</span><select defaultValue=""><option value="" disabled>Choose a category</option><option>Sports</option><option>Luxury</option><option>Sedan</option><option>SUV</option><option>Economy</option></select><ChevronDown size={16} /></label><button className="search-button">Search available cars <ArrowRight size={18} /></button></form></section>
+      <section id="booking" className="booking-section section-pad">
+        <div className="booking-intro" data-reveal>
+          <p className="eyebrow">Start your journey</p>
+          <h2>Ready to<br />Drive?</h2>
+          <p>Your next car is closer than you think.</p>
+        </div>
+        <form
+          className="booking-form"
+          data-reveal
+          onSubmit={(e) => {
+            e.preventDefault();
+            openBooking({
+              pickupLocation: formPickup || undefined,
+              dropoffLocation: formDropoff || undefined,
+              pickupDate: formPickupDate || undefined,
+              returnDate: formReturnDate || undefined,
+              vehicleType: formCategory || undefined,
+              step: 1,
+            });
+          }}
+        >
+          <label>
+            <span><MapPin size={15} /> Pickup location</span>
+            <input
+              placeholder="Where are you starting?"
+              value={formPickup}
+              onChange={(e) => setFormPickup(e.target.value)}
+            />
+            <ChevronDown size={16} />
+          </label>
+          <label>
+            <span><MapPin size={15} /> Drop-off location</span>
+            <input
+              placeholder="Same location"
+              value={formDropoff}
+              onChange={(e) => setFormDropoff(e.target.value)}
+            />
+            <ChevronDown size={16} />
+          </label>
+          <label>
+            <span><CalendarDays size={15} /> Pickup date</span>
+            <input
+              type="date"
+              value={formPickupDate}
+              onChange={(e) => setFormPickupDate(e.target.value)}
+            />
+          </label>
+          <label>
+            <span><CalendarDays size={15} /> Return date</span>
+            <input
+              type="date"
+              value={formReturnDate}
+              onChange={(e) => setFormReturnDate(e.target.value)}
+            />
+          </label>
+          <label>
+            <span><Gauge size={15} /> Vehicle type</span>
+            <select
+              value={formCategory}
+              onChange={(e) => setFormCategory(e.target.value)}
+            >
+              <option value="">Choose a category</option>
+              <option>Sports</option>
+              <option>Luxury</option>
+              <option>Sedan</option>
+              <option>SUV</option>
+              <option>Economy</option>
+            </select>
+            <ChevronDown size={16} />
+          </label>
+          <button type="submit" className="search-button">
+            Search available cars <ArrowRight size={18} />
+          </button>
+        </form>
+      </section>
 
       <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
       <section id="why" className="why-section section-pad"><div className="why-title" data-reveal><p className="eyebrow">The DriveX standard</p><h2>Built Around<br /><span>Your Journey</span></h2></div><div className="why-list">{[["Flexible Rentals", "An afternoon, a weekend, or longer. Keep the car for exactly the time you need."], ["Transparent Pricing", "The price you see is the price you drive away with. No last-minute surprises."], ["Quality Vehicles", "Every car is inspected, maintained, and prepared before every drive."], ["Effortless Booking", "From search to confirmation in a few considered steps."]].map(([title, copy], i) => <article key={title} data-reveal><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
 
-      <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => scrollTo("#booking")}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
+      <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
 
       <footer id="footer"><div className="footer-main"><div><div className="wordmark">DRIVE<span>X</span></div><p>Drive more. Experience more.</p></div><div><h4>Explore</h4><a href="#vehicles">Vehicles</a><a href="#how">How It Works</a><a href="#why">About</a><a href="mailto:hello@drivex.ph">Contact</a></div><div><h4>Support</h4><a href="#footer">Help Center</a><a href="#footer">Rental Policies</a><a href="#footer">Terms</a><a href="#footer">Privacy</a></div><div><h4>Follow</h4><a href="#footer">Instagram</a><a href="#footer">Facebook</a><a href="#footer">LinkedIn</a></div></div><div className="footer-bottom"><span>© 2026 DriveX. All rights reserved.</span><span>Manila, Philippines</span></div></footer>
     </main>

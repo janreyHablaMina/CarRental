@@ -4,12 +4,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
+import { useBooking } from "@/context/BookingContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { openBooking } = useBooking();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +32,11 @@ export default function Navbar() {
     } else {
       router.push(`/${hash}`);
     }
+  };
+
+  const handleBookNow = () => {
+    setMenuOpen(false);
+    openBooking({ step: 1 });
   };
 
   return (
@@ -55,7 +62,7 @@ export default function Navbar() {
         <Link href="/contact" style={{ color: pathname === "/contact" ? "#4da3ff" : "inherit" }}>Contact</Link>
       </nav>
       
-      <button className="nav-cta desktop-cta" onClick={() => handleNav("#booking")}>
+      <button className="nav-cta desktop-cta" onClick={handleBookNow}>
         Book now <ArrowRight size={16} />
       </button>
       
@@ -69,7 +76,7 @@ export default function Navbar() {
           <button onClick={() => handleNav("#how")}>How It Works</button>
           <button onClick={() => handleNav("#why")}>About</button>
           <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
-          <button onClick={() => handleNav("#booking")}>Book Now</button>
+          <button onClick={handleBookNow}>Book Now</button>
         </nav>
       )}
     </header>
