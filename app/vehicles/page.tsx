@@ -20,13 +20,93 @@ import {
   Zap,
 } from "lucide-react";
 import { vehicles, type Vehicle } from "@/lib/vehicles";
+import { useBooking } from "@/context/BookingContext";
 
 const PAGE_SIZE = 6;
 const CATEGORIES = ["All", "Sports", "Luxury", "Sedan", "SUV", "Economy"];
 
+const FEATURED_SLIDES = [
+  {
+    id: "lamborghini-huracan-evo",
+    brand: "Lamborghini",
+    name: "Huracán EVO",
+    tagline: "Atmospheric V10 // Corsa Dynamics & Titanium Exhaust",
+    category: "Sports",
+    engine: "640 HP V10",
+    acceleration: "2.9s 0-100",
+    transmission: "7-Spd Dual-Clutch",
+    seats: 2,
+    price: "28,000",
+    image: "/images/fleet-sports-huracan.jpg",
+    badge: "FLEET FLAGSHIP",
+  },
+  {
+    id: "rolls-royce-phantom-viii",
+    brand: "Rolls-Royce",
+    name: "Phantom VIII",
+    tagline: "The Pinnacle of Ultra-Luxury Transport & Silent Flight",
+    category: "Luxury",
+    engine: "563 HP Twin-Turbo V12",
+    acceleration: "5.1s 0-100",
+    transmission: "8-Spd Satellite Aided",
+    seats: 5,
+    price: "35,000",
+    image: "/images/fleet-rolls.jpg",
+    badge: "VIP SOVEREIGN",
+  },
+  {
+    id: "porsche-911-carrera-t",
+    brand: "Porsche",
+    name: "911 Carrera T",
+    tagline: "Pure Mechanical Purity // Active Suspension Dynamics",
+    category: "Sports",
+    engine: "385 HP Twin-Turbo",
+    acceleration: "4.0s 0-100",
+    transmission: "PDK Automatic",
+    seats: 4,
+    price: "18,500",
+    image: "/images/fleet-porsche.jpg",
+    badge: "TRACK HERITAGE",
+  },
+  {
+    id: "tesla-model-s-plaid",
+    brand: "Tesla",
+    name: "Model S Plaid",
+    tagline: "Sub-2-Second Acceleration // Tri-Motor Torque Vectoring",
+    category: "Luxury",
+    engine: "1,020 HP Electric",
+    acceleration: "1.99s 0-100",
+    transmission: "Tri-Motor AWD",
+    seats: 5,
+    price: "12,500",
+    image: "/images/fleet-tesla.jpg",
+    badge: "ELECTRIC HYPERCAR",
+  },
+  {
+    id: "range-rover-velar-r-dynamic",
+    brand: "Range Rover",
+    name: "Velar R-Dynamic",
+    tagline: "All-Terrain Prestige // British High-Performance Avant-Garde",
+    category: "SUV",
+    engine: "395 HP Turbo Inline-6",
+    acceleration: "5.2s 0-100",
+    transmission: "8-Speed Automatic AWD",
+    seats: 5,
+    price: "8,500",
+    image: "/images/fleet-suv-velar.jpg",
+    badge: "PREMIUM CONCIERGE SUV",
+  },
+];
+
 export default function VehiclesCollectionPage() {
   const router = useRouter();
   const gridTopRef = useRef<HTMLDivElement>(null);
+  const { openBooking } = useBooking();
+
+  // Cinematic Slider State
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [slideProgress, setSlideProgress] = useState(0);
 
   // Filter & Search states
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +114,40 @@ export default function VehiclesCollectionPage() {
   const [selectedSeats, setSelectedSeats] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("featured");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Slider Autoplay Effect (5s per slide)
+  useEffect(() => {
+    if (isPaused) return;
+
+    const slideTimer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % FEATURED_SLIDES.length);
+      setSlideProgress(0);
+    }, 5000);
+
+    const progressTimer = setInterval(() => {
+      setSlideProgress((p) => Math.min(100, p + 100 / 50));
+    }, 100);
+
+    return () => {
+      clearInterval(slideTimer);
+      clearInterval(progressTimer);
+    };
+  }, [isPaused, currentSlide]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % FEATURED_SLIDES.length);
+    setSlideProgress(0);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + FEATURED_SLIDES.length) % FEATURED_SLIDES.length);
+    setSlideProgress(0);
+  };
+
+  const goToSlide = (idx: number) => {
+    setCurrentSlide(idx);
+    setSlideProgress(0);
+  };
 
   // Category counts
   const categoryCounts = useMemo(() => {
@@ -139,36 +253,146 @@ export default function VehiclesCollectionPage() {
     <div className="vc-page">
       {/* Topbar */}
 
-      {/* Hero Banner */}
-      <section className="vc-hero">
-        <div className="vc-hero-eyebrow">
-          <span className="vc-pulse-dot" />
-          <span>The Collection // 2026 Fleet Directory</span>
-        </div>
-        <h1 className="vc-hero-title">
-          Curated Performance. <span>Refined Luxury.</span>
-        </h1>
-        <p className="vc-hero-sub">
-          Explore our complete roster of precision supercars, grand tourers, executive sedans, and versatile luxury SUVs. Prepared to perfection for your journey.
-        </p>
+      {/* Cinematic Showcase Slider Banner */}
+      <section className="vc-cinematic-banner">
+        <div
+          className="vc-slider-stage"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {FEATURED_SLIDES.map((slide, index) => {
+            const isActive = index === currentSlide;
+            return (
+              <div
+                key={slide.id}
+                className={`vc-slide-item ${isActive ? "active" : ""}`}
+              >
+                {/* Background Image Layer */}
+                <div className="vc-slide-bg-wrap">
+                  <Image
+                    src={slide.image}
+                    alt={`${slide.brand} ${slide.name}`}
+                    fill
+                    priority={index === 0}
+                    sizes="100vw"
+                  />
+                </div>
 
-        <div className="vc-stats-strip">
-          <div className="vc-stat-item">
-            <span className="vc-stat-num">{vehicles.length}</span>
-            <span className="vc-stat-label">Total Vehicles</span>
+                {/* Overlays & Atmosphere */}
+                <div className="vc-slide-glow" />
+                <div className="vc-slide-overlay" />
+                <div className="vc-slide-speedlines" />
+
+                {/* Slide Text Content & Telemetry */}
+                <div className="vc-slide-content">
+                  <div className="vc-slide-eyebrow">
+                    <span className="vc-pulse-dot" />
+                    <span>{slide.badge} // {slide.category.toUpperCase()} CLASS</span>
+                  </div>
+
+                  <div>
+                    <p className="vc-slide-brand">{slide.brand}</p>
+                    <h2 className="vc-slide-title">{slide.name}</h2>
+                  </div>
+
+                  <div className="vc-slide-specs-row">
+                    <span className="vc-spec-pill highlight">
+                      <Zap size={13} /> {slide.engine}
+                    </span>
+                    <span className="vc-spec-pill">
+                      <Gauge size={13} /> {slide.acceleration}
+                    </span>
+                    <span className="vc-spec-pill">
+                      {slide.transmission}
+                    </span>
+                    <span className="vc-spec-pill">
+                      <Users size={13} /> {slide.seats} Seats
+                    </span>
+                  </div>
+
+                  <div className="vc-slide-price-tag">
+                    <span>From</span>
+                    <strong>₱{slide.price}</strong>
+                    <span>/ 24-hr day</span>
+                  </div>
+
+                  <div className="vc-slide-actions">
+                    <button
+                      type="button"
+                      className="vc-banner-btn-primary"
+                      onClick={() => openBooking({ vehicleId: slide.id, step: 1 })}
+                    >
+                      <Sparkles size={16} /> Reserve This Car <ArrowRight size={16} />
+                    </button>
+                    <Link
+                      href={`/vehicles/${slide.id}`}
+                      className="vc-banner-btn-secondary"
+                    >
+                      Explore Specs
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Top Right HUD & Nav Controls */}
+          <div className="vc-slider-hud-top">
+            <div className="vc-slider-counter">
+              <strong>0{currentSlide + 1}</strong> // 0{FEATURED_SLIDES.length}
+            </div>
+            <div className="vc-slider-nav-btns">
+              <button
+                type="button"
+                className="vc-slider-arrow"
+                onClick={prevSlide}
+                aria-label="Previous vehicle slide"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                className="vc-slider-arrow"
+                onClick={nextSlide}
+                aria-label="Next vehicle slide"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
-          <div className="vc-stat-item">
-            <span className="vc-stat-num">5</span>
-            <span className="vc-stat-label">Tiers & Categories</span>
+
+          {/* Autoplay Progress Line */}
+          <div className="vc-slider-progress-track">
+            <div
+              className="vc-slider-progress-bar"
+              style={{ width: `${slideProgress}%` }}
+            />
           </div>
-          <div className="vc-stat-item">
-            <span className="vc-stat-num">80+</span>
-            <span className="vc-stat-label">Covered Locations</span>
-          </div>
-          <div className="vc-stat-item">
-            <span className="vc-stat-num">100%</span>
-            <span className="vc-stat-label">Verified Fleet</span>
-          </div>
+        </div>
+
+        {/* Thumbnail Selector Bar below Stage */}
+        <div className="vc-thumbnails-bar">
+          {FEATURED_SLIDES.map((slide, idx) => (
+            <button
+              key={slide.id}
+              type="button"
+              className={`vc-thumb-card ${idx === currentSlide ? "active" : ""}`}
+              onClick={() => goToSlide(idx)}
+            >
+              <div className="vc-thumb-img-wrap">
+                <Image
+                  src={slide.image}
+                  alt={slide.name}
+                  fill
+                  sizes="80px"
+                />
+              </div>
+              <div className="vc-thumb-info">
+                <span className="vc-thumb-title">{slide.brand} {slide.name}</span>
+                <span className="vc-thumb-price">₱{slide.price}/d</span>
+              </div>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -452,8 +676,21 @@ export default function VehiclesCollectionPage() {
                         </div>
                       </div>
 
-                      <div className="vc-card-arrow-btn">
-                        <ArrowRight size={17} />
+                      <div className="vc-card-actions">
+                        <button
+                          type="button"
+                          className="vc-card-quick-book-btn"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openBooking({ vehicleId: vehicle.id, step: 1 });
+                          }}
+                        >
+                          <Sparkles size={11} /> Book
+                        </button>
+                        <div className="vc-card-arrow-btn">
+                          <ArrowRight size={17} />
+                        </div>
                       </div>
                     </div>
                   </div>
