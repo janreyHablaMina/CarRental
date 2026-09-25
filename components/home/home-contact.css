@@ -1,15 +1,15 @@
 /* ==========================================================================
-   DriveX Home Page Hubs & Lounges Map Section
-   Directly utilizing the Contact Page Leaflet Map Component & Dark Theme
+   DriveX Home Page Hubs & Curated Scenic Escapes
+   Luxury Automotive Editorial & Travel Experience
    ========================================================================== */
 
 .home-contact-section {
   position: relative;
   width: 100%;
-  padding: 110px 0;
+  padding: 100px 0 110px 0;
   background: #06080e;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
 }
 
@@ -21,587 +21,399 @@
   box-sizing: border-box;
 }
 
-/* Header */
+/* Section Header */
 .home-contact-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 32px;
-  margin-bottom: 30px;
+  margin-bottom: 36px;
   flex-wrap: wrap;
 }
 
 .home-contact-header h2 {
-  font-size: clamp(34px, 4.5vw, 54px);
+  font-size: clamp(34px, 4.5vw, 52px);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: #ffffff;
   margin: 8px 0 0 0;
+  line-height: 1.15;
 }
 
 .home-contact-header-desc {
-  max-width: 440px;
-  color: #8fa0ba;
-  font-size: 14.5px;
-  line-height: 1.6;
+  max-width: 480px;
+  color: #94a3b8;
+  font-size: 15px;
+  line-height: 1.65;
   margin: 0;
 }
 
-/* Hub Selector Tabs */
+/* Informative Hub Selector Tabs */
 .home-hub-tabs {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
+  padding-bottom: 24px;
+  margin-bottom: 6px;
+  scrollbar-width: none;
+}
+
+.home-hub-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .home-hub-tab {
   display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  background: rgba(18, 24, 38, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 20px;
+  background: rgba(14, 19, 32, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
   color: #8fa0ba;
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  flex-shrink: 0;
 }
 
 .home-hub-tab:hover {
-  background: rgba(28, 38, 60, 0.8);
+  background: rgba(22, 31, 52, 0.85);
   color: #ffffff;
-  border-color: rgba(77, 163, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 .home-hub-tab.active {
-  background: rgba(77, 163, 255, 0.15);
-  border-color: rgba(77, 163, 255, 0.5);
+  background: rgba(25, 36, 62, 0.95);
+  border-color: rgba(56, 189, 248, 0.55);
   color: #ffffff;
-  box-shadow: 0 0 16px rgba(77, 163, 255, 0.2);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
 }
 
-.home-hub-tab-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #556276;
-  transition: background 0.2s, box-shadow 0.2s;
+.home-hub-tab-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.home-hub-tab.active .home-hub-tab-dot {
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
+.home-hub-tab-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  transition: color 0.2s;
 }
 
-/* Full Width Edge-to-Edge Cinematic Car Video */
+.home-hub-tab.active .home-hub-tab-num {
+  color: #38bdf8;
+}
+
+.home-hub-tab-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.home-hub-tab-service {
+  font-size: 11px;
+  color: #7dd3fc;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.home-hub-tab.active .home-hub-tab-service {
+  opacity: 1;
+  color: #38bdf8;
+}
+
+/* ==========================================================================
+   Full Width Cinematic Nature Video & Travel Showcase
+   ========================================================================== */
+
 .home-video-fullwidth {
   position: relative;
   width: 100%;
-  height: 580px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  background: #06080e;
+  min-height: 620px;
+  height: clamp(560px, 62vh, 720px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: #05070c;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8);
 }
 
 .home-car-video-element {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
   transform: scale(1.02);
-  transition: transform 0.8s ease;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.92) contrast(1.05);
 }
 
-/* Vignette Gradients & Subtle HUD Scanline */
-.home-video-vignette {
+/* Cinematic Vignette Overlay - Deeper on Left for Card Legibility */
+.home-travel-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(6, 8, 14, 0.85) 0%, rgba(6, 8, 14, 0) 25%, rgba(6, 8, 14, 0) 70%, rgba(6, 8, 14, 0.95) 100%),
-    radial-gradient(ellipse at center, transparent 40%, rgba(6, 8, 14, 0.6) 100%);
+    linear-gradient(90deg, rgba(5, 7, 12, 0.88) 0%, rgba(5, 7, 12, 0.72) 36%, rgba(5, 7, 12, 0.25) 70%, rgba(5, 7, 12, 0.6) 100%),
+    linear-gradient(180deg, rgba(5, 7, 12, 0.75) 0%, transparent 20%, transparent 80%, rgba(5, 7, 12, 0.9) 100%);
   z-index: 1;
 }
 
-.home-video-scanline {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    rgba(18, 24, 38, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
-  );
-  background-size: 100% 4px;
-  opacity: 0.35;
-  z-index: 2;
-}
-
-/* HUD Badges across top of video */
-.home-video-hud-top {
-  position: absolute;
-  top: 24px;
-  left: max(5vw, calc((100vw - 1400px) / 2));
-  right: max(5vw, calc((100vw - 1400px) / 2));
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+/* Floating Travel Showcase Card */
+.home-travel-card-wrapper {
+  position: relative;
   z-index: 3;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 max(5vw, calc((100vw - 1400px) / 2));
   pointer-events: none;
-  flex-wrap: wrap;
 }
 
-.home-hud-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.home-hud-chip.live {
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #e2e8f0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-}
-
-.home-hud-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 10px #ef4444;
-  animation: hudPulse 1.8s infinite ease-out;
-}
-
-@keyframes hudPulse {
-  0% { transform: scale(0.9); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.6; }
-  100% { transform: scale(0.9); opacity: 1; }
-}
-
-.home-hud-chip.secondary {
-  background: rgba(15, 23, 42, 0.65);
+.home-travel-card {
+  pointer-events: auto;
+  max-width: 500px;
+  background: rgba(10, 14, 24, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #38bdf8;
+  border-radius: 20px;
+  padding: 34px 38px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(56, 189, 248, 0.08);
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-/* Center Telemetry Callout */
-.home-video-center-info {
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 4px;
-  z-index: 3;
-  pointer-events: none;
+.home-travel-card:hover {
+  border-color: rgba(56, 189, 248, 0.3);
 }
 
-.home-video-watermark {
-  font-size: clamp(20px, 3.5vw, 36px);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #ffffff;
-  text-transform: uppercase;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.3);
-}
-
-.home-video-coords {
-  margin: 0;
-  font-family: var(--font-mono, monospace);
-  font-size: 11.5px;
-  color: #94a3b8;
-  letter-spacing: 0.1em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-}
-
-.home-video-scenic-sub {
-  margin: 2px 0 0 0;
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(11px, 1.4vw, 13px);
-  font-weight: 500;
-  color: #38bdf8;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-}
-
-.home-video-telemetry-strip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  color: #94a3b8;
-  letter-spacing: 0.08em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-  background: rgba(6, 8, 14, 0.65);
-  padding: 5px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.telemetry-divider {
-  color: rgba(56, 189, 248, 0.6);
-}
-
-/* Floating Player Controls */
-.home-video-controls-bar {
-  position: absolute;
-  bottom: 24px;
-  right: max(5vw, calc((100vw - 1400px) / 2));
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 4;
-}
-
-.home-video-ctrl-btn {
+.home-travel-card-badge {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 14px;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 5px 12px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.28);
   border-radius: 999px;
-  color: #f1f5f9;
-  font-family: var(--font-mono, monospace);
+  color: #38bdf8;
   font-size: 11.5px;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.home-travel-badge-icon {
+  color: #38bdf8;
+}
+
+.home-travel-title {
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  line-height: 1.22;
+}
+
+.home-travel-tagline {
+  font-size: 13px;
+  color: #38bdf8;
+  font-weight: 500;
+  margin: 0 0 14px 0;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.home-travel-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #94a3b8;
+  margin: 0 0 16px 0;
+}
+
+/* Key Service Standards Facts List */
+.home-pillar-facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px;
+  background: rgba(6, 9, 16, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
+.home-pillar-fact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.home-pillar-fact-bullet {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #38bdf8;
+  margin-top: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.home-travel-locations-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 11px;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.home-footnote-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+/* Card Action Buttons */
+.home-travel-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.home-travel-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: #ffffff;
+  color: #06080e;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+}
+
+.home-travel-btn-primary:hover {
+  background: var(--accent, #4da3ff);
+  color: #06080e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(77, 163, 255, 0.35);
+}
+
+.home-travel-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-travel-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Floating Discreet Video Controls */
+.home-travel-video-ctrls {
+  position: absolute;
+  bottom: 24px;
+  right: max(5vw, calc((100vw - 1400px) / 2));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+}
+
+.home-travel-ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(10, 14, 24, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #cbd5e1;
+  font-size: 11.5px;
+  font-weight: 500;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.home-video-ctrl-btn:hover {
-  background: rgba(56, 189, 248, 0.2);
-  border-color: rgba(56, 189, 248, 0.5);
+.home-travel-ctrl-btn:hover {
+  background: rgba(20, 28, 44, 0.9);
   color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
 
-/* Selected Hub Details Bar below map */
-.home-selected-hub-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  background: rgba(13, 18, 30, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin-top: 20px;
-  backdrop-filter: blur(14px);
-  flex-wrap: wrap;
-}
-
-.home-selected-hub-main {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.home-selected-hub-tags {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.home-selected-hub-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-}
-
-.home-selected-hub-category {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 3px 9px;
-  border-radius: 4px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.home-selected-hub-meta {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 13px;
-  color: #8fa0ba;
-  flex-wrap: wrap;
-}
-
-.home-selected-hub-meta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.home-selected-hub-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.home-hub-action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 650;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.home-hub-action-btn.secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #e2e8f0;
-}
-
-.home-hub-action-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
-}
-
-.home-hub-action-btn.primary {
-  background: #ffffff;
-  color: #06080e;
-  border: 1px solid #ffffff;
-}
-
-.home-hub-action-btn.primary:hover {
-  background: var(--accent, #4da3ff);
-  border-color: var(--accent, #4da3ff);
-  color: #06080e;
-  transform: translateY(-2px);
-}
-
-/* ---------------- Map Marker Pulse & Labels ---------------- */
-.custom-leaflet-marker {
-  background: transparent !important;
-  border: none !important;
-}
-
-.map-marker-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.marker-core {
-  width: 14px;
-  height: 14px;
-  background: #0284c7;
-  border: 2.5px solid #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  z-index: 2;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.map-marker-container.active .marker-core {
-  background: #ef4444;
-  border-color: #ffffff;
-  transform: scale(1.35);
-  box-shadow: 0 0 16px rgba(239, 68, 68, 0.8);
-}
-
-.marker-pulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(239, 68, 68, 0) 70%);
-  border-radius: 50%;
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.map-marker-container.active .marker-pulse {
-  animation: radar-pulse-map 2s infinite ease-out;
-}
-
-@keyframes radar-pulse-map {
-  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-}
-
-.marker-label {
-  position: absolute;
-  left: 28px;
-  white-space: nowrap;
-  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #0f172a;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3px 8px;
-  border-radius: 6px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  transition: all 0.25s ease;
-  pointer-events: none;
-}
-
-.map-marker-container.active .marker-label {
-  color: #ef4444;
-  border-color: #ef4444;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
-}
-
-/* ---------------- Custom Leaflet Popup Styling ---------------- */
-.drivex-custom-popup .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  color: #ffffff !important;
-  border-radius: 12px !important;
-  padding: 0 !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
-}
-
-.drivex-custom-popup .leaflet-popup-tip {
-  background: #0f172a !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-.drivex-custom-popup a.leaflet-popup-close-button {
-  color: #94a3b8 !important;
-  padding: 6px 8px !important;
-}
-
-.drivex-custom-popup a.leaflet-popup-close-button:hover {
-  color: #ffffff !important;
-}
-
-.leaflet-popup-card {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
-}
-
-.leaflet-popup-badge {
-  font-size: 10px;
-  font-family: var(--font-mono, monospace);
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #38bdf8;
-  letter-spacing: 0.05em;
-}
-
-.leaflet-popup-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.25;
-}
-
-.leaflet-popup-address {
-  font-size: 11.5px;
-  color: #cbd5e1;
-  line-height: 1.35;
-}
-
-.leaflet-popup-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 11px;
-  color: #94a3b8;
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.leaflet-popup-link {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 6px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #38bdf8;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.leaflet-popup-link:hover {
-  color: #7dd3fc;
-  text-decoration: underline;
-}
-
-/* Responsive */
 @media (max-width: 900px) {
   .home-video-fullwidth {
-    height: 420px;
+    min-height: auto;
+    height: auto;
+    padding: 60px 0;
   }
-  .home-video-hud-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    top: 16px;
+
+  .home-travel-card {
+    max-width: 100%;
+    padding: 28px 24px;
   }
-  .home-video-center-info {
-    display: none;
-  }
-  .home-video-controls-bar {
+
+  .home-travel-video-ctrls {
     bottom: 16px;
+    right: 20px;
   }
-  .home-selected-hub-bar {
+}
+
+@media (max-width: 600px) {
+  .home-contact-section {
+    padding: 70px 0 80px 0;
+  }
+
+  .home-travel-card-actions {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
-  .home-selected-hub-actions {
-    width: 100%;
-  }
-  .home-hub-action-btn {
-    flex: 1;
+
+  .home-travel-btn-primary,
+  .home-travel-btn-ghost {
     justify-content: center;
   }
 }
-
-

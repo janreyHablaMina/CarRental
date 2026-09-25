@@ -3,128 +3,130 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import {
-  MapPin,
-  Phone,
-  Clock,
+  Compass,
   ArrowRight,
   ExternalLink,
   Play,
   Pause,
   Volume2,
   VolumeX,
-  Compass,
-  Mountain,
+  Sparkles,
+  ShieldCheck,
+  Zap,
+  PhoneCall,
+  MapPin,
 } from "lucide-react";
 import "./home-contact.css";
 
-export interface HubLocation {
+export interface DriveXPillar {
   id: string;
-  name: string;
-  category: string;
-  address: string;
-  phone: string;
-  email: string;
-  hours: string;
-  coords?: string;
-  lat: number;
-  lng: number;
-  googleMapsUrl: string;
-  features: string[];
-  scenicRoute: string;
-  elevation: string;
-  speed: string;
+  number: string;
+  tabLabel: string;
+  subLabel: string;
+  badge: string;
+  title: string;
+  tagline: string;
+  description: string;
+  keyFacts: string[];
+  ctaText: string;
+  ctaLink: string;
 }
 
-const HUBS: HubLocation[] = [
+const PILLARS: DriveXPillar[] = [
   {
-    id: "bgc",
-    name: "BGC Flagship Lounge",
-    category: "Supercar Delivery & Showroom",
-    address: "5th Ave cor. 28th St, Bonifacio High Street Central, Taguig City, Metro Manila",
-    phone: "+63 (2) 8888-3748",
-    email: "bgc.concierge@drivex.ph",
-    hours: "Open 24/7 (VIP Turnaround)",
-    coords: "14.5507° N, 121.0509° E",
-    lat: 14.5507,
-    lng: 121.0509,
-    googleMapsUrl: "https://maps.google.com/?q=Bonifacio+High+Street+Taguig",
-    features: ["Supercar Direct Handover", "Private VIP Valet", "Refreshment Lounge"],
-    scenicRoute: "Sierra Madre Mountain Pass // Luzon Foothills",
-    elevation: "540m ASL",
-    speed: "112 KM/H",
+    id: "fleet",
+    number: "01",
+    tabLabel: "Curated Fleet",
+    subLabel: "Exotics & Grand Tourers",
+    badge: "Precision & Performance",
+    title: "Handpicked Exotics & Luxury Flagships",
+    tagline: "Every vehicle is personally owned, maintained, and prepared to factory standard.",
+    description:
+      "DriveX is not a peer-to-peer marketplace or a standard commercial rental fleet. Every car—from track-honed Porsche GTs and Ferrari mid-engine exotics to flagship Range Rovers and executive sedans—is maintained to strict manufacturer specifications, multi-point inspected, and immaculately detailed before every drive.",
+    keyFacts: [
+      "Tier-1 Multi-Point Inspection Before Every Handover",
+      "Factory Calibrated: Porsche, Ferrari, McLaren, Mercedes-AMG",
+      "Pristine Showroom Condition & Sanitized Delivery",
+    ],
+    ctaText: "Explore Available Fleet",
+    ctaLink: "#vehicles",
   },
   {
-    id: "makati",
-    name: "Makati Executive Hub",
-    category: "Chauffeur & Corporate Fleet",
-    address: "Ayala Triangle Gardens Tower Two, Paseo de Roxas, Makati CBD",
-    phone: "+63 (2) 8888-3749",
-    email: "makati.fleet@drivex.ph",
-    hours: "06:00 AM – 11:00 PM Daily",
-    coords: "14.5574° N, 121.0232° E",
-    lat: 14.5574,
-    lng: 121.0232,
-    googleMapsUrl: "https://maps.google.com/?q=Ayala+Triangle+Gardens+Makati",
-    features: ["Executive Sedans", "Armored Vehicle Dispatch", "Corporate Billing Desk"],
-    scenicRoute: "Tagaytay Ridge Pass & Taal Lake Scenic Route",
-    elevation: "680m ASL",
-    speed: "96 KM/H",
+    id: "handover",
+    number: "02",
+    tabLabel: "White-Glove Handover",
+    subLabel: "Tarmac & Doorstep Delivery",
+    badge: "Zero Friction Service",
+    title: "Airport Tarmac to Private Doorstep",
+    tagline: "Skip the rental counters, paperwork queues, and bureaucratic friction.",
+    description:
+      "We deliver directly to you. Whether arriving on a flight at NAIA or Clark International, departing from your private residence in BGC or Makati, or staying at a 5-star hotel, your prepared vehicle awaits you at your exact schedule with keyless mobile unlock or private white-glove valet turnaround.",
+    keyFacts: [
+      "Flight-Tracked Delivery: Waiting Curbside at NAIA T1–T3 & Clark",
+      "Doorstep Delivery Across BGC, Makati, Ortigas & Alabang",
+      "Digital Fast-Track: 100% Paperless Identity Verification",
+    ],
+    ctaText: "Reserve VIP Delivery",
+    ctaLink: "/booking",
   },
   {
-    id: "naia",
-    name: "NAIA Terminal 3 VIP Concierge",
-    category: "24/7 Flight Arrival Hub",
-    address: "Terminal 3 Arrival VIP Lounge, Andrews Ave, Pasay City, Metro Manila",
-    phone: "+63 (2) 8888-3750",
-    email: "airport.vip@drivex.ph",
-    hours: "Open 24/7 (Flight Tracked)",
-    coords: "14.5204° N, 121.0159° E",
-    lat: 14.5204,
-    lng: 121.0159,
-    googleMapsUrl: "https://maps.google.com/?q=NAIA+Terminal+3+Pasay",
-    features: ["Tarmac Fast-Track", "Luggage Valet", "Keyless Mobile Unlock"],
-    scenicRoute: "South Luzon Coastal Corridor & Batangas Coast",
-    elevation: "42m ASL",
-    speed: "124 KM/H",
+    id: "expeditions",
+    number: "03",
+    tabLabel: "Scenic Expeditions",
+    subLabel: "Curated Nature Grand Tours",
+    badge: "The Open Road",
+    title: "Engineered for Philippine Road Trips",
+    tagline: "From misty highland switchbacks to cliffside coastal highways.",
+    description:
+      "We believe true luxury is the freedom of the open road. Our grand touring fleet is engineered and primed for iconic Philippine landscapes—curving through the cool mountain mists of Tagaytay, carving the soaring Sierra Madre passes, or cruising the coastal cliffs of Cebu and Batangas with pre-loaded expressway RFID.",
+    keyFacts: [
+      "Pre-Loaded Autosweep & Easytrip RFID on All Tollways",
+      "Bespoke Driving Route Guides for Mountain & Coastal Tours",
+      "Cross-Hub Drop-Offs Between Manila, Clark & Regional Hubs",
+    ],
+    ctaText: "View Driving Escapes",
+    ctaLink: "/contact",
   },
   {
-    id: "clark",
-    name: "Clark Freeport Hub",
-    category: "Grand Touring & Track Fleet",
-    address: "Clark Global City, Manuel A. Roxas Hwy, Clark Freeport Zone, Pampanga",
-    phone: "+63 (45) 499-3748",
-    email: "clark.fleet@drivex.ph",
-    hours: "07:00 AM – 10:00 PM Daily",
-    coords: "15.1764° N, 120.5312° E",
-    lat: 15.1764,
-    lng: 120.5312,
-    googleMapsUrl: "https://maps.google.com/?q=Clark+Global+City+Pampanga",
-    features: ["Track Preparation", "North Luzon Dispatch", "Helipad Access"],
-    scenicRoute: "Bamban Peaks & Zambales Mountain Range Expedition",
-    elevation: "410m ASL",
-    speed: "135 KM/H",
+    id: "transparency",
+    number: "04",
+    tabLabel: "Zero-Surprise Pricing",
+    subLabel: "All-Inclusive & Honest",
+    badge: "Complete Peace of Mind",
+    title: "All-Inclusive, Transparent Luxury",
+    tagline: "The price you see is the price you drive away with.",
+    description:
+      "Traditional car rentals are notorious for hidden fees, fine-print restrictions, and delayed security deposit returns. DriveX operates with absolute clarity: Tier-1 Comprehensive Collision Insurance is included, toll RFID is transparently tracked, fuel policies are simple, and security deposit releases are executed promptly.",
+    keyFacts: [
+      "Comprehensive CDW & Third-Party Liability (TPL) Included",
+      "Zero Hidden Surcharges, Turnaround Fees, or Airport Markups",
+      "Expedited Digital Security Deposit Releases Upon Return",
+    ],
+    ctaText: "Explore Rental Standards",
+    ctaLink: "/#why",
   },
   {
-    id: "cebu",
-    name: "Cebu IT Park Hub",
-    category: "Visayas Coastal Fleet",
-    address: "Skyrise 4B, Garden Bloc, Cebu IT Park, Lahug, Cebu City",
-    phone: "+63 (32) 412-3748",
-    email: "cebu.vip@drivex.ph",
-    hours: "08:00 AM – 09:00 PM Daily",
-    coords: "10.3297° N, 123.9056° E",
-    lat: 10.3297,
-    lng: 123.9056,
-    googleMapsUrl: "https://maps.google.com/?q=Cebu+IT+Park+Lahug",
-    features: ["Coastal SUV Fleet", "Mactan Airport Drop", "Island Tour Drivers"],
-    scenicRoute: "Cebu Trans-Central Mountain Highway & Coastal Cliffs",
-    elevation: "830m ASL",
-    speed: "108 KM/H",
+    id: "concierge",
+    number: "05",
+    tabLabel: "24/7 VIP Concierge",
+    subLabel: "Personal Journey Liaison",
+    badge: "Always By Your Side",
+    title: "Your Dedicated Mobility Concierge",
+    tagline: "Single-point personal liaison from reservation to retrieval.",
+    description:
+      "You never deal with a call center or automated chatbot. A dedicated DriveX Concierge is available around the clock via WhatsApp or direct phone to arrange bespoke route suggestions, coordinate vehicle swaps, assist with restaurant and hotel valets, and guarantee 24/7 nationwide roadside dispatch.",
+    keyFacts: [
+      "Dedicated WhatsApp Concierge Liaison for Every Client",
+      "24/7 Nationwide Roadside Assistance & Recovery",
+      "Bespoke Chauffeur & Armored Vehicle Options Available",
+    ],
+    ctaText: "Contact Concierge Desk",
+    ctaLink: "/contact",
   },
 ];
 
 export default function HomeContactSection() {
-  const [selectedHub, setSelectedHub] = useState<HubLocation>(HUBS[0]);
+  const [selectedPillar, setSelectedPillar] = useState<DriveXPillar>(PILLARS[0]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -152,31 +154,37 @@ export default function HomeContactSection() {
         {/* Section Header */}
         <div className="home-contact-header">
           <div>
-            <p className="eyebrow">05 // Nationwide Operations</p>
-            <h2>Nationwide Hubs &amp; Lounges</h2>
+            <p className="eyebrow">05 // The DriveX Standard</p>
+            <h2>The Art of the Extraordinary Journey</h2>
           </div>
           <p className="home-contact-header-desc">
-            Direct airport delivery, private VIP turnarounds, and nationwide touring fleets engineered for scenic road trips across the Philippines.
+            DriveX was created to redefine automotive luxury in the Philippines. Discover the five core pillars that separate our grand touring experience from ordinary car rentals.
           </p>
         </div>
 
-        {/* Hub Selector Pills */}
+        {/* 5 DriveX Core Pillars Selector Tabs */}
         <div className="home-hub-tabs">
-          {HUBS.map((hub) => (
-            <button
-              type="button"
-              key={hub.id}
-              className={`home-hub-tab ${selectedHub.id === hub.id ? "active" : ""}`}
-              onClick={() => setSelectedHub(hub)}
-            >
-              <span className="home-hub-tab-dot" />
-              <span>{hub.name.split(" ")[0]}</span>
-            </button>
-          ))}
+          {PILLARS.map((pillar) => {
+            const isActive = selectedPillar.id === pillar.id;
+            return (
+              <button
+                type="button"
+                key={pillar.id}
+                className={`home-hub-tab ${isActive ? "active" : ""}`}
+                onClick={() => setSelectedPillar(pillar)}
+              >
+                <div className="home-hub-tab-top">
+                  <span className="home-hub-tab-num">{pillar.number}</span>
+                  <span className="home-hub-tab-name">{pillar.tabLabel}</span>
+                </div>
+                <span className="home-hub-tab-service">{pillar.subLabel}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* FULL WIDTH CINEMATIC NATURE TRIP / MOVING CAR VIDEO */}
+      {/* FULL WIDTH CINEMATIC NATURE TRIP / MOVING CAR EXPERIENCE */}
       <div className="home-video-fullwidth">
         <video
           ref={videoRef}
@@ -193,90 +201,72 @@ export default function HomeContactSection() {
           Your browser does not support HTML5 video.
         </video>
 
-        {/* Dark Cinematic Vignette Overlays */}
-        <div className="home-video-vignette" />
-        <div className="home-video-scanline" />
+        {/* Soft Luxury Vignette Overlay */}
+        <div className="home-travel-vignette" />
 
-        {/* HUD Telemetry Badges */}
-        <div className="home-video-hud-top">
-          <div className="home-hud-chip live">
-            <span className="home-hud-dot" />
-            <span>NATURE EXPEDITION // 4K SCENIC HIGHWAY RUN</span>
-          </div>
-          <div className="home-hud-chip secondary">
-            <Mountain size={13} />
-            <span>COASTAL &amp; MOUNTAIN GRAND TOURING</span>
+        {/* Floating Luxury Editorial Travel Card */}
+        <div className="home-travel-card-wrapper">
+          <div className="home-travel-card">
+            <div className="home-travel-card-badge">
+              <Sparkles size={13} className="home-travel-badge-icon" />
+              <span>{selectedPillar.badge}</span>
+            </div>
+
+            <h3 className="home-travel-title">{selectedPillar.title}</h3>
+            <p className="home-travel-tagline">{selectedPillar.tagline}</p>
+
+            <p className="home-travel-desc">{selectedPillar.description}</p>
+
+            {/* Key Service Standards List */}
+            <div className="home-pillar-facts-list">
+              {selectedPillar.keyFacts.map((fact, idx) => (
+                <div key={idx} className="home-pillar-fact-item">
+                  <span className="home-pillar-fact-bullet" />
+                  <span>{fact}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="home-travel-card-actions">
+              <Link href={selectedPillar.ctaLink} className="home-travel-btn-primary">
+                {selectedPillar.ctaText} <ArrowRight size={14} />
+              </Link>
+              <Link href="/contact" className="home-travel-btn-ghost">
+                Speak with Concierge
+              </Link>
+            </div>
+
+            {/* Subtle Nationwide Footnote */}
+            <div className="home-travel-locations-footnote">
+              <MapPin size={12} className="home-footnote-icon" />
+              <span>Nationwide Operations: BGC Lounge • Makati CBD • NAIA Terminals • Clark Freeport • Cebu IT Park</span>
+            </div>
           </div>
         </div>
 
-        {/* Video Overlay Center Callout */}
-        <div className="home-video-center-info">
-          <span className="home-video-watermark">{selectedHub.name.toUpperCase()}</span>
-          <p className="home-video-scenic-sub">{selectedHub.scenicRoute}</p>
-          <div className="home-video-telemetry-strip">
-            <span>{selectedHub.coords || "14.5507° N, 121.0509° E"}</span>
-            <span className="telemetry-divider">•</span>
-            <span>ELEV: {selectedHub.elevation}</span>
-            <span className="telemetry-divider">•</span>
-            <span>CRUISE: {selectedHub.speed}</span>
-          </div>
-        </div>
-
-        {/* Video Player Floating Controls */}
-        <div className="home-video-controls-bar">
+        {/* Floating Minimalist Video Controls */}
+        <div className="home-travel-video-ctrls">
           <button
             type="button"
-            className="home-video-ctrl-btn"
+            className="home-travel-ctrl-btn"
             onClick={togglePlay}
-            aria-label={isPlaying ? "Pause video" : "Play video"}
+            aria-label={isPlaying ? "Pause scenic video" : "Play scenic video"}
           >
-            {isPlaying ? <Pause size={15} /> : <Play size={15} />}
+            {isPlaying ? <Pause size={13} /> : <Play size={13} />}
             <span>{isPlaying ? "Pause" : "Play"}</span>
           </button>
 
           <button
             type="button"
-            className="home-video-ctrl-btn"
+            className="home-travel-ctrl-btn"
             onClick={toggleMute}
             aria-label={isMuted ? "Unmute audio" : "Mute audio"}
           >
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+            {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
             <span>{isMuted ? "Muted" : "Sound On"}</span>
           </button>
-        </div>
-      </div>
-
-      <div className="home-contact-container">
-        {/* Selected Hub Details Bar */}
-        <div className="home-selected-hub-bar">
-          <div className="home-selected-hub-main">
-            <div className="home-selected-hub-tags">
-              <span className="home-selected-hub-name">{selectedHub.name}</span>
-              <span className="home-selected-hub-category">{selectedHub.category}</span>
-            </div>
-            <div className="home-selected-hub-meta">
-              <span><MapPin size={14} /> {selectedHub.address}</span>
-              <span><Clock size={14} /> {selectedHub.hours}</span>
-              <span><Phone size={14} /> {selectedHub.phone}</span>
-            </div>
-          </div>
-
-          <div className="home-selected-hub-actions">
-            <a
-              href={selectedHub.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="home-hub-action-btn secondary"
-            >
-              Directions <ExternalLink size={13} />
-            </a>
-            <Link href="/contact" className="home-hub-action-btn primary">
-              Concierge Hub <ArrowRight size={14} />
-            </Link>
-          </div>
         </div>
       </div>
     </section>
   );
 }
-
