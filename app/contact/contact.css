@@ -12,10 +12,10 @@
   box-sizing: border-box;
 }
 
-.contact-container {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 max(5vw, calc((100vw - 1360px) / 2));
+.contact-container,
+.contact-banner-container {
+  width: 100%;
+  padding: 0 max(5vw, calc((100vw - 1400px) / 2));
   box-sizing: border-box;
 }
 
@@ -87,12 +87,6 @@
   padding: 106px 0 46px; /* Top padding accommodates the fixed topbar */
 }
 
-.contact-banner-container {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 max(5vw, calc((100vw - 1360px) / 2));
-  box-sizing: border-box;
-}
 
 .contact-hero-tag {
   display: inline-flex;
@@ -211,7 +205,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* Common Box Style */
@@ -442,141 +436,30 @@
 }
 
 /* ==========================================================================
-   Right Column: Lounges & Interactive Map
+   Right Column: Map Card Frame (Displaying only the interactive map)
    ========================================================================== */
-.hub-tabs-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.hub-tab-btn {
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
-  color: #94a3b8;
-  font-size: 11.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.hub-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: #ffffff;
-}
-
-.hub-tab-btn.active {
-  background: rgba(77, 163, 255, 0.12);
-  border-color: var(--accent, #4da3ff);
-  color: #ffffff;
-}
-
-.selected-hub-dossier {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dossier-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.dossier-category {
-  font-family: var(--font-mono, monospace);
-  font-size: 10px;
-  color: var(--accent, #4da3ff);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.dossier-title {
-  font-size: 17px;
-  font-weight: 650;
-  color: #ffffff;
-  margin: 3px 0 0;
-  letter-spacing: -0.01em;
-}
-
-.dossier-map-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 2px;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 600;
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.dossier-map-btn:hover {
-  background: var(--accent, #4da3ff);
-  border-color: var(--accent, #4da3ff);
-  color: #08090a;
-}
-
-.dossier-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12.5px;
-  color: #cbd5e1;
-}
-
-.meta-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.meta-line a {
-  color: #cbd5e1;
-  text-decoration: none;
-}
-
-.meta-line a:hover {
-  color: var(--accent, #4da3ff);
-  text-decoration: underline;
-}
-
-.meta-icon {
-  color: var(--accent, #4da3ff);
-  flex-shrink: 0;
-}
-
-/* Embedded Leaflet Map in Lounge Box */
-.hub-embedded-map {
-  position: relative;
-  width: 100%;
-  height: 240px;
-  border-radius: 2px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #070910;
-  margin-top: 4px;
-}
-
-.leaflet-map-wrapper {
-  position: absolute;
-  inset: 0;
-  width: 100%;
+.map-card-frame {
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  min-height: 480px;
   height: 100%;
+  display: flex;
+  border-radius: 4px;
 }
 
-.leaflet-map-element {
-  width: 100%;
-  height: 100%;
+.map-card-frame .leaflet-map-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 480px;
+}
+
+.map-card-frame .leaflet-map-element {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .contact-map-loader {
@@ -853,18 +736,13 @@
     padding: 20px 16px;
   }
 
+  .map-card-frame {
+    padding: 0 !important;
+    min-height: 380px;
+  }
+
   .direct-pill {
     width: 100%;
     justify-content: center;
-  }
-
-  .hub-tabs-row {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-  }
-
-  .hub-tab-btn {
-    flex-shrink: 0;
   }
 }

@@ -9,11 +9,7 @@ import {
   MessageSquare,
   ArrowRight,
   CheckCircle2,
-  MapPin,
-  Clock,
-  ExternalLink,
   ChevronDown,
-  Sparkles,
 } from "lucide-react";
 import { vehicles } from "@/lib/vehicles";
 import { type HubLocation } from "@/components/LeafletMap";
@@ -132,7 +128,6 @@ export default function ContactPage() {
     phone: "",
     email: "",
     vehicle: "",
-    location: "BGC Flagship Lounge",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -153,7 +148,6 @@ export default function ContactPage() {
       phone: "",
       email: "",
       vehicle: "",
-      location: "BGC Flagship Lounge",
       message: "",
     });
     setSubmitted(false);
@@ -318,23 +312,6 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="form-field">
-                    <label>Preferred Handover Hub</label>
-                    <div className="select-wrap">
-                      <select
-                        value={formData.location}
-                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      >
-                        <option value="BGC Flagship Lounge">BGC Flagship Lounge (Bonifacio High Street)</option>
-                        <option value="NAIA Terminal 3 Airport">NAIA Terminal 3 (Airside / Curbside VIP)</option>
-                        <option value="Makati CBD Handover">Makati Executive Hub (Ayala Triangle)</option>
-                        <option value="Clark Freeport Zone">Clark Freeport Zone (Pampanga / Helipad)</option>
-                        <option value="Cebu IT Park">Cebu IT Park Hub (Garden Bloc)</option>
-                        <option value="Custom Hotel or Residence">Private Residence or 5-Star Hotel Valet</option>
-                      </select>
-                      <ChevronDown size={14} className="select-icon" />
-                    </div>
-                  </div>
 
                   <div className="form-field">
                     <label>Trip Dates &amp; Special Requests</label>
@@ -354,69 +331,13 @@ export default function ContactPage() {
               )}
             </div>
 
-            {/* Right Column: Physical Lounges + Integrated Interactive Map */}
-            <div className="contact-box locations-box">
-              <div className="box-head">
-                <h2>Flagship Lounges &amp; Hubs</h2>
-                <p>Pick up keys at our private lounges or request direct curbside delivery.</p>
-              </div>
-
-              {/* Hub Tabs */}
-              <div className="hub-tabs-row">
-                {HUBS.map((hub) => (
-                  <button
-                    type="button"
-                    key={hub.id}
-                    className={`hub-tab-btn ${selectedHub.id === hub.id ? "active" : ""}`}
-                    onClick={() => setSelectedHub(hub)}
-                  >
-                    {hub.name.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
-
-              {/* Selected Hub Details Card */}
-              <div className="selected-hub-dossier">
-                <div className="dossier-top">
-                  <div>
-                    <span className="dossier-category">{selectedHub.category}</span>
-                    <h3 className="dossier-title">{selectedHub.name}</h3>
-                  </div>
-                  <a
-                    href={selectedHub.googleMapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="dossier-map-btn"
-                  >
-                    <span>Google Maps</span>
-                    <ExternalLink size={12} />
-                  </a>
-                </div>
-
-                <div className="dossier-meta">
-                  <div className="meta-line">
-                    <MapPin size={14} className="meta-icon" />
-                    <span>{selectedHub.address}</span>
-                  </div>
-                  <div className="meta-line">
-                    <Clock size={14} className="meta-icon" />
-                    <span>{selectedHub.hours}</span>
-                  </div>
-                  <div className="meta-line">
-                    <Phone size={14} className="meta-icon" />
-                    <a href={`tel:${selectedHub.phone.replace(/[^0-9+]/g, "")}`}>{selectedHub.phone}</a>
-                  </div>
-                </div>
-
-                {/* Compact Embedded Leaflet Map */}
-                <div className="hub-embedded-map">
-                  <LeafletMap
-                    hubs={HUBS}
-                    selectedHub={selectedHub}
-                    onSelectHub={setSelectedHub}
-                  />
-                </div>
-              </div>
+            {/* Right Column: Interactive Map */}
+            <div className="contact-box map-card-frame">
+              <LeafletMap
+                hubs={HUBS}
+                selectedHub={selectedHub}
+                onSelectHub={setSelectedHub}
+              />
             </div>
           </div>
         </div>
