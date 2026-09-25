@@ -1,21 +1,66 @@
 "use client";
 
+import "./stats-counter.css";
 import React, { useEffect, useState, useRef } from "react";
-import { Trophy, ShieldCheck, Clock, Star, Activity } from "lucide-react";
+import { ShieldCheck, Clock, Star, Zap, CheckCircle2, Radio, Award } from "lucide-react";
 
-interface CounterItemProps {
-  icon: React.ReactNode;
+interface MetricData {
+  id: string;
+  tag: string;
   target: number;
   prefix?: string;
   suffix?: string;
   decimals?: number;
-  label: string;
-  sub: string;
+  title: string;
+  subtitle: string;
+  badge: string;
 }
 
-function AnimatedCounter({ icon, target, prefix = "", suffix = "", decimals = 0, label, sub }: CounterItemProps) {
-  const [count, setCount] = useState(0);
-  const cardRef = useRef<HTMLDivElement>(null);
+const METRICS: MetricData[] = [
+  {
+    id: "01",
+    tag: "DISPATCH VOLUME",
+    target: 14850,
+    suffix: "+",
+    title: "VIP Trips Executed",
+    subtitle: "Zero mechanical incidents across 4 years of luxury fleet operation",
+    badge: "FLEET CERTIFIED",
+  },
+  {
+    id: "02",
+    tag: "RELIABILITY INDEX",
+    target: 99.8,
+    decimals: 1,
+    suffix: "%",
+    title: "Punctual Handover Rate",
+    subtitle: "GPS-coordinated airport tarmac & executive hotel curb arrivals",
+    badge: "FLIGHT TRACKED",
+  },
+  {
+    id: "03",
+    tag: "DISPATCH VELOCITY",
+    target: 15,
+    prefix: "< ",
+    suffix: "m",
+    title: "Average VIP Turnaround",
+    subtitle: "Instant paperless identity verification with keyless smartphone access",
+    badge: "RAPID DEPLOY",
+  },
+  {
+    id: "04",
+    tag: "SATISFACTION RATING",
+    target: 4.98,
+    decimals: 2,
+    suffix: " ★",
+    title: "Verified Driver Score",
+    subtitle: "Rated by 3,400+ corporate executives, entrepreneurs, and car enthusiasts",
+    badge: "TOP TIER",
+  },
+];
+
+function MetricColumn({ metric }: { metric: MetricData }) {
+  const [val, setVal] = useState(0);
+  const colRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
   useEffect(() => {
@@ -23,7 +68,7 @@ function AnimatedCounter({ icon, target, prefix = "", suffix = "", decimals = 0,
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
-          const duration = 2000;
+          const duration = 1800;
           const frameDuration = 1000 / 60;
           const totalFrames = Math.round(duration / frameDuration);
           let frame = 0;
@@ -31,91 +76,121 @@ function AnimatedCounter({ icon, target, prefix = "", suffix = "", decimals = 0,
           const timer = setInterval(() => {
             frame++;
             const progress = frame / totalFrames;
-            // Ease out cubic
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
-            const current = target * easeProgress;
+            const ease = 1 - Math.pow(1 - progress, 3);
+            const current = metric.target * ease;
 
             if (frame >= totalFrames) {
-              setCount(target);
+              setVal(metric.target);
               clearInterval(timer);
             } else {
-              setCount(current);
+              setVal(current);
             }
           }, frameDuration);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
+    if (colRef.current) {
+      observer.observe(colRef.current);
     }
-
     return () => observer.disconnect();
-  }, [target]);
+  }, [metric.target]);
 
-  const displayValue = decimals > 0 
-    ? count.toFixed(decimals) 
-    : Math.floor(count).toLocaleString();
+  const formattedValue = metric.decimals 
+    ? val.toFixed(metric.decimals) 
+    : Math.floor(val).toLocaleString();
 
   return (
-    <div ref={cardRef} className="hp-stat-card">
-      <div className="hp-stat-icon-wrap">{icon}</div>
-      <div className="hp-stat-number">
-        {prefix}{displayValue}{suffix}
+    <div ref={colRef} className="hp-telemetry-col">
+      <div className="hp-col-header">
+        <span className="hp-col-tag">{metric.tag}</span>
+        <span className="hp-col-index">{metric.id}</span>
       </div>
-      <div className="hp-stat-label">{label}</div>
-      <div className="hp-stat-sub">{sub}</div>
+
+      <div className="hp-col-metric">
+        <span className="hp-metric-digits">
+          {metric.prefix}{formattedValue}
+        </span>
+        <span className="hp-metric-suffix">{metric.suffix}</span>
+      </div>
+
+      <div className="hp-col-body">
+        <h4 className="hp-col-title">{metric.title}</h4>
+        <p className="hp-col-sub">{metric.subtitle}</p>
+      </div>
+
+      <div className="hp-col-footer">
+        <span className="hp-col-badge">{metric.badge}</span>
+      </div>
     </div>
   );
 }
 
 export default function StatsCounter() {
-  return (
-    <section className="hp-stats-section" id="metrics">
-      <div className="hp-stats-container">
-        <div className="hp-stats-header">
-          <div className="hp-stats-title-wrap">
-            <h3>Precision in Every Mile</h3>
-            <p>Live operational metrics across Metro Manila, Clark, and Cebu lounges.</p>
-          </div>
-          <div className="hp-live-telemetry-badge">
-            <span className="pulse-orb" />
-            <span>Live Telemetry Stream Active</span>
-          </div>
-        </div>
+  const [timeString, setTimeString] = useState("");
 
-        <div className="hp-stats-grid">
-          <AnimatedCounter
-            icon={<Trophy size={20} />}
-            target={14850}
-            suffix="+"
-            label="VIP Trips Executed"
-            sub="Zero mechanical incidents across 4 years"
-          />
-          <AnimatedCounter
-            icon={<ShieldCheck size={20} />}
-            target={99.8}
-            decimals={1}
-            suffix="%"
-            label="On-Time Curbside Handover"
-            sub="GPS-coordinated tarmac & valet arrivals"
-          />
-          <AnimatedCounter
-            icon={<Clock size={20} />}
-            target={15}
-            suffix=" Min"
-            label="Average VIP Turnaround"
-            sub="Paperless mobile license verification"
-          />
-          <AnimatedCounter
-            icon={<Star size={20} />}
-            target={4.98}
-            decimals={2}
-            suffix=" / 5.0"
-            label="Client Satisfaction Rating"
-            sub="Based on 3,400+ verified exotic rentals"
-          />
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setTimeString(
+        now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+          timeZone: "Asia/Manila",
+        }) + " PHT"
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="hp-telemetry-strip" id="metrics">
+      {/* Top HUD Telemetry Bar */}
+      <div className="hp-telemetry-topbar">
+        <div className="hp-topbar-left">
+          <span className="hp-pulse-indicator" />
+          <span className="hp-topbar-label">DRIVEX FLEET TELEMETRY // SYSTEM STATUS: ACTIVE</span>
+          <span className="hp-topbar-divider">/</span>
+          <span className="hp-topbar-hub">5 NATIONWIDE HUBS ONLINE</span>
+        </div>
+        <div className="hp-topbar-right">
+          <span className="hp-topbar-clock">{timeString || "10:00:00 PHT"}</span>
+          <span className="hp-topbar-status">READY FOR DISPATCH</span>
+        </div>
+      </div>
+
+      {/* Main 4-Segment Minimalist Metric Strip */}
+      <div className="hp-telemetry-grid">
+        {METRICS.map((metric) => (
+          <MetricColumn key={metric.id} metric={metric} />
+        ))}
+      </div>
+
+      {/* Bottom Architectural Guarantee Ticker */}
+      <div className="hp-telemetry-bottom-strip">
+        <div className="hp-guarantee-item">
+          <CheckCircle2 size={13} className="hp-guarantee-icon" />
+          <span>₱0 Hidden Deposit Deductions</span>
+        </div>
+        <div className="hp-guarantee-sep">&bull;</div>
+        <div className="hp-guarantee-item">
+          <CheckCircle2 size={13} className="hp-guarantee-icon" />
+          <span>Tier-1 Comprehensive Insurance Included</span>
+        </div>
+        <div className="hp-guarantee-sep">&bull;</div>
+        <div className="hp-guarantee-item">
+          <CheckCircle2 size={13} className="hp-guarantee-icon" />
+          <span>Guaranteed Curbside Handover</span>
+        </div>
+        <div className="hp-guarantee-sep">&bull;</div>
+        <div className="hp-guarantee-item">
+          <CheckCircle2 size={13} className="hp-guarantee-icon" />
+          <span>24/7 Priority Roadside VIP Dispatch</span>
         </div>
       </div>
     </section>

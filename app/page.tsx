@@ -106,8 +106,11 @@ export default function Home() {
             <button className="text-button" onClick={() => router.push("/vehicles")}>Explore full collection</button>
           </div>
         </div>
-        <button className="scroll-cue" onClick={() => scrollTo("#vehicles")}>Scroll to explore <ArrowDown size={15} /></button>
+        <button className="scroll-cue" onClick={() => scrollTo("#metrics")}>Scroll to explore <ArrowDown size={15} /></button>
       </section>
+
+      {/* Live Operational Metrics & Telemetry Counter (Full-Width Edge-to-Edge) */}
+      <StatsCounter />
 
       <section id="vehicles" className="vehicles-section section-pad">
         <div className="section-head" data-reveal>
@@ -180,9 +183,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* Live Operational Metrics & Telemetry Counter */}
-      <StatsCounter />
 
       <section id="booking" className="booking-section section-pad">
         <div className="booking-intro" data-reveal>
