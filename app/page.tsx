@@ -11,6 +11,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { vehicles } from "@/lib/vehicles";
 import { useBooking } from "@/context/BookingContext";
+import "./home-sections.css";
+import StatsCounter from "@/components/home/StatsCounter";
+import PromoSection from "@/components/home/PromoSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
 
@@ -177,6 +181,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Live Operational Metrics & Telemetry Counter */}
+      <StatsCounter />
+
       <section id="booking" className="booking-section section-pad">
         <div className="booking-intro" data-reveal>
           <p className="eyebrow">Start your journey</p>
@@ -255,7 +262,13 @@ export default function Home() {
 
       <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
 
+      {/* Seasonal Privileges & Interactive Promo Codes with Countdown */}
+      <PromoSection />
+
       <section id="why" className="why-section section-pad"><div className="why-title" data-reveal><p className="eyebrow">The DriveX standard</p><h2>Built Around<br /><span>Your Journey</span></h2></div><div className="why-list">{[["Flexible Rentals", "An afternoon, a weekend, or longer. Keep the car for exactly the time you need."], ["Transparent Pricing", "The price you see is the price you drive away with. No last-minute surprises."], ["Quality Vehicles", "Every car is inspected, maintained, and prepared before every drive."], ["Effortless Booking", "From search to confirmation in a few considered steps."]].map(([title, copy], i) => <article key={title} data-reveal><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+
+      {/* Infinite Auto-Scrolling VIP Testimonials */}
+      <TestimonialsSection />
 
       <section className="cinematic-cta"><Image src="/images/drivex-coastal-drive.png" alt="Black grand touring car on a coastal road at blue hour" fill sizes="100vw" className="cta-image" /><div className="cta-overlay" /><div className="cta-content" data-reveal><p className="eyebrow">The road is waiting</p><h2>Where will you<br />go next?</h2><p>Your next journey starts with DriveX.</p><div><button className="primary-button" onClick={() => openBooking({ step: 1 })}>Book your car <ArrowRight size={18} /></button><button className="text-button" onClick={() => scrollTo("#vehicles")}>Explore vehicles</button></div></div></section>
 

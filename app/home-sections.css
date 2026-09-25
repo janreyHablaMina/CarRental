@@ -1,0 +1,687 @@
+/* ==========================================================================
+   Home Page Feature Extensions: Stats, Promos, & Testimonials
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Section 1: Live Telemetry & Counter Grid
+   -------------------------------------------------------------------------- */
+.hp-stats-section {
+  position: relative;
+  padding: 80px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.hp-stats-container {
+  position: relative;
+  background: linear-gradient(135deg, rgba(18, 22, 34, 0.75) 0%, rgba(10, 12, 18, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 48px 40px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.hp-stats-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77, 163, 255, 0.6), transparent);
+}
+
+.hp-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hp-stats-title-wrap h3 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 6px 0;
+}
+
+.hp-stats-title-wrap p {
+  color: #8fa0ba;
+  font-size: 14px;
+  margin: 0;
+}
+
+.hp-live-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #4ade80;
+  text-transform: uppercase;
+}
+
+.hp-live-telemetry-badge .pulse-orb {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+  animation: pulseBeacon 2s infinite ease-in-out;
+}
+
+@keyframes pulseBeacon {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.hp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.hp-stat-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.hp-stat-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(77, 163, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hp-stat-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(77, 163, 255, 0.1);
+  color: #4da3ff;
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  margin-bottom: 16px;
+}
+
+.hp-stat-number {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: -0.03em;
+  font-family: var(--font-mono, monospace);
+  margin-bottom: 6px;
+  background: linear-gradient(180deg, #ffffff 40%, #9cb8d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hp-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+}
+
+.hp-stat-sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   Section 2: Exclusive Promos & Privilege Offers
+   -------------------------------------------------------------------------- */
+.hp-promos-section {
+  position: relative;
+  padding: 90px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hp-promos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.hp-promos-title-area {
+  max-width: 600px;
+}
+
+.hp-section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4da3ff;
+  font-size: 12px;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.hp-section-heading {
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 12px 0;
+}
+
+.hp-section-heading span {
+  background: linear-gradient(135deg, #4da3ff 0%, #9cb8d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hp-section-desc {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hp-countdown-box {
+  background: rgba(18, 22, 34, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 22px;
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hp-countdown-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hp-countdown-label span:first-child {
+  font-size: 10px;
+  font-family: var(--font-mono, monospace);
+  color: #ef4444;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.hp-countdown-label span:last-child {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.hp-countdown-digits {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hp-time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hp-time-val {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: var(--font-mono, monospace);
+  font-weight: 800;
+  font-size: 17px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-width: 32px;
+  text-align: center;
+}
+
+.hp-time-lbl {
+  font-size: 9px;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.hp-time-sep {
+  color: #4da3ff;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.hp-promos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.hp-promo-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(22, 27, 40, 0.6) 0%, rgba(13, 16, 24, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.hp-promo-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(77, 163, 255, 0.4);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(77, 163, 255, 0.1);
+}
+
+.hp-promo-card.featured-card {
+  border-color: rgba(77, 163, 255, 0.35);
+  background: linear-gradient(180deg, rgba(28, 38, 62, 0.7) 0%, rgba(13, 18, 30, 0.9) 100%);
+}
+
+.hp-promo-card.featured-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4da3ff, #818cf8);
+}
+
+.hp-promo-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.hp-promo-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(77, 163, 255, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(77, 163, 255, 0.25);
+}
+
+.hp-promo-pill.gold {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.hp-promo-discount {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.hp-promo-discount span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4da3ff;
+  margin-left: 2px;
+}
+
+.hp-promo-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.01em;
+}
+
+.hp-promo-description {
+  font-size: 13.5px;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0 0 24px 0;
+}
+
+.hp-promo-code-container {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.hp-promo-code-container:hover {
+  border-color: rgba(77, 163, 255, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hp-promo-code-text {
+  font-family: var(--font-mono, monospace);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #e2e8f0;
+}
+
+.hp-copy-code-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.hp-copy-code-btn:hover {
+  background: #4da3ff;
+  border-color: #4da3ff;
+  color: #000;
+}
+
+.hp-copy-code-btn.copied {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+
+.hp-claim-deal-btn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.hp-promo-card:hover .hp-claim-deal-btn {
+  background: #4da3ff;
+  border-color: #4da3ff;
+  color: #06080e;
+  box-shadow: 0 4px 18px rgba(77, 163, 255, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Section 3: VIP Testimonials Auto-Scroll Marquee & Carousel
+   -------------------------------------------------------------------------- */
+.hp-testimonials-section {
+  position: relative;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+.hp-testimonials-header {
+  max-width: 1400px;
+  margin: 0 auto 50px auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.hp-rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(18, 22, 34, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 20px;
+  backdrop-filter: blur(12px);
+}
+
+.hp-rating-score {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.hp-rating-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hp-stars-row {
+  display: flex;
+  gap: 3px;
+  color: #f59e0b;
+}
+
+.hp-rating-count {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Infinite Marquee Track */
+.hp-marquee-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 0;
+}
+
+.hp-marquee-wrapper::before,
+.hp-marquee-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hp-marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, #06070a 0%, transparent 100%);
+}
+
+.hp-marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(-90deg, #06070a 0%, transparent 100%);
+}
+
+.hp-marquee-track {
+  display: flex;
+  gap: 28px;
+  width: max-content;
+  animation: marqueeScroll 45s linear infinite;
+}
+
+.hp-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.hp-testimonial-card {
+  width: 440px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(20, 24, 35, 0.75) 0%, rgba(12, 14, 21, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 30px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hp-testimonial-card:hover {
+  border-color: rgba(77, 163, 255, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(77, 163, 255, 0.1);
+}
+
+.hp-testimonial-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hp-car-driven-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+}
+
+.hp-testimonial-quote {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  font-style: normal;
+  margin: 0;
+}
+
+.hp-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hp-author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border: 1px solid rgba(77, 163, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.hp-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hp-author-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hp-verified-icon {
+  color: #38bdf8;
+}
+
+.hp-author-role {
+  font-size: 12px;
+  color: #8fa0ba;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hp-promos-grid {
+    grid-template-columns: 1fr;
+  }
+  .hp-testimonial-card {
+    width: 360px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .hp-stats-container {
+    padding: 30px 20px;
+  }
+  .hp-stat-number {
+    font-size: 32px;
+  }
+  .hp-countdown-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .hp-testimonial-card {
+    width: 300px;
+    padding: 22px;
+  }
+}
