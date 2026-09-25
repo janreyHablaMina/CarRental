@@ -141,14 +141,14 @@ export default function Home() {
           ))}
         </div>
         <div className="vehicle-grid">
-          {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).map((vehicle, index) => (
+          {(selectedCategory === "All" ? vehicles : vehicles.filter((v) => v.category === selectedCategory)).slice(0, 6).map((vehicle, index) => (
             <Link href={`/vehicles/${vehicle.id}`} className="vehicle-item" key={vehicle.id} data-reveal style={{ textDecoration: "none", color: "inherit", display: "block" }}>
               <div className="vehicle-visual">
                 <Image
                   src={vehicle.image}
                   alt={`${vehicle.brand} ${vehicle.name}`}
                   fill
-                  sizes="(max-width: 900px) 100vw, 50vw"
+                  sizes="(max-width: 900px) 100vw, 33vw"
                   className="vehicle-real-photo"
                 />
                 <div className="vehicle-photo-overlay" />
@@ -181,6 +181,13 @@ export default function Home() {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* View All Cars Button Row */}
+        <div className="view-all-cars-row" data-reveal>
+          <Link href="/vehicles" className="primary-button">
+            View all cars <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 

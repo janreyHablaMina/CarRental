@@ -1,156 +1,145 @@
 /* ==========================================================================
-   Precision Telemetry HUD Strip: Clean, Modern, Zero Heavy Shadows
+   Balanced Luxury Stats Counter Section (Midnight Slate & Frosted Glass)
    ========================================================================== */
 
-.hp-telemetry-strip {
+.hp-counter-section {
   position: relative;
   width: 100%;
-  background: #06070a;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 20;
+  padding: 68px 0;
+  background: radial-gradient(circle at 50% 0%, #131b2e 0%, #0a0e18 55%, #060810 100%);
+  border-top: 1px solid rgba(77, 163, 255, 0.22);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  z-index: 10;
   box-sizing: border-box;
 }
 
-/* Top Telemetry Status Line */
-.hp-telemetry-topbar {
+/* Subtle Ambient Glow */
+.hp-counter-ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 250px;
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+.hp-counter-inner {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 max(24px, 4vw);
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Header */
+.hp-counter-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 14px max(24px, 4vw);
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hp-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 5px 14px;
+  border-radius: 999px;
   font-family: var(--font-mono, monospace);
   font-size: 11px;
-  letter-spacing: 0.08em;
-  box-sizing: border-box;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+  margin-bottom: 12px;
 }
 
-.hp-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #94a3b8;
-}
-
-.hp-pulse-indicator {
-  width: 7px;
-  height: 7px;
+.hp-pulse-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
-  animation: telemetryPulse 2s infinite ease-in-out;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulseDot 2s infinite ease-in-out;
 }
 
-@keyframes telemetryPulse {
+@keyframes pulseDot {
   0% { transform: scale(0.9); opacity: 0.8; }
   50% { transform: scale(1.3); opacity: 1; }
   100% { transform: scale(0.9); opacity: 0.8; }
 }
 
-.hp-topbar-label {
-  color: #e2e8f0;
+.hp-counter-heading {
+  font-size: clamp(22px, 2.5vw, 28px);
   font-weight: 700;
-  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
 }
 
-.hp-topbar-divider {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-.hp-topbar-hub {
-  color: #38bdf8;
-  font-weight: 600;
-}
-
-.hp-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.hp-topbar-clock {
-  color: #f8fafc;
-  font-weight: 800;
-  font-family: var(--font-mono, monospace);
-}
-
-.hp-topbar-status {
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  color: #38bdf8;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-
-/* 4-Column Grid */
-.hp-telemetry-grid {
+/* 4-Card Grid */
+.hp-counter-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  width: 100%;
-  max-width: 1680px;
-  margin: 0 auto;
+  gap: 20px;
   box-sizing: border-box;
 }
 
-.hp-telemetry-col {
+.hp-metric-card {
   position: relative;
-  padding: 36px max(24px, 2.5vw);
-  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(16, 22, 36, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px 24px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 18px;
-  transition: background 0.2s ease;
+  align-items: flex-start;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
 }
 
-.hp-telemetry-col:last-child {
-  border-right: none;
+.hp-metric-card:hover {
+  background: rgba(22, 30, 50, 0.8);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-3px);
 }
 
-.hp-telemetry-col:hover {
-  background: rgba(255, 255, 255, 0.018);
+.hp-metric-card-top {
+  margin-bottom: 16px;
 }
 
-.hp-col-header {
-  display: flex;
-  justify-content: space-between;
+.hp-metric-icon {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  color: #38bdf8;
 }
 
-.hp-col-tag {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #64748b;
-  text-transform: uppercase;
-}
-
-.hp-col-index {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.hp-col-metric {
+.hp-metric-value {
   display: flex;
   align-items: baseline;
   gap: 4px;
-  margin: 4px 0;
+  margin-bottom: 8px;
 }
 
-.hp-metric-digits {
+.hp-metric-number {
   font-family: var(--font-mono, monospace);
-  font-size: clamp(34px, 3.2vw, 48px);
-  font-weight: 900;
+  font-size: clamp(30px, 2.8vw, 40px);
+  font-weight: 800;
   letter-spacing: -0.03em;
   color: #ffffff;
   line-height: 1;
@@ -158,114 +147,43 @@
 
 .hp-metric-suffix {
   font-family: var(--font-mono, monospace);
-  font-size: clamp(20px, 2vw, 28px);
-  font-weight: 800;
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 700;
   color: #38bdf8;
 }
 
-.hp-col-body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.hp-col-title {
-  font-size: 16px;
+.hp-metric-label {
+  font-size: 15px;
   font-weight: 700;
-  color: #f8fafc;
-  margin: 0;
+  color: #f1f5f9;
   letter-spacing: -0.01em;
+  margin: 0 0 6px 0;
 }
 
-.hp-col-sub {
-  font-size: 13px;
+.hp-metric-sub {
+  font-size: 12.5px;
   color: #8fa0ba;
   line-height: 1.5;
   margin: 0;
 }
 
-.hp-col-footer {
-  margin-top: auto;
-  padding-top: 14px;
-}
-
-.hp-col-badge {
-  display: inline-block;
-  font-family: var(--font-mono, monospace);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 3px 9px;
-  border-radius: 4px;
-}
-
-/* Bottom Guarantee Ticker */
-.hp-telemetry-bottom-strip {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 16px max(24px, 4vw);
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 12.5px;
-  color: #94a3b8;
-  box-sizing: border-box;
-}
-
-.hp-guarantee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: #cbd5e1;
-}
-
-.hp-guarantee-icon {
-  color: #38bdf8;
-  flex-shrink: 0;
-}
-
-.hp-guarantee-sep {
-  color: rgba(255, 255, 255, 0.2);
-}
-
-/* Responsive Media Queries */
+/* Responsive */
 @media (max-width: 1024px) {
-  .hp-telemetry-grid {
+  .hp-counter-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .hp-telemetry-col:nth-child(2) {
-    border-right: none;
-  }
-  .hp-telemetry-col:nth-child(1),
-  .hp-telemetry-col:nth-child(2) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    gap: 16px;
   }
 }
 
-@media (max-width: 640px) {
-  .hp-telemetry-grid {
+@media (max-width: 600px) {
+  .hp-counter-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
-  .hp-telemetry-col {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    padding: 26px 20px;
+  .hp-counter-section {
+    padding: 50px 0;
   }
-  .hp-telemetry-topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .hp-telemetry-bottom-strip {
-    justify-content: flex-start;
-    gap: 12px;
-  }
-  .hp-guarantee-sep {
-    display: none;
+  .hp-metric-card {
+    padding: 22px 20px;
   }
 }
