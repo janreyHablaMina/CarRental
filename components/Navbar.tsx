@@ -52,7 +52,7 @@ export default function Navbar() {
         <Link href="/vehicles">All Cars</Link>
         <button onClick={() => handleNav("#how")}>How It Works</button>
         <button onClick={() => handleNav("#why")}>About</button>
-        <button onClick={() => handleNav("#footer")}>Contact</button>
+        <Link href="/contact" style={{ color: pathname === "/contact" ? "#4da3ff" : "inherit" }}>Contact</Link>
       </nav>
       
       <button className="nav-cta desktop-cta" onClick={() => handleNav("#booking")}>
@@ -68,6 +68,7 @@ export default function Navbar() {
           <Link href="/vehicles" onClick={() => setMenuOpen(false)}>All Cars</Link>
           <button onClick={() => handleNav("#how")}>How It Works</button>
           <button onClick={() => handleNav("#why")}>About</button>
+          <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
           <button onClick={() => handleNav("#booking")}>Book Now</button>
         </nav>
       )}
