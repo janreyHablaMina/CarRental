@@ -48,8 +48,8 @@ export default function HomeSectionDivider() {
       className="home-section-divider"
       aria-hidden="false"
       style={{
-        background: "#ffffff",
-        color: "#0f172a",
+        background: "#090d16",
+        color: "#ffffff",
         position: "relative",
         zIndex: 10,
         display: "block",
