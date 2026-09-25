@@ -742,22 +742,6 @@ export default function VehiclesCollectionPage() {
           </>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="vc-footer">
-        <div className="vc-footer-brand">
-          DRIVE<span>X</span> SHOWROOM
-        </div>
-        <div className="vc-footer-links">
-          <Link href="/">Home</Link>
-          <Link href="/#booking">Reservations</Link>
-          <Link href="/#why">About DriveX</Link>
-          <Link href="/#footer">Support</Link>
-        </div>
-        <div className="vc-footer-copy">
-          © {new Date().getFullYear()} DriveX Luxury Fleet. All rights reserved.
-        </div>
-      </footer>
     </div>
   );
 }

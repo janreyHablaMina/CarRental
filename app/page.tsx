@@ -15,7 +15,6 @@ import "./home-sections.css";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CockpitCounter from "@/components/home/CockpitCounter";
 import HomeContactSection from "@/components/home/HomeContactSection";
-import HomeFooter from "@/components/home/HomeFooter";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
 
@@ -198,9 +197,6 @@ export default function Home() {
  
       {/* Map Background VIP Concierge & Contact Section */}
       <HomeContactSection />
- 
-      {/* Redesigned Luxury Automotive Footer */}
-      <HomeFooter />
     </main>
   );
 }
