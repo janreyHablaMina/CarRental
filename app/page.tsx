@@ -12,8 +12,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { vehicles } from "@/lib/vehicles";
 import { useBooking } from "@/context/BookingContext";
 import "./home-sections.css";
-import StatsCounter from "@/components/home/StatsCounter";
-import PromoSection from "@/components/home/PromoSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 
 const CarScene = dynamic(() => import("@/components/three/CarScene"), { ssr: false });
@@ -32,11 +30,6 @@ export default function Home() {
   const [heroProgress, setHeroProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [formPickup, setFormPickup] = useState("");
-  const [formDropoff, setFormDropoff] = useState("");
-  const [formPickupDate, setFormPickupDate] = useState("");
-  const [formReturnDate, setFormReturnDate] = useState("");
-  const [formCategory, setFormCategory] = useState("");
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -106,11 +99,8 @@ export default function Home() {
             <button className="text-button" onClick={() => router.push("/vehicles")}>Explore full collection</button>
           </div>
         </div>
-        <button className="scroll-cue" onClick={() => scrollTo("#metrics")}>Scroll to explore <ArrowDown size={15} /></button>
+        <button className="scroll-cue" onClick={() => scrollTo("#vehicles")}>Scroll to explore <ArrowDown size={15} /></button>
       </section>
-
-      {/* Live Operational Metrics & Telemetry Counter (Full-Width Edge-to-Edge) */}
-      <StatsCounter />
 
       <section id="vehicles" className="vehicles-section section-pad">
         <div className="section-head" data-reveal>
@@ -191,86 +181,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="booking" className="booking-section section-pad">
-        <div className="booking-intro" data-reveal>
-          <p className="eyebrow">Start your journey</p>
-          <h2>Ready to<br />Drive?</h2>
-          <p>Your next car is closer than you think.</p>
-        </div>
-        <form
-          className="booking-form"
-          data-reveal
-          onSubmit={(e) => {
-            e.preventDefault();
-            openBooking({
-              pickupLocation: formPickup || undefined,
-              dropoffLocation: formDropoff || undefined,
-              pickupDate: formPickupDate || undefined,
-              returnDate: formReturnDate || undefined,
-              vehicleType: formCategory || undefined,
-              step: 1,
-            });
-          }}
-        >
-          <label>
-            <span><MapPin size={15} /> Pickup location</span>
-            <input
-              placeholder="Where are you starting?"
-              value={formPickup}
-              onChange={(e) => setFormPickup(e.target.value)}
-            />
-            <ChevronDown size={16} />
-          </label>
-          <label>
-            <span><MapPin size={15} /> Drop-off location</span>
-            <input
-              placeholder="Same location"
-              value={formDropoff}
-              onChange={(e) => setFormDropoff(e.target.value)}
-            />
-            <ChevronDown size={16} />
-          </label>
-          <label>
-            <span><CalendarDays size={15} /> Pickup date</span>
-            <input
-              type="date"
-              value={formPickupDate}
-              onChange={(e) => setFormPickupDate(e.target.value)}
-            />
-          </label>
-          <label>
-            <span><CalendarDays size={15} /> Return date</span>
-            <input
-              type="date"
-              value={formReturnDate}
-              onChange={(e) => setFormReturnDate(e.target.value)}
-            />
-          </label>
-          <label>
-            <span><Gauge size={15} /> Vehicle type</span>
-            <select
-              value={formCategory}
-              onChange={(e) => setFormCategory(e.target.value)}
-            >
-              <option value="">Choose a category</option>
-              <option>Sports</option>
-              <option>Luxury</option>
-              <option>Sedan</option>
-              <option>SUV</option>
-              <option>Economy</option>
-            </select>
-            <ChevronDown size={16} />
-          </label>
-          <button type="submit" className="search-button">
-            Search available cars <ArrowRight size={18} />
-          </button>
-        </form>
-      </section>
-
       <section id="how" className="how-section section-pad"><div className="section-head" data-reveal><div><p className="eyebrow">Simple by design</p><h2>From choice<br />to open road.</h2></div></div><div className="steps-list">{steps.map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p><ArrowRight /></article>)}</div></section>
-
-      {/* Seasonal Privileges & Interactive Promo Codes with Countdown */}
-      <PromoSection />
 
       <section id="why" className="why-section section-pad"><div className="why-title" data-reveal><p className="eyebrow">The DriveX standard</p><h2>Built Around<br /><span>Your Journey</span></h2></div><div className="why-list">{[["Flexible Rentals", "An afternoon, a weekend, or longer. Keep the car for exactly the time you need."], ["Transparent Pricing", "The price you see is the price you drive away with. No last-minute surprises."], ["Quality Vehicles", "Every car is inspected, maintained, and prepared before every drive."], ["Effortless Booking", "From search to confirmation in a few considered steps."]].map(([title, copy], i) => <article key={title} data-reveal><span>0{i + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
 
