@@ -1,20 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
-import { MapPin, Phone, Clock, ArrowRight, ExternalLink } from "lucide-react";
-import { type HubLocation } from "@/components/LeafletMap";
+import {
+  MapPin,
+  Phone,
+  Clock,
+  ArrowRight,
+  ExternalLink,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Zap,
+} from "lucide-react";
 import "./home-contact.css";
 
-const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
-  ssr: false,
-  loading: () => (
-    <div className="home-leaflet-loading">
-      <span>Initializing DriveX Telemetry Map...</span>
-    </div>
-  ),
-});
+export interface HubLocation {
+  id: string;
+  name: string;
+  category: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+  coords?: string;
+  lat: number;
+  lng: number;
+  googleMapsUrl: string;
+  features: string[];
+}
 
 const HUBS: HubLocation[] = [
   {
@@ -91,6 +106,26 @@ const HUBS: HubLocation[] = [
 
 export default function HomeContactSection() {
   const [selectedHub, setSelectedHub] = useState<HubLocation>(HUBS[0]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
 
   return (
     <section className="home-contact-section" id="contact" data-reveal>
@@ -120,16 +155,71 @@ export default function HomeContactSection() {
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Exact Leaflet Map from Contact Page */}
-        <div className="home-map-frame">
-          <LeafletMap
-            hubs={HUBS}
-            selectedHub={selectedHub}
-            onSelectHub={setSelectedHub}
-          />
+      {/* FULL WIDTH CINEMATIC CAR VIDEO EXPERIENCE */}
+      <div className="home-video-fullwidth">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          poster="/images/drivex-hero-front.jpg"
+          className="home-car-video-element"
+        >
+          <source src="/videos/luxury-car.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/demo/video/upload/blue_sports_car.mp4" type="video/mp4" />
+          Your browser does not support HTML5 video.
+        </video>
+
+        {/* Dark Cinematic Vignette Overlays */}
+        <div className="home-video-vignette" />
+        <div className="home-video-scanline" />
+
+        {/* HUD Telemetry Badges */}
+        <div className="home-video-hud-top">
+          <div className="home-hud-chip live">
+            <span className="home-hud-dot" />
+            <span>CINEMATIC TELEMETRY // 4K HIGHWAY RUN</span>
+          </div>
+          <div className="home-hud-chip secondary">
+            <Zap size={13} />
+            <span>SUPERCAR DYNAMICS ACTIVE</span>
+          </div>
         </div>
 
+        {/* Video Overlay Center Callout */}
+        <div className="home-video-center-info">
+          <span className="home-video-watermark">{selectedHub.name.toUpperCase()}</span>
+          <p className="home-video-coords">{selectedHub.coords || "METRO MANILA // 14.5507° N, 121.0509° E"}</p>
+        </div>
+
+        {/* Video Player Floating Controls */}
+        <div className="home-video-controls-bar">
+          <button
+            type="button"
+            className="home-video-ctrl-btn"
+            onClick={togglePlay}
+            aria-label={isPlaying ? "Pause video" : "Play video"}
+          >
+            {isPlaying ? <Pause size={15} /> : <Play size={15} />}
+            <span>{isPlaying ? "Pause" : "Play"}</span>
+          </button>
+
+          <button
+            type="button"
+            className="home-video-ctrl-btn"
+            onClick={toggleMute}
+            aria-label={isMuted ? "Unmute audio" : "Mute audio"}
+          >
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+            <span>{isMuted ? "Muted" : "Sound On"}</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="home-contact-container">
         {/* Selected Hub Details Bar */}
         <div className="home-selected-hub-bar">
           <div className="home-selected-hub-main">
@@ -162,3 +252,4 @@ export default function HomeContactSection() {
     </section>
   );
 }
+

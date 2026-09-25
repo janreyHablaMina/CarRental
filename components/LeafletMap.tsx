@@ -41,22 +41,28 @@ export default function LeafletMap({
 
     // Initialize Map
     if (!mapRef.current) {
-      mapRef.current = L.map(containerRef.current, {
-        center: [14.5507, 121.0509], // Default to BGC
+      const map = L.map(containerRef.current, {
+        center: [selectedHub.lat, selectedHub.lng],
         zoom: 13,
-        zoomControl: false,
-        attributionControl: false,
+        minZoom: 5,
+        maxZoom: 19,
+        zoomControl: true,
+        scrollWheelZoom: true,
       });
 
-      // Esri World Dark Gray Base Tile Layer (100% Free, NO API KEY REQUIRED, NO WATERMARKS)
-      L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        {
-          attribution: "Esri, DeLorme, NAVTEQ",
-          maxZoom: 16,
-        }
-      ).addTo(mapRef.current);
+      // OpenStreetMap Standard Street Map (Free, vibrant street colors, roads, parks, blue ocean, NO dark void on zoom out)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+        subdomains: ["a", "b", "c"],
+        maxZoom: 19,
+        minZoom: 5,
+      }).addTo(map);
+
+      mapRef.current = map;
     }
+
+    const map = mapRef.current;
 
     // Clear existing markers
     Object.values(markersRef.current).forEach((marker) => marker.remove());
@@ -64,26 +70,48 @@ export default function LeafletMap({
 
     // Add Markers
     hubs.forEach((hub) => {
-      const isActive = hub.id === selectedHub.id;
-      
+      const isSelected = hub.id === selectedHub.id;
+
       const customIcon = L.divIcon({
         className: "custom-leaflet-marker",
         html: `
-          <div class="map-marker-container ${isActive ? "active" : ""}">
+          <div class="map-marker-container ${isSelected ? "active" : ""}" id="marker-${hub.id}">
             <div class="marker-pulse"></div>
             <div class="marker-core"></div>
             <div class="marker-label">${hub.name.split(" ")[0]}</div>
           </div>
         `,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [0, -14],
       });
 
       const marker = L.marker([hub.lat, hub.lng], { icon: customIcon })
-        .addTo(mapRef.current!)
+        .addTo(map)
         .on("click", () => {
           onSelectHub(hub);
         });
+
+      // Custom rich popup
+      const popupContent = `
+        <div class="leaflet-popup-card">
+          <div class="leaflet-popup-badge">${hub.category}</div>
+          <div class="leaflet-popup-title">${hub.name}</div>
+          <div class="leaflet-popup-address">📍 ${hub.address}</div>
+          <div class="leaflet-popup-meta">
+            <span>🕒 ${hub.hours}</span>
+            <span>📞 ${hub.phone}</span>
+          </div>
+          <a href="${hub.googleMapsUrl}" target="_blank" rel="noreferrer" class="leaflet-popup-link">
+            Directions on Google Maps ↗
+          </a>
+        </div>
+      `;
+      marker.bindPopup(popupContent, {
+        className: "drivex-custom-popup",
+        closeButton: true,
+        maxWidth: 280,
+      });
 
       markersRef.current[hub.id] = marker;
     });
@@ -97,12 +125,35 @@ export default function LeafletMap({
     };
   }, []);
 
-  // Update map view when selected hub changes
+  // Update map view & active marker styling when selected hub changes
   useEffect(() => {
-    if (mapRef.current && selectedHub) {
-      mapRef.current.flyTo([selectedHub.lat, selectedHub.lng], 14, {
-        duration: 1.2,
-      });
+    const map = mapRef.current;
+    if (!map || !selectedHub) return;
+
+    // Fly smoothly to selected hub
+    map.flyTo([selectedHub.lat, selectedHub.lng], 14, {
+      duration: 1.2,
+      easeLinearity: 0.25,
+    });
+
+    // Update active class on markers in DOM
+    hubs.forEach((hub) => {
+      const elem = document.getElementById(`marker-${hub.id}`);
+      if (elem) {
+        if (hub.id === selectedHub.id) {
+          elem.classList.add("active");
+        } else {
+          elem.classList.remove("active");
+        }
+      }
+    });
+
+    // Open popup after flyTo completes
+    const activeMarker = markersRef.current[selectedHub.id];
+    if (activeMarker) {
+      setTimeout(() => {
+        activeMarker.openPopup();
+      }, 700);
     }
   }, [selectedHub]);
 
@@ -112,3 +163,4 @@ export default function LeafletMap({
     </div>
   );
 }
+
