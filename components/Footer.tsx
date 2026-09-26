@@ -92,11 +92,11 @@ export default function Footer() {
           </div>
 
           <div className="dx-baseline-legal">
-            <Link href="/#">Privacy Charter</Link>
+            <Link href="/contact">Privacy Charter</Link>
             <span>•</span>
-            <Link href="/#">Rental Policies</Link>
+            <Link href="/contact">Rental Policies</Link>
             <span>•</span>
-            <Link href="/#">CDW Coverage Terms</Link>
+            <Link href="/contact">CDW Coverage Terms</Link>
           </div>
 
           <button

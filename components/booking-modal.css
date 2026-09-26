@@ -31,7 +31,7 @@
   background: #0c0e12;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(77, 163, 255, 0.08);
-  border-radius: 12px;
+  border-radius: 2px;
   color: #f3f4f6;
   overflow: hidden;
   display: flex;
@@ -91,7 +91,7 @@
   color: #9da4ad;
   width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,7 +120,7 @@
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -137,7 +137,7 @@
 .bm-step-num {
   width: 22px;
   height: 22px;
-  border-radius: 50%;
+  border-radius: 2px;
   font-size: 11px;
   font-weight: 700;
   display: flex;
@@ -207,7 +207,7 @@
   padding: 3px 8px;
   background: rgba(77, 163, 255, 0.15);
   color: var(--accent, #4da3ff);
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid rgba(77, 163, 255, 0.3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -222,7 +222,7 @@
   padding: 16px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  border-radius: 2px;
   margin-bottom: 24px;
 }
 
@@ -230,7 +230,7 @@
   position: relative;
   width: 160px;
   height: 95px;
-  border-radius: 6px;
+  border-radius: 2px;
   overflow: hidden;
   background: #15181e;
 }
@@ -269,7 +269,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #e5e8ec;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 13px;
   cursor: pointer;
   outline: none;
@@ -317,7 +317,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f3f4f6;
   padding: 10px 14px;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 14px;
   outline: none;
   transition: all 0.2s;
@@ -356,7 +356,7 @@
   padding: 14px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
   display: flex;
   align-items: flex-start;
@@ -398,7 +398,7 @@
 .bm-price-strip {
   background: linear-gradient(90deg, rgba(20, 25, 33, 0.8) 0%, rgba(15, 18, 24, 0.9) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -454,7 +454,7 @@
 .bm-docs-header-notice {
   background: rgba(77, 163, 255, 0.06);
   border: 1px solid rgba(77, 163, 255, 0.2);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 12px 16px;
   margin-bottom: 20px;
   display: flex;
@@ -474,7 +474,7 @@
 .bm-doc-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -505,7 +505,7 @@
 .bm-doc-status {
   font-size: 11px;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 2px;
   font-weight: 550;
 }
 
@@ -523,7 +523,7 @@
 /* Upload Dropzone */
 .bm-upload-zone {
   border: 2px dashed rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 20px 14px;
   text-align: center;
   cursor: pointer;
@@ -554,7 +554,7 @@
 .bm-upload-icon {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 2px;
   background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -581,7 +581,7 @@
 /* File Preview Box */
 .bm-preview-box {
   position: relative;
-  border-radius: 8px;
+  border-radius: 2px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #11141a;
@@ -622,7 +622,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .bm-preview-remove:hover {
@@ -649,7 +649,7 @@
 .bm-review-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 20px;
 }
 
@@ -685,7 +685,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 2px;
   background: rgba(255, 255, 255, 0.03);
   font-size: 12px;
 }
@@ -707,7 +707,7 @@
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.09);
   background: rgba(255, 255, 255, 0.02);
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -727,7 +727,7 @@
   padding: 14px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-radius: 2px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -762,7 +762,7 @@
 .bm-success-icon {
   width: 72px;
   height: 72px;
-  border-radius: 50%;
+  border-radius: 2px;
   background: rgba(46, 204, 113, 0.15);
   border: 2px solid #2ecc71;
   color: #2ecc71;
@@ -804,7 +804,7 @@
   padding: 10px 24px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
+  border-radius: 2px;
   font-family: var(--font-mono, monospace);
   font-size: 16px;
   font-weight: 700;
@@ -817,7 +817,7 @@
   max-width: 560px;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 18px 20px;
   text-align: left;
   margin-bottom: 28px;
@@ -864,7 +864,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f3f4f6;
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -883,7 +883,7 @@
   border: 1px solid var(--accent, #4da3ff);
   color: #070809;
   padding: 10px 24px;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;

@@ -55,7 +55,7 @@
   background: rgba(77, 163, 255, 0.08);
   border: 1px solid rgba(77, 163, 255, 0.2);
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: 2px;
 }
 
 /* --------------------------------------------------------------------------
@@ -91,7 +91,7 @@
   aspect-ratio: 16 / 10.5;
   background: #050608;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: 2px;
   overflow: hidden;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
@@ -116,7 +116,7 @@
   background: rgba(7, 8, 9, 0.7);
   backdrop-filter: blur(8px);
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   pointer-events: none;
 }
@@ -134,7 +134,7 @@
   width: 84px;
   height: 56px;
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: 2px;
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.08);
   background: #040507;
@@ -163,7 +163,7 @@
 .vd-overview-box {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 22px 24px;
   display: flex;
   flex-direction: column;
@@ -207,7 +207,7 @@
 .vd-console-card {
   background: #090b0e;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
+  border-radius: 2px;
   padding: 32px 28px;
   display: flex;
   flex-direction: column;
@@ -264,7 +264,7 @@
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 14px 18px;
-  border-radius: 10px;
+  border-radius: 2px;
 }
 
 .vd-price-col small {
@@ -296,7 +296,7 @@
   background: rgba(56, 189, 248, 0.1);
   border: 1px solid rgba(56, 189, 248, 0.2);
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 2px;
 }
 
 /* Core Specs Grid (4 Items) */
@@ -313,7 +313,7 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: 2px;
 }
 
 .vd-spec-item svg {
@@ -343,7 +343,7 @@
 .vd-route-terminal {
   background: #06070a;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 18px 18px 20px;
   display: flex;
   flex-direction: column;
@@ -372,7 +372,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
   padding: 6px 11px;
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s;
   font-size: 12px;
@@ -418,7 +418,7 @@
   width: 100%;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 10px 36px 10px 34px;
   color: #ffffff;
   font-size: 13px;
@@ -458,7 +458,7 @@
   right: 0;
   background: #11141c;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border-radius: 2px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
   max-height: 200px;
   overflow-y: auto;
@@ -512,7 +512,7 @@
 .vd-rate-card {
   background: rgba(77, 163, 255, 0.06);
   border: 1px solid rgba(77, 163, 255, 0.22);
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 12px 14px;
 }
 
@@ -532,7 +532,7 @@
   color: #93c5fd;
   background: rgba(77, 163, 255, 0.14);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .vd-rate-card-val {
@@ -570,7 +570,7 @@
   background: #ffffff;
   color: #070809;
   border: none;
-  border-radius: 8px;
+  border-radius: 2px;
   font-size: 15px;
   font-weight: 750;
   cursor: pointer;
@@ -656,7 +656,7 @@
   flex-direction: column;
   background: #090b0e;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -699,7 +699,7 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   padding: 3px 8px;
-  border-radius: 4px;
+  border-radius: 2px;
   color: #e2e8f0;
 }
 
@@ -778,7 +778,7 @@
 .vd-suggested-arrow {
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 2px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
@@ -811,7 +811,7 @@
   text-align: center;
   background: #090b0e;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
+  border-radius: 2px;
   padding: 40px 32px;
 }
 
@@ -845,7 +845,7 @@
   font-size: 13.5px;
   font-weight: 700;
   padding: 12px 20px;
-  border-radius: 6px;
+  border-radius: 2px;
   text-decoration: none;
   transition: all 0.2s;
 }

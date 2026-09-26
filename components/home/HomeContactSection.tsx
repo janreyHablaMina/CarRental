@@ -67,7 +67,7 @@ export default function HomeContactSection() {
               DriveX was created to redefine automotive luxury in the Philippines. Discover the standard that separates our grand touring experience from ordinary car rentals.
             </p>
             <div className="home-cinematic-actions">
-              <Link href="#vehicles" className="home-cinematic-btn-primary">
+              <Link href="/#vehicles" className="home-cinematic-btn-primary">
                 Explore Fleet <ArrowRight size={15} />
               </Link>
               <Link href="/contact" className="home-cinematic-btn-ghost">
