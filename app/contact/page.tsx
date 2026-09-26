@@ -172,7 +172,6 @@ export default function ContactPage() {
           {/* Luxury Atmospheric Overlays */}
           <div className="contact-banner-glow" />
           <div className="contact-banner-overlay" />
-          <div className="contact-banner-speedlines" />
 
           {/* Banner Editorial Content */}
           <div className="contact-banner-content">

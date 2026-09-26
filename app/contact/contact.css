@@ -72,13 +72,7 @@
   z-index: 2;
 }
 
-.contact-banner-speedlines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg, transparent, transparent 140px, rgba(77, 163, 255, 0.025) 140px, rgba(77, 163, 255, 0.025) 142px);
-  pointer-events: none;
-  z-index: 2;
-}
+
 
 .contact-banner-content {
   position: relative;

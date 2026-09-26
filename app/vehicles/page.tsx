@@ -281,7 +281,6 @@ export default function VehiclesCollectionPage() {
                 {/* Overlays & Atmosphere */}
                 <div className="vc-slide-glow" />
                 <div className="vc-slide-overlay" />
-                <div className="vc-slide-speedlines" />
 
                 {/* Slide Text Content & Telemetry */}
                 <div className="vc-slide-content">

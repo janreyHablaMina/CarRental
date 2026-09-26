@@ -170,14 +170,6 @@
   z-index: 2;
 }
 
-/* Ambient Speedlines */
-.vc-slide-speedlines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg, transparent, transparent 140px, rgba(77, 163, 255, 0.03) 140px, rgba(77, 163, 255, 0.03) 142px);
-  pointer-events: none;
-  z-index: 2;
-}
 
 /* Content Layout inside Full-Width Banner (aligned to 1400px container) */
 .vc-slide-content {
