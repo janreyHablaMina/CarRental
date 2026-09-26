@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUp, ArrowRight, Sparkles } from "lucide-react";
@@ -8,25 +8,6 @@ import "./home/home-footer.css";
 
 export default function Footer() {
   const pathname = usePathname();
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          timeZone: "Asia/Manila",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        })
-      );
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Do not render the public footer on admin pages
   if (pathname.startsWith("/admin")) return null;
@@ -37,26 +18,10 @@ export default function Footer() {
 
   return (
     <footer className="dx-billboard-footer" id="footer" aria-label="DriveX Footer">
-      {/* Top Telemetry Header Bar */}
-      <div className="dx-telemetry-strip">
-        <div className="dx-telemetry-inner">
-          <div className="dx-telemetry-left">
-            <span className="dx-beacon-dot" />
-            <span className="dx-beacon-label">LIVE OPERATIONS ACTIVE</span>
-            <span className="dx-telemetry-sep">•</span>
-            <span className="dx-telemetry-time">
-              MANILA {time || "10:30:00 PM"} PHT
-            </span>
-          </div>
-
-          <div className="dx-telemetry-right">
-            <span className="dx-coords">14°33′14″N 121°03′04″E</span>
-            <span className="dx-telemetry-sep">•</span>
-            <span className="dx-hubs">BGC • NAIA T3 • CLARK • CEBU</span>
-          </div>
-        </div>
+      {/* Massive Background Watermark */}
+      <div className="dx-footer-bg-watermark" aria-hidden="true">
+        DRIVEX
       </div>
-
       {/* Main Billboard Canvas */}
       <div className="dx-billboard-container">
         {/* Editorial Headline & Ethos */}
@@ -117,12 +82,6 @@ export default function Footer() {
           <span className="dx-nav-dot">/</span>
           <Link href="/admin" className="dx-nav-item dx-admin-link">Fleet Console</Link>
         </nav>
-      </div>
-
-      {/* Massive Edge-to-Edge Billboard Typography (Diffuser Style) */}
-      <div className="dx-diffuser-wordmark-wrap" aria-hidden="true">
-        <div className="dx-diffuser-glow-line" />
-        <span className="dx-diffuser-wordmark">D R I V E X</span>
       </div>
 
       {/* Baseline Utility Bar */}
